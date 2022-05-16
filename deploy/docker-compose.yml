@@ -1,0 +1,15 @@
+version: '3'
+services:
+    site-nginx:
+        restart: always
+        image: nginx:1.13.3
+        volumes:
+            - ./../:/var/www/html
+            - ./nginx/logs/:/var/log/nginx
+            - ./nginx/sites/:/etc/nginx/conf.d
+        ports:
+            - "85:80"
+            - "445:443"
+        expose:
+            - "85"
+            - "445"

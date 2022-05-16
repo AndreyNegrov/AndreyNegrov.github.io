@@ -1,0 +1,2 @@
+2022/05/14 15:52:51 [error] 8#8: *1 rewrite or internal redirection cycle while internally redirecting to "/index.php", client: 172.18.0.1, server: domain.tld, request: "GET / HTTP/1.0", host: "dea8dabe0b78c7edd.word-grinder.com"
+2022/05/14 15:52:51 [error] 8#8: *2 rewrite or internal redirection cycle while internally redirecting to "/index.php", client: 172.18.0.1, server: domain.tld, request: "GET /favicon.ico HTTP/1.0", host: "dea8dabe0b78c7edd.word-grinder.com", referrer: "http://dea8dabe0b78c7edd.word-grinder.com/"
