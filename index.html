@@ -744,7 +744,7 @@ function startMusic() {
     if (musicIdle) { musicIdle.pause(); musicIdle.currentTime = 0; musicIdle = null; }
     if (musicAction) { musicAction.pause(); musicAction.currentTime = 0; musicAction = null; }
     if (!musicCalm) {
-      musicCalm = new Audio('./assets/music_calm.mp3');
+      musicCalm = new Audio('./music_calm.mp3');
       musicCalm.loop = true;
       musicCalm.volume = 0.22;
     }
@@ -753,8 +753,8 @@ function startMusic() {
   } else {
     if (musicCalm) { musicCalm.pause(); musicCalm.currentTime = 0; }
     if (!musicIdle) {
-      musicIdle = new Audio('./assets/music_idle.mp3');
-      musicAction = new Audio('./assets/music_action.mp3');
+      musicIdle = new Audio('./music_idle.mp3');
+      musicAction = new Audio('./music_action.mp3');
       musicIdle.loop = true;
       musicAction.loop = true;
       musicIdle.volume = 0.28;
