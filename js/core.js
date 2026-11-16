@@ -278,15 +278,16 @@ const UI = {
   },
 
   setBg(src, look = "day") {
+    const kind = /flat/.test(src) ? "bg-flat" : /hall/.test(src) ? "bg-hall" : /cafe/.test(src) ? "bg-cafe" : /dock/.test(src) ? "bg-dock" : "";
     const cur = $(`#bg-${this.bgActive}`);
     const img = $("img", cur);
     if (img && img.getAttribute("src") === src) {
-      $(".bg-box", cur).className = "bg-box look-" + look;
+      $(".bg-box", cur).className = "bg-box look-" + look + (kind ? " " + kind : "");
       return;
     }
     const nextId = this.bgActive === "a" ? "b" : "a";
     const next = $(`#bg-${nextId}`);
-    next.innerHTML = `<div class="bg-box look-${look}"><img src="${src}" alt=""><div class="fx">${src.endsWith("flat.jpg") ? FLAT_FX : ""}</div></div>`;
+    next.innerHTML = `<div class="bg-box look-${look}${kind ? " " + kind : ""}"><img src="${src}" alt=""><div class="fx">${src.endsWith("flat.jpg") ? FLAT_FX : ""}</div></div>`;
     requestAnimationFrame(() => { next.classList.add("on"); cur.classList.remove("on"); });
     this.bgActive = nextId;
   },
