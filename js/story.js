@@ -109,7 +109,7 @@ const SCENES = {
   "d1-door": {
     type: "ad", day: 1, time: "11:40", place: "Коридор, дверь 4B", bg: "art/hall.jpg", look: "day", ambience: "room",
     kicker: "Дверь ещё закрыта", title: "Объявление",
-    lead: "Хелен опаздывает. Лист на двери — её условия. Прочитайте: через минуту она спросит именно это.",
+    lead: "Хелен спросит эти условия. Незнакомое слово можно нажать.",
     paperTitle: "FLAT 4B — TO LET",
     lines: [
       "Quiet tenant wanted. Someone who works from home.",

@@ -238,8 +238,7 @@ const Game = {
       $("#scene").innerHTML = `
         <section class="ad-hold">
           <article class="listing">
-            <p class="listing-no">4B</p>
-            <p class="listing-title">${esc(sc.paperTitle || "TO LET")}</p>
+            <p class="listing-title">To let</p>
             ${lines.map((t) => `<p class="english">${enHTML(t)}</p>`).join("")}
             <p class="listing-sign">Helen</p>
           </article>
