@@ -67,19 +67,21 @@ const Game = {
   title(pick) {
     this.leave();
     this.playing = false;
-    Theme.set("night");
-    UI.hideHud();
-    document.body.classList.add("s3");
-    document.body.dataset.m = "";
-    Sound.setAmbience(null);
-    this.titleMusic();
     // Какой сезон показать: выбранный вкладкой, иначе последний сыгранный, иначе новый.
     let last = null;
     try { last = localStorage.getItem("iney-last-pack"); } catch { /* без хранилища показываем новый сезон */ }
     const pid = PACKS[pick] ? pick : PACKS[last] ? last : "moon";
     const pk = PACKS[pid], M = pk.meta;
+    // У мультяшного сезона и титул свой, мультяшный (Toon.title в js/toon.js).
+    const toon = M.theme === "toon";
+    Theme.set(toon ? "toon" : "night");
+    UI.hideHud();
+    document.body.classList.add("s3");
+    document.body.dataset.m = "";
+    Sound.setAmbience(null);
+    this.titleMusic();
     Pack.use(pid);
-    UI.setBg(M.bg, M.look);
+    UI.setBg(M.bg, toon ? "day" : M.look);
     const saves = { 1: Store.peek("iney-v2"), 2: Store.peek("iney-s2d") };
     Object.values(PACKS).forEach((p) => { const sv = Store.peek(p.meta.key); saves[p.meta.season] = p.migrate ? p.migrate(sv) : sv; });
     const has = (n) => !!(saves[n] && saves[n].started && saves[n].step > 0);
@@ -108,7 +110,15 @@ const Game = {
       const m = PACKS[id].meta, played = has(m.season);
       return `<button class="t-tab ${id === pid ? "on" : ""}" data-act="pack" data-pack="${id}"><b>${esc(m.tab)}</b><span>${m.isNew && !played ? "новый" : played ? "начат" : "не начат"}</span></button>`;
     }).join("");
-    $("#scene").innerHTML = `
+    const archive = `
+        <details class="o-archive">
+          <summary>Архив: первые сезоны</summary>
+          <div class="season-row">
+            ${card(1, "Сезон 1", "Квартира 4B", "Лев пропал. На складе напротив пишут одно, а грузят другое.", has(1))}
+            ${card(2, "Сезон 2", "Звонок", "Мира не вернулась к десяти. Её подруга звонит вам сама.", has(2))}
+          </div>
+        </details>`;
+    $("#scene").innerHTML = toon ? Toon.title({ pk, M, sv, hasCur, where, stars, trained, tabs, archive }) : `
       <section class="title hub o-title">
         <header class="t-top">
           <div class="t-brand"><i>${ICON.snow}</i><div><b>Иней</b><span>английский под прикрытием</span></div></div>
@@ -133,13 +143,7 @@ const Game = {
           <button data-act="coll">${ICON.shield}<b>Личное дело</b><span>${Object.keys(P.badges).length}/${Object.keys(BADGES).length}</span></button>
           <button data-act="settings">${ICON.gear}<b>Настройки</b></button>
         </nav>
-        <details class="o-archive">
-          <summary>Архив: первые сезоны</summary>
-          <div class="season-row">
-            ${card(1, "Сезон 1", "Квартира 4B", "Лев пропал. На складе напротив пишут одно, а грузят другое.", has(1))}
-            ${card(2, "Сезон 2", "Звонок", "Мира не вернулась к десяти. Её подруга звонит вам сама.", has(2))}
-          </div>
-        </details>
+        ${archive}
       </section>`;
     // На узком экране вкладки прокручиваются: выбранная должна быть видна целиком.
     const tt = $(".t-tabs"), on = tt && $(".t-tab.on", tt);
@@ -149,7 +153,11 @@ const Game = {
       if (!a) return;
       Sound.ensure();
       Sound.sfx("click");
-      if (a.dataset.act === "pack") return this.title(a.dataset.pack);
+      if (a.dataset.act === "pack") {
+        // Выбранная вкладка запоминается: после тренировки или перезагрузки титул откроется на ней же.
+        try { localStorage.setItem("iney-last-pack", a.dataset.pack); } catch { /* не страшно */ }
+        return this.title(a.dataset.pack);
+      }
       if (a.dataset.act === "settings") return this.settings(() => this.title(pid));
       if (a.dataset.act === "train") return Arcade.hub();
       if (a.dataset.act === "coll") return Arcade.collection();
@@ -158,7 +166,8 @@ const Game = {
       const sp = Pack.bySeason(season);
       if (sp) { try { localStorage.setItem("iney-last-pack", sp.meta.id); } catch { /* не страшно */ } }
       if (a.dataset.act === "new") {
-        if (has(season) && !confirm(modern ? "Начать сезон заново? Прогресс миссий сотрётся, уровень и отметки останутся." : "Начать этот сезон заново? Его прогресс сотрётся.")) return;
+        if (has(season) && !confirm(!modern ? "Начать этот сезон заново? Его прогресс сотрётся." : toon && season === M.season
+          ? "Начать сезон заново? Прогресс миссий сотрётся, ранг и стикеры останутся." : "Начать сезон заново? Прогресс миссий сотрётся, уровень и отметки останутся.")) return;
         Store.use(season);
         Store.reset();
         if (modern) { state.season = 3; state.started = true; state.step = 0; Store.save(); return this.run(); }

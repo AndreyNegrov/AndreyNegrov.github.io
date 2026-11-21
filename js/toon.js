@@ -33,6 +33,55 @@ const Toon = {
   },
   owl(mood = "") { return Face.svg("owl", "", { mood }); },
 
+  // ───── титул, когда выбрана вкладка мультяшного сезона: как в прежней версии, плюс вкладки сезонов ─────
+  // d: { pk, M, sv, hasCur, where, stars, trained, tabs, archive } — всё посчитано в Game.title.
+  title(d) {
+    const { pk, M, sv, hasCur, where, stars, trained, tabs, archive } = d;
+    const P = Profile.get(), rank = this.rank();
+    const nBadges = Object.keys(P.badges).length, allBadges = Object.keys(BADGES).length;
+    const COLORS = ["#ff7a59", "#ffd23f", "#3de0a8", "#b08cff", "#38d0ff", "#ff6f9f"];
+    const path = Object.entries(pk.MISSIONS).map(([n, m], i) => {
+      const st = sv && sv.missions && sv.missions[n];
+      const cur = where ? where.mission === Number(n) : Number(n) === 1;
+      return `<li class="${st ? "done" : ""} ${cur ? "cur" : ""}" style="--c:${COLORS[i % COLORS.length]}"><i>${m.emo || "🎯"}</i><b>${esc(m.title)}</b><em>${st ? "★".repeat(st.stars) + "☆".repeat(3 - st.stars) : ""}</em></li>`;
+    }).join("");
+    return `
+      <section class="title hub o-title">
+        <header class="t-top">
+          <div class="t-agent"><i>${rank.ico}</i><div><span>Агент «Иней»</span><b>${esc(rank.name)}</b>
+            <div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div><em>${P.xp} XP</em></div>
+          <div class="t-chips">
+            <div class="t-chip ${trained ? "hot" : ""}" title="Дней подряд с тренировкой">🔥 ${P.streak || 0}</div>
+            <button class="t-chip" data-act="coll" title="Коллекция стикеров">🏅 ${nBadges}/${allBadges}</button>
+            ${stars ? `<div class="t-chip" title="Звёзды за миссии">⭐ ${stars}/18</div>` : ""}
+          </div>
+        </header>
+        <h1 class="t-logo">ИНЕЙ</h1>
+        <p class="t-tag">шпионский английский</p>
+        <div class="t-main">
+          <article class="o-hero">
+            <div class="t-tabs">${tabs}</div>
+            <p class="kicker">${esc(M.kicker)}</p>
+            <h2>${esc(M.title)}</h2>
+            <p class="lead">${esc(M.lead)}</p>
+            <ul class="t-path">${path}</ul>
+            <div class="row">
+              ${hasCur ? `<button class="btn primary" data-act="continue" data-season="${M.season}">▶ Продолжить${where && where.mission ? ": миссия " + where.mission : ""}</button>` : ""}
+              <button class="btn ${hasCur ? "ghost" : "primary"}" data-act="new" data-season="${M.season}">${hasCur ? "Начать заново" : "▶ " + esc(M.cta)}</button>
+            </div>
+            <p class="muted small">Говоришь голосом (кнопка «Говорить» или пробел) или пишешь. Персонажи ищут смысл, а не точные слова. Лучше в Edge или Chrome, в наушниках.</p>
+            ${Mic.isFile() ? `<p class="muted small t-warn">🎤 Игра открыта как файл: браузер будет спрашивать про микрофон каждый раз. Запусти <b>play.cmd</b> в папке игры — спросит один раз и запомнит.</p>` : ""}
+          </article>
+          <aside class="t-side">
+            <button class="t-card train" data-act="train"><i>🎯</i><b>Тренировка${trained ? "" : "<u>×2 XP</u>"}</b><span>Пять мини-игр по две минуты: навигатор, цифры на слух, быстрый ответ, фразы, эхо.</span></button>
+            <button class="t-card coll" data-act="coll"><i>🏅</i><b>Коллекция</b><span>Стикеры за красивую работу: ${nBadges} из ${allBadges}.</span></button>
+            <button class="t-card set" data-act="settings"><i>⚙️</i><b>Настройки</b><span>Сложность, голоса, музыка, языковая модель.</span></button>
+          </aside>
+        </div>
+        ${archive}
+      </section>`;
+  },
+
   // ───── разговор: рисованные лица вместо фото ─────
   convStage(sc, lv) {
     const kind = sc.ui || "face";

@@ -286,6 +286,16 @@ body.s3 .o-hero .row { margin-top: 16px; }
 body.s3 .o-archive { width: min(1060px, 100%); }
 body.s3 .o-archive summary { color: #e9e3ff; font-weight: 700; text-shadow: 0 2px 0 rgba(20, 12, 70, 0.7); }
 body.s3 .season { background: #1e1650; border: 2px solid rgba(255, 255, 255, 0.13); backdrop-filter: none; }
+/* Вкладки сезонов на мультяшном титуле: отсюда можно вернуться к ночным сезонам. */
+.t-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.t-tab { display: grid; gap: 1px; text-align: left; background: #2a2070; border: 2px solid rgba(255, 255, 255, 0.14); border-radius: 14px; padding: 7px 14px; color: var(--ink); box-shadow: 0 4px 0 var(--edge); font: inherit; cursor: pointer; transition: transform 0.12s, border-color 0.12s; }
+.t-tab b { font-size: 14px; font-weight: 900; white-space: nowrap; }
+.t-tab span { font-size: 11px; font-weight: 700; color: var(--muted); }
+.t-tab:hover { border-color: var(--yellow); transform: translateY(-1px); }
+.t-tab:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--edge); }
+.t-tab.on { background: linear-gradient(180deg, #ffe169, #ffc928); border-color: transparent; color: #2a1a00; box-shadow: 0 4px 0 #b07a00; }
+.t-tab.on span { color: #6b4a00; }
+.t-warn { color: #ffd98a; }
 
 /* ───── мессенджер ───── */
 body.s3 .o-phone { background: #17104a; border: 3px solid #0d082c; border-radius: 36px; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16), 0 10px 0 var(--edge), 0 40px 90px rgba(8, 4, 34, 0.6); }

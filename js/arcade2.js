@@ -398,6 +398,7 @@ Object.assign(Arcade, {
     Game.leave();
     Game.playing = false;
     UI.hideHud();
+    Theme.set("night");   // тренировки и личное дело — в обычном виде, даже если титул был мультяшный
     document.body.classList.add("s3");
     document.body.dataset.m = "";
     UI.setBg("art/lobby.jpg", "dim");
