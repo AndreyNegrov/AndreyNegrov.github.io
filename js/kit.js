@@ -5,7 +5,12 @@ const Leg = {
   get(s = state) { return (s && s.legend) || { city: "riga", job: "courier", ride: "bike" }; },
   city(s) { return LEGEND.city[this.get(s).city] || LEGEND.city.riga; },
   job(s) { return LEGEND.job[this.get(s).job] || Object.values(LEGEND.job)[0]; },
-  ride(s) { return LEGEND.ride[this.get(s).ride] || Object.values(LEGEND.ride)[0]; },
+  // Строка легенды из группы: если такой группы у сезона нет — пустой объект, а не ошибка.
+  pick(group, s) { const g = LEGEND[group]; return g ? g[this.get(s)[group]] || Object.values(g)[0] : {}; },
+  ride(s) { return this.pick("ride", s); },
+  hobby(s) { return this.pick("hobby", s); },
+  // Третья строка легенды: транспорт, «по чему скучаешь» или хобби — у каждого сезона своя.
+  third(s) { return this.pick(LEGEND_GROUPS[2] ? LEGEND_GROUPS[2][0] : "ride", s); },
   otherCities(s) {
     const mine = this.get(s).city;
     return Object.entries(LEGEND.city).filter(([k]) => k !== mine).flatMap(([, c]) => c.any);
@@ -98,7 +103,7 @@ const Clues = {
     if (!st.clues.includes(id)) st.clues.push(id);
     Store.save();
     if (!quiet) {
-      UI.toast(`<b>Улика</b> ${esc(CLUES[id].ru)}`, "ok", 5600);
+      UI.toast(`<b>${TOON() ? "🔎 " : ""}Улика</b> ${esc(CLUES[id].ru)}`, "ok", 5600);
       Sound.sfx("stamp");
       Juice.xp(10, $("#btn-notes"), "улика");
     }
@@ -116,7 +121,7 @@ const Dossier = {
     d[field] = value;
     Store.save();
     const f = (DOSSIER_FIELDS.find((x) => x.id === field) || {}).ru || field;
-    UI.toast(`<b>Досье · ${esc(PEOPLE[who].name)}</b> ${esc(f)}: ${esc(value)}`, "ok", 3000);
+    UI.toast(`<b>${TOON() ? "📁 " : ""}Досье · ${esc(PEOPLE[who].name)}</b> ${esc(f)}: ${esc(value)}`, "ok", 3000);
     Juice.xp(3, $("#btn-notes"));
     UI.bumpNotes();
   }
@@ -224,7 +229,8 @@ const Kit = {
       el.className = "o-chapter";
       document.body.dataset.m = ch.n;
       el.innerHTML = `<div class="o-ch-in">
-        <p class="o-ch-n">${String(ch.n).padStart(2, "0")} / 06</p>
+        ${TOON() ? `<div class="o-ch-ico">${(MISSIONS[ch.n] && MISSIONS[ch.n].emo) || "🎯"}</div><p class="o-ch-n">Миссия ${ch.n} из 6</p>`
+          : `<p class="o-ch-n">${String(ch.n).padStart(2, "0")} / 06</p>`}
         <h1>${esc(ch.title)}</h1>
         <p class="o-ch-sub">${esc(ch.sub || "")}</p>
         <i class="o-ch-line"></i>
@@ -247,11 +253,12 @@ const Kit = {
   legend(sc) {
     return new Promise((resolve) => {
       const pick = { ...(state.legend || {}) };
+      const M = Pack.meta(), T = TOON();
       const group = (key, title) => `
         <div class="o-leg-group"><h4>${title}</h4><div class="o-leg-opts">
         ${Object.entries(LEGEND[key]).map(([id, o]) => `
           <button class="o-leg-opt ${pick[key] === id ? "on" : ""}" data-k="${key}" data-v="${id}">
-            <b>${esc(o.ru)}</b><span class="english">${enHTML(o.say)}</span>
+            ${T ? `<span class="o-leg-emo">${o.emo || ""}</span>` : ""}<b>${esc(o.ru)}</b><span class="english">${enHTML(o.say)}</span>
           </button>`).join("")}
         </div></div>`;
       const keys = LEGEND_GROUPS.map(([k]) => k);
@@ -262,11 +269,12 @@ const Kit = {
           <section class="o-legend">
             <article class="o-leg-card ${drawn ? "still" : ""}">
               <div class="o-leg-head">
-                <div class="o-leg-photo">${ICON.user}</div>
-                <div><p class="kicker">${esc(Pack.meta().legendKicker || "Легенда · профиль курьера Relay")}</p><h1>Alex Frost</h1>
-                <p class="muted">${esc(Pack.meta().legendLead || "Frost — «иней». В Лондоне два месяца. Остальное выбери: потом это придётся говорить вслух, и не один раз.")}</p></div>
+                <div class="o-leg-photo">${T ? Face.svg("self") : ICON.user}</div>
+                <div><p class="kicker">${esc(M.legendKicker || "Легенда · профиль курьера Relay")}</p><h1>Alex Frost</h1>
+                <p class="muted">${esc(M.legendLead || "Frost — «иней». В Лондоне два месяца. Остальное выбери: потом это придётся говорить вслух, и не один раз.")}</p></div>
               </div>
               ${LEGEND_GROUPS.map(([k, t]) => group(k, t)).join("")}
+              ${M.legendNote ? `<p class="muted small">${esc(M.legendNote)}</p>` : ""}
               <div class="row"><button class="btn primary" data-act="go" ${ready ? "" : "disabled"}>Запомнить легенду</button></div>
             </article>
           </section>`;
@@ -286,6 +294,7 @@ const Kit = {
         if (e.target.closest('[data-act="go"]') && keys.every((k) => pick[k])) {
           $("#scene").onclick = null;
           state.legend = pick;
+          (M.legendPhrases || []).forEach((id) => Phrases.unlock(id));
           Store.save();
           Voice.stop();
           resolve();
@@ -312,15 +321,16 @@ const Kit = {
       const clues = st.clues.map((id) => CLUES[id]).filter(Boolean);
       const next = MISSIONS[m + 1];
       const xp0 = st.xp || 0;
-      const rank = Profile.rank();
+      const T = TOON();
+      const rank = T ? Toon.rank() : Profile.rank();
       $("#scene").innerHTML = `
         <section class="o-debrief">
           <article class="o-db-card">
-            <div class="o-db-head"><i>${ICON[MISSIONS[m].ico] || ICON.target}</i><div><p class="kicker">Миссия ${m} · итог</p><h1>${esc(val(sc.title, state))}</h1></div><span class="o-stamp">${won === 3 ? "Чисто" : "Пройдено"}</span></div>
-            <div class="o-stars">${stars.map((s) => `<div class="o-star ${s.ok ? "on" : ""}"><i>${ICON.starFill}</i><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ""}</div>`).join("")}</div>
-            <div class="o-xpline"><i>${rank.mark}</i><div><b>${esc(rank.name)}</b><span class="o-xp-next">${rank.next ? `до уровня «${esc(rank.next.name)}» — ${rank.next.at - Profile.get().xp}` : "высший уровень"}</span><div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div><em class="o-xp-n">+${xp0}</em></div>
+            <div class="o-db-head"><i>${T ? MISSIONS[m].emo || "🎯" : ICON[MISSIONS[m].ico] || ICON.target}</i><div><p class="kicker">Миссия ${m} · итог</p><h1>${esc(val(sc.title, state))}</h1></div><span class="o-stamp">${won === 3 ? (T ? "Идеально" : "Чисто") : "Пройдено"}</span></div>
+            <div class="o-stars">${stars.map((s) => `<div class="o-star ${s.ok ? "on" : ""}"><i>${T ? "★" : ICON.starFill}</i><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ""}</div>`).join("")}</div>
+            <div class="o-xpline"><i>${T ? rank.ico : rank.mark}</i><div><b>${esc(rank.name)}</b><span class="o-xp-next">${Kit.nextText(rank)}</span><div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div><em class="o-xp-n">+${xp0}</em></div>
             <div class="o-db-stickers"></div>
-            <div class="o-sova"><div class="o-sova-ava">${avatar("sova", "sm")}</div><p>${esc(val(sc.sova, state))}</p></div>
+            <div class="o-sova"><div class="o-sova-ava">${T ? Toon.owl(won >= 2 ? "happy" : "") : avatar("sova", "sm")}</div><p>${esc(val(sc.sova, state))}</p></div>
             <div class="o-db-cols">
               <section><h4>Фразы, которые сработали</h4>
                 ${used.length ? used.map((p) => `<div class="o-ph-row"><button class="icon-btn sm" data-say="${esc(p.en)}">${ICON.play}</button><div><b class="english">${esc(p.en)}</b><span>${esc(p.ru)}</span></div></div>`).join("")
@@ -352,6 +362,7 @@ const Kit = {
         if (gain) Juice.xp(gain, $(".o-xp-n"), "звёзды");
         Kit.xpLine(xp0);
         Sound.sfx(won === 3 ? "win" : "ok");
+        if (T && won === 3) Juice.rain(120);
       });
       $(".o-debrief").onclick = (e) => {
         const sayBtn = e.target.closest("[data-say]");
@@ -365,12 +376,20 @@ const Kit = {
     });
   },
 
+  // Подпись под уровнем: сколько осталось до следующего. В мультяшном сезоне — ранги и XP.
+  nextText(rank) {
+    const left = rank.next ? rank.next.at - Profile.get().xp : 0;
+    if (TOON()) return rank.next ? `до ранга «${rank.next.name}» — ${left} XP` : "высший ранг";
+    return rank.next ? `до уровня «${rank.next.name}» — ${left}` : "высший уровень";
+  },
+
   // Обновляет строку опыта и стикеры на экране итогов.
   xpLine(from) {
     const st = Mission.stats();
     const n = $(".o-xp-n"), bar = $(".o-xpline .xp-bar u"), nx = $(".o-xp-next"), box = $(".o-db-stickers");
     if (!n) return;
-    const rank = Profile.rank();
+    const T = TOON();
+    const rank = T ? Toon.rank() : Profile.rank();
     const to = st.xp || 0, t0 = performance.now();
     const step = (t) => {
       const k = clamp((t - t0) / 900, 0, 1);
@@ -380,11 +399,13 @@ const Kit = {
     };
     requestAnimationFrame(step);
     if (bar) bar.style.width = rank.pct + "%";
-    if (nx) nx.textContent = rank.next ? `до уровня «${rank.next.name}» — ${rank.next.at - Profile.get().xp}` : "высший уровень";
+    if (nx) nx.textContent = this.nextText(rank);
     const b = $(".o-xpline b"), ico = $(".o-xpline > i");
     if (b) b.textContent = rank.name;
-    if (ico) ico.textContent = rank.mark;
-    if (box) box.innerHTML = (st.badges || []).filter((id) => BADGES[id]).map((id) => `<div><i>${ICON[BADGES[id].ico]}</i>${esc(BADGES[id].name)}</div>`).join("");
+    if (ico) ico.textContent = T ? rank.ico : rank.mark;
+    if (box) box.innerHTML = (st.badges || []).filter((id) => BADGES[id]).map((id) => T
+      ? `<div><i>${Toon.badge(id).emo}</i>${esc(Toon.badge(id).name)}</div>`
+      : `<div><i>${ICON[BADGES[id].ico]}</i>${esc(BADGES[id].name)}</div>`).join("");
   },
 
   replayMission(m) {
@@ -413,29 +434,31 @@ const Kit = {
       const phrases = Object.keys(state.phrases || {}).filter((id) => state.phrases[id].n > 0).length;
       const stars = Object.values(state.missions || {}).reduce((a, x) => a + (x.stars || 0), 0);
       const xp0 = st.xp || 0;
-      const rank = Profile.rank();
+      const T = TOON(), M = Pack.meta();
+      const rank = T ? Toon.rank() : Profile.rank();
+      const head = T ? (kind === "best" ? "🏆" : kind === "good" ? "🎖️" : "🚪") : kind === "gone" ? ICON.pin : ICON.shield;
       Sound.setAmbience("room");
       $("#scene").innerHTML = `
         <section class="o-debrief">
           <article class="o-db-card o-final ${kind}">
-            <div class="o-db-head"><i>${kind === "gone" ? ICON.pin : ICON.shield}</i><div><p class="kicker">${esc(sc.kicker)}</p><h1>${esc(e.title)}</h1></div>${kind !== "gone" ? `<span class="o-stamp">Дело закрыто</span>` : ""}</div>
+            <div class="o-db-head"><i>${head}</i><div><p class="kicker">${esc(sc.kicker)}</p><h1>${esc(e.title)}</h1></div>${kind !== "gone" ? `<span class="o-stamp">Дело закрыто</span>` : ""}</div>
             ${e.text(state).filter(Boolean).map((p) => `<p class="lead">${esc(p)}</p>`).join("")}
-            <div class="o-stars">${stars6.map((s) => `<div class="o-star ${s.ok ? "on" : ""}"><i>${ICON.starFill}</i><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ""}</div>`).join("")}</div>
-            <div class="o-xpline"><i>${rank.mark}</i><div><b>${esc(rank.name)}</b><span class="o-xp-next"></span><div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div><em class="o-xp-n">+${xp0}</em></div>
+            <div class="o-stars">${stars6.map((s) => `<div class="o-star ${s.ok ? "on" : ""}"><i>${T ? "★" : ICON.starFill}</i><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ""}</div>`).join("")}</div>
+            <div class="o-xpline"><i>${T ? rank.ico : rank.mark}</i><div><b>${esc(rank.name)}</b><span class="o-xp-next"></span><div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div><em class="o-xp-n">+${xp0}</em></div>
             <div class="o-db-stickers"></div>
-            <div class="o-sova"><div class="o-sova-ava">${avatar("sova", "sm")}</div><p>${esc(e.sova(state))}</p></div>
+            <div class="o-sova"><div class="o-sova-ava">${T ? Toon.owl(kind === "best" ? "happy" : "") : avatar("sova", "sm")}</div><p>${esc(e.sova(state))}</p></div>
             <div class="stats">
               <div><b>${found}/${total}</b><span>улик</span></div>
               <div><b>${phrases}/${PHRASES.length}</b><span>фраз сказано вслух</span></div>
               <div><b>${stars}/18</b><span>звёзд за миссии</span></div>
-              <div><b class="o-st-n">${Object.keys(Profile.get().badges).length}/${Object.keys(BADGES).length}</b><span>отметок в деле</span></div>
+              <div><b class="o-st-n">${Object.keys(Profile.get().badges).length}/${Object.keys(BADGES).length}</b><span>${T ? "стикеров" : "отметок в деле"}</span></div>
             </div>
             <div class="row">
-              ${kind !== "best" ? '<button class="btn primary" data-act="m6">Переиграть последнюю ночь</button>' : ""}
+              ${kind !== "best" ? `<button class="btn primary" data-act="m6">${esc(M.replayLast || "Переиграть последнюю ночь")}</button>` : ""}
               <button class="btn ${kind === "best" ? "primary" : "ghost"}" data-act="title">Главное меню</button>
               <button class="btn ghost" data-act="again">Сезон заново</button>
             </div>
-            ${kind === "best" ? '<p class="muted small">Конец сезона «Последняя миля». Тренировки и личное дело — в главном меню.</p>' : ""}
+            ${kind === "best" ? `<p class="muted small">${esc(M.endNote || `Конец сезона «${M.title}». Тренировки и личное дело — в главном меню.`)}</p>` : ""}
           </article>
         </section>`;
       const timers = [];
@@ -452,13 +475,14 @@ const Kit = {
         const n = $(".o-st-n");
         if (n) n.textContent = `${Object.keys(Profile.get().badges).length}/${Object.keys(BADGES).length}`;
         Sound.sfx(kind === "best" ? "win" : kind === "good" ? "ok" : "bad");
+        if (T && kind === "best") Juice.rain(200);
       });
       $(".o-final").onclick = (ev) => {
         const a = ev.target.closest("[data-act]");
         if (!a) return;
         if (a.dataset.act === "m6") Kit.replayMission(6);
         else if (a.dataset.act === "again") {
-          if (!confirm("Начать сезон заново? Прогресс миссий сотрётся, уровень и отметки останутся.")) return;
+          if (!confirm(T ? "Начать сезон заново? Прогресс миссий сотрётся, ранг и стикеры останутся." : "Начать сезон заново? Прогресс миссий сотрётся, уровень и отметки останутся.")) return;
           Store.reset(); state.season = 3; state.started = true; state.fv = 2; Store.save(); Game.run();
         } else Game.title();
       };
@@ -490,7 +514,7 @@ const Kit = {
           : '<p class="muted">Пусто. Фразы появятся по ходу миссий.</p>');
     }
     if (tab === "legend") {
-      const c = Leg.city(), j = Leg.job(), rd = Leg.ride();
+      const c = Leg.city(), j = Leg.job(), rd = Leg.third();
       const rows = [["Имя", "My name is Alex Frost."], ["Откуда", `I'm from ${c.en}.`], ["Работа", j.say], [Pack.meta().legend3 || "Транспорт", rd.say], ...(Pack.meta().legendMore || [["В Лондоне", "I've been in London for two months."]])];
       return `<p class="muted">Это нужно говорить одинаково всем. Каждое расхождение — засветка.</p>` +
         rows.map(([k, en]) => `<div class="o-ph-row"><button class="icon-btn sm" data-say="${esc(en)}">${ICON.play}</button><div><span>${esc(k)}</span><b class="english">${esc(en)}</b></div></div>`).join("");

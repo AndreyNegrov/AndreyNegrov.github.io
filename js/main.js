@@ -67,6 +67,7 @@ const Game = {
   title(pick) {
     this.leave();
     this.playing = false;
+    Theme.set("night");
     UI.hideHud();
     document.body.classList.add("s3");
     document.body.dataset.m = "";
@@ -79,7 +80,8 @@ const Game = {
     const pk = PACKS[pid], M = pk.meta;
     Pack.use(pid);
     UI.setBg(M.bg, M.look);
-    const saves = { 1: Store.peek("iney-v2"), 2: Store.peek("iney-s2d"), 3: Store.peek("iney-relay"), 4: Store.peek("iney-moon") };
+    const saves = { 1: Store.peek("iney-v2"), 2: Store.peek("iney-s2d") };
+    Object.values(PACKS).forEach((p) => { const sv = Store.peek(p.meta.key); saves[p.meta.season] = p.migrate ? p.migrate(sv) : sv; });
     const has = (n) => !!(saves[n] && saves[n].started && saves[n].step > 0);
     const sv = saves[M.season], hasCur = has(M.season);
     const where = hasCur ? SCENES[pk.FLOW[Math.min(sv.step, pk.FLOW.length - 1)]] : null;
@@ -104,7 +106,7 @@ const Game = {
     }).join("");
     const tabs = Pack.list().map((id) => {
       const m = PACKS[id].meta, played = has(m.season);
-      return `<button class="t-tab ${id === pid ? "on" : ""}" data-act="pack" data-pack="${id}"><b>${esc(m.tab)}</b><span>${id === "moon" && !played ? "новый" : played ? "начат" : "не начат"}</span></button>`;
+      return `<button class="t-tab ${id === pid ? "on" : ""}" data-act="pack" data-pack="${id}"><b>${esc(m.tab)}</b><span>${m.isNew && !played ? "новый" : played ? "начат" : "не начат"}</span></button>`;
     }).join("");
     $("#scene").innerHTML = `
       <section class="title hub o-title">
@@ -139,6 +141,9 @@ const Game = {
           </div>
         </details>
       </section>`;
+    // На узком экране вкладки прокручиваются: выбранная должна быть видна целиком.
+    const tt = $(".t-tabs"), on = tt && $(".t-tab.on", tt);
+    if (on) { const d = on.getBoundingClientRect().right - tt.getBoundingClientRect().right; if (d > 0) tt.scrollLeft += d + 6; }
     $(".title").addEventListener("click", (e) => {
       const a = e.target.closest("[data-act]");
       if (!a) return;
@@ -150,7 +155,8 @@ const Game = {
       if (a.dataset.act === "coll") return Arcade.collection();
       const season = Number(a.dataset.season);
       const modern = season >= 3;
-      if (modern) { try { localStorage.setItem("iney-last-pack", season === 4 ? "moon" : "relay"); } catch { /* не страшно */ } }
+      const sp = Pack.bySeason(season);
+      if (sp) { try { localStorage.setItem("iney-last-pack", sp.meta.id); } catch { /* не страшно */ } }
       if (a.dataset.act === "new") {
         if (has(season) && !confirm(modern ? "Начать сезон заново? Прогресс миссий сотрётся, уровень и отметки останутся." : "Начать этот сезон заново? Его прогресс сотрётся.")) return;
         Store.use(season);
@@ -177,6 +183,7 @@ const Game = {
   intro(i) {
     this.leave();
     this.playing = false;
+    Theme.set("night");
     UI.hideHud();
     document.body.classList.remove("s3");
     const intro = this.introList();
@@ -257,6 +264,7 @@ const Game = {
     const tok = (this.tok = { dead: false });
     this.playing = true;
     this.paused = false;
+    Theme.set(state.season === 3 ? Pack.meta().theme || "night" : "night");
     UI.setBg(sc.bg, sc.look || "day");
     UI.hud(sc);
     Sound.setAmbience(sc.ambience || (state.season === 3 ? (sc.look === "night" ? "night" : "room") : "room"));
@@ -442,6 +450,7 @@ const Game = {
     $("#scene").innerHTML = `
       <section class="card-scene">
         <article class="story-card fail">
+          ${TOON() ? '<div class="fail-ico">🔥</div>' : ""}
           <p class="kicker">Легенда сгорела</p>
           <h1>Провал</h1>
           <p class="lead">${esc(text)}</p>
@@ -583,6 +592,8 @@ const ENGINES = {
   crack: (sc, tok) => Crack.run(sc, tok),
   lift: (sc, tok) => Lift.run(sc, tok),
   search: (sc, tok) => Search.run(sc, tok),
+  elevator: (sc, tok) => LiftCab.run(sc, tok),
+  deskSearch: (sc, tok) => DeskSearch.run(sc, tok),
   caseboard: (sc, tok) => Caseboard.run(sc, tok),
   order: (sc) => OrderCard.run(sc),
   bagcheck: (sc, tok) => BagCheck.run(sc, tok),

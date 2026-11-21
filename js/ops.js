@@ -151,12 +151,12 @@ const Eaves = {
           <div class="o-waves" style="left:${tp.x}%;top:${tp.y}%"><i></i><i></i><i></i></div>
           ${OfficeMap.token(sc.targetAt, sc.target, { label: PEOPLE[sc.target].name, cls: "target", plan: sc.plan })}
           ${sc.spots.map((s, i) => { const p = OfficeMap.pct(s.at, sc.plan); return `<button class="o-spot d-${s.dist}" data-spot="${i}" style="left:${p.x}%;top:${p.y}%"><span>${esc(s.label)}</span></button>`; }).join("")}
-          <div class="o-me" style="left:${OfficeMap.pct(sc.spots[0].at, sc.plan).x}%;top:${OfficeMap.pct(sc.spots[0].at, sc.plan).y}%"><i></i></div>
+          <div class="o-me" style="left:${OfficeMap.pct(sc.spots[0].at, sc.plan).x}%;top:${OfficeMap.pct(sc.spots[0].at, sc.plan).y}%">${TOON() ? avatar("you", "o-tok-face") : "<i></i>"}</div>
         </div></div>
         <aside class="o-panel">
           <p class="kicker">${esc(sc.time)} · ${esc(sc.place)}</p>
           <h2>${esc(sc.title)}</h2>
-          <div class="o-eye"><span class="o-eye-ico">${ICON.eye}</span><div class="o-eye-bar"><i></i></div><b class="o-eye-n">0</b></div>
+          <div class="o-eye"><span class="o-eye-ico">${TOON() ? "👁" : ICON.eye}</span><div class="o-eye-bar"><i></i></div><b class="o-eye-n">0</b></div>
           <div class="o-spots">${sc.spots.map((s, i) => `<button class="o-spot-row d-${s.dist}" data-spot="${i}"><b>${esc(s.label)}</b><span>${esc(s.ru)}</span></button>`).join("")}</div>
           <div class="o-subs"><span class="muted">Тихо.</span></div>
           <div class="o-catchbox"></div>
@@ -168,7 +168,7 @@ const Eaves = {
           <p class="kicker">${esc(sc.time)} · ${esc(sc.place)}</p>
           <h2>${esc(sc.title)}</h2>
           <p>${esc(val(sc.intro, state))}</p>
-          <div class="keys"><span>Ближе — слышно лучше</span><span>Глаз — насколько ты на виду</span><span>Заметят — назови повод</span><span>После реплики — какое слово прозвучало</span></div>
+          <div class="keys"><span>Ближе — слышно лучше</span><span>Глаз — насколько ты на виду</span><span>Заметят — назови повод</span><span>${TOON() ? "🎯 Лови ключевые слова" : "После реплики — какое слово прозвучало"}</span></div>
           <button class="btn primary" data-act="start">Начать</button>
         </div></div>
       </section>`;
@@ -193,7 +193,8 @@ const Eaves = {
       E.attn = 0;
       E.noticeNow = false;
       Sound.sfx("pop");
-      UI.toast("<b>Отвлёк(ла)</b> Ты роняешь велосипедный замок. Все смотрят на звук, а не на тебя.", "ok", 4200);
+      UI.toast(TOON() ? "<b>🍪 Печенье</b> Ты ставишь на стол коробку печенья. Все смотрят на печенье, а не на тебя."
+        : "<b>Отвлёк(ла)</b> Ты роняешь велосипедный замок. Все смотрят на звук, а не на тебя.", "ok", 4200);
       Juice.float("внимание сброшено", $(".o-eye", E.el), "ok");
     } else if (id === "freeze") {
       if (!(state.heat > 0)) return UI.toast("Засветки нет — остужать нечего.", "info");
@@ -210,7 +211,7 @@ const Eaves = {
     const opts = shuffle(line.catch.opts.map((t, i) => ({ t, ok: i === 0 })));
     const ms = 5600;
     E.stats.catches += 1;
-    box.innerHTML = `<div class="o-catch"><p>${esc(line.catch.q)}</p><div>${opts.map((o, i) => `<button data-i="${i}">${esc(o.t)}</button>`).join("")}</div><u style="animation-duration:${ms}ms"></u></div>`;
+    box.innerHTML = `<div class="o-catch"><p>${TOON() ? "🎯 Поймай слово: " : ""}${esc(line.catch.q)}</p><div>${opts.map((o, i) => `<button data-i="${i}">${esc(o.t)}</button>`).join("")}</div><u style="animation-duration:${ms}ms"></u></div>`;
     const pick = await new Promise((r) => {
       const t = setTimeout(() => r(null), ms);
       box.onclick = (e) => { const b = e.target.closest("[data-i]"); if (b) { clearTimeout(t); r(Number(b.dataset.i)); } };
@@ -477,7 +478,7 @@ const Stall = {
           strikes -= 1;
           draw();
           Sound.sfx("pop");
-          ui.sys("Ты переводишь разговор на пустяк. Напряжение спадает.", "ok");
+          ui.sys(TOON() ? "🍪 Ты протягиваешь Грейс печенье. Она вздыхает и остаётся." : "Ты переводишь разговор на пустяк. Напряжение спадает.", "ok");
           ui.mood(sc.npc, "happy", 1800);
         } else if (id === "freeze") {
           if (!(state.heat > 0)) return UI.toast("Засветки нет — остужать нечего.", "info");

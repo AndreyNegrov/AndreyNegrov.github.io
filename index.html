@@ -7,8 +7,12 @@
   <title>Иней</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237180ff'/%3E%3Cstop offset='1' stop-color='%239a6bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 14v36M16.4 23l31.2 18M47.6 23L16.4 41' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="night.css" />
-  <link rel="stylesheet" href="night-play.css" />
+  <!-- Два вида: ночной (основной) и мультяшный (сезон «Онбординг»). Включён один, переключает Theme в js/core.js. -->
+  <link rel="stylesheet" href="night.css" data-theme="night" />
+  <link rel="stylesheet" href="night-play.css" data-theme="night" />
+  <link rel="stylesheet" href="office.css" data-theme="toon" media="not all" />
+  <link rel="stylesheet" href="game.css" data-theme="toon" media="not all" />
+  <link rel="stylesheet" href="arcade.css" data-theme="toon" media="not all" />
 </head>
 <body>
   <div id="bg"><div class="bg-layer on" id="bg-a"></div><div class="bg-layer" id="bg-b"></div></div>
@@ -41,6 +45,8 @@
   <script src="js/board.js"></script>
   <script src="js/desk.js"></script>
   <script src="js/phone.js"></script>
+  <script src="js/face.js"></script>
+  <script src="js/scenery.js"></script>
   <script src="js/juice.js"></script>
   <script src="js/relay.js"></script>
   <script src="js/kit.js"></script>
@@ -53,7 +59,9 @@
   <script src="js/memory.js"></script>
   <script src="js/sets.js"></script>
   <script src="js/moon.js"></script>
+  <script src="js/office.js"></script>
   <script src="js/packs.js"></script>
+  <script src="js/toon.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

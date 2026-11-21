@@ -173,7 +173,7 @@ const Conv = {
         ctx.bonusDone.add(bh.id);
         if (bh.flag) state.flags[bh.flag] = true;
         if (bh.clue) Clues.add(bh.clue);
-        ui.sys("Бонус: " + bh.label, "ok");
+        ui.sys((TOON() ? "⭐ Бонус: " : "Бонус: ") + bh.label, "ok");
         Sound.sfx("ok");
         Juice.xp(10, ui.anchor(), "бонус");
         ui.mood(who, "wow", 2200);
@@ -193,14 +193,14 @@ const Conv = {
         const clean = tries === 1 && !r.leakHits.length;
         if (tries === 1) st.first += 1;
         Juice.hit(ui.anchor(), { first: clean, voice: ReplyBox.via === "voice" });
-        if (!r.leakHits.length) ui.mood(who, "happy", 2200);
+        if (!r.leakHits.length) { ui.mood(who, "happy", 2200); ui.react(who, clean ? ["👍", "😄", "👏", "✨"][st.first % 4] : "👌"); }
         if (b.badge && clean) Juice.badge(b.badge);
         if (!lines.length && r.ai && r.reply) lines.push(r.reply);
         else if (!r.leakHits.length && b.ok) lines.push(val(b.ok, state));
         for (const l of lines) await this.say(ctx, who, l);
         break;
       }
-      if (fresh.length) Sound.sfx("pop");
+      if (fresh.length) { Sound.sfx("pop"); if (TOON()) Juice.float("ещё чуть-чуть", ui.anchor(), "ok"); }
       else if (!r.leakHits.length) { Juice.miss(); ui.mood(who, "hm", 2400); }
       if (tries >= (b.maxTries || 3) || r.gaveUp) {
         Juice.miss();
@@ -340,7 +340,7 @@ const Conv = {
       if (!cur || !cur.model) return UI.toast("Сейчас подсказывать нечего.", "info");
       if (!Gadgets.use("whisper")) return;
       ui.hint(cur.hint, { ...cur.opts, model: cur.model });
-      ui.sys("Сова подсказывает: " + cur.model, "ok");
+      ui.sys((TOON() ? "🎧 Сова шепчет: " : "Сова подсказывает: ") + cur.model, "ok");
       Sound.sfx("pop");
       Voice.say(cur.model, { who: "guest", rate: 0.85, volume: 0.6 });
     }
@@ -400,7 +400,9 @@ const ConvUI = {
     const P = PEOPLE[sc.npc] || {};
     // Крупное изображение собеседника: фото, а если его нет — монограмма.
     const big = (w) => { const p = PEOPLE[w]; return p.img ? `<img src="${p.img}" alt="">` : `<span class="pt-mono">${esc(p.initial || p.name[0])}</span>`; };
-    if (kind === "video") {
+    const toon = TOON();
+    if (toon) stage = Toon.convStage(sc, lv);
+    else if (kind === "video") {
       stage = `<div class="o-vc">
         <div class="o-vc-top"><span class="o-rec"></span><b>${esc(sc.title || "Call")}</b><span class="o-vc-time">00:00</span></div>
         <div class="o-vc-grid n${cast.length + 1}">
@@ -605,8 +607,10 @@ const ConvUI = {
           parts.push(`<div class="o-checks">${o.topics.filter((t) => t.required || t.offer || o.asked.has(t.id)).map((t) => `<span class="${o.asked.has(t.id) ? "ok" : t.required ? "" : "opt"}">${esc(t.label)}${!t.required && !o.asked.has(t.id) ? " · по желанию" : ""}</span>`).join("")}</div>`);
         }
         if (o.legend && lv.subs !== "none") {
-          const c = Leg.city(), j = Leg.job(), rd = Leg.ride();
-          parts.push(`<div class="o-legmini"><span>Легенда</span> Alex Frost · ${esc(c.en)} · ${esc(j.short)} · ${esc(rd.short)}</div>`);
+          const c = Leg.city(), j = Leg.job(), rd = Leg.third();
+          parts.push(toon
+            ? `<div class="o-legmini"><span>Легенда</span> ${esc(c.en)} · ${esc(j.short)} · ${esc(rd.ru || "")} · 2 months</div>`
+            : `<div class="o-legmini"><span>Легенда</span> Alex Frost · ${esc(c.en)} · ${esc(j.short)} · ${esc(rd.short || rd.ru || "")}</div>`);
         }
         if (o.read) parts.push(`<p class="o-read"><small>Прочитай вслух</small><span class="english">${enHTML(o.read)}</span></p>`);
         if (o.model && !o.read) parts.push(`<p class="o-example"><small>Пример</small> <span class="english">${esc(o.model)}</span></p>`);
@@ -617,7 +621,7 @@ const ConvUI = {
       notify(text) {
         const n = $(".o-notify", root);
         n.hidden = false;
-        n.innerHTML = `<div class="o-notify-ava">${avatar("sova", "sm")}</div><div><b>Сова</b><p>${esc(text)}</p></div>`;
+        n.innerHTML = `<div class="o-notify-ava">${toon ? Face.svg("owl") : avatar("sova", "sm")}</div><div><b>Сова</b><p>${esc(text)}</p></div>`;
         n.classList.remove("in");
         void n.offsetWidth;
         n.classList.add("in");
@@ -631,7 +635,7 @@ const ConvUI = {
           box.innerHTML = `<div class="o-flash">
             <div class="o-flash-head">${avatar(f.who, "sm")}<b>${esc(PEOPLE[f.who].name)}</b><span>#general</span></div>
             <p class="o-flash-txt">${esc(f.text)}</p>
-            <button class="btn small o-shot" data-act="shot">Скриншот <kbd>S</kbd></button>
+            <button class="btn small o-shot" data-act="shot">${toon ? "📸 " : ""}Скриншот <kbd>S</kbd></button>
             <i class="o-flash-bar" style="animation-duration:${ms}ms"></i>
           </div>`;
           Sound.sfx("note");
@@ -661,6 +665,8 @@ const ConvUI = {
       },
       extra(html) { const x = $(".o-stage-extra", root); x.innerHTML = html; return x; }
     };
+    // Мультяшный сезон: лица меняют выражение, над ними всплывают эмодзи.
+    if (toon) Object.assign(api, Toon.convFaces(root, moodT, () => destroyed));
     return api;
   }
 };

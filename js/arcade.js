@@ -11,12 +11,12 @@ const shuffle = (arr) => {
 
 const Arcade = {
   // Карточка правил перед игрой. Возвращает, когда игрок нажал кнопку.
-  intro(sc, { ico = "target", keys = [], btn = "Начать" } = {}) {
+  intro(sc, { ico = "target", emo = "", keys = [], btn = "Начать" } = {}) {
     return new Promise((resolve) => {
       const el = document.createElement("div");
       el.className = "a-over";
       el.innerHTML = `<div class="a-rules">
-        <i>${ICON[ico] || ICON.target}</i>
+        <i>${(TOON() && emo) || ICON[ico] || ICON.target}</i>
         <p class="kicker">${esc(sc.kicker || "Задание")}</p>
         <h2>${esc(sc.title || "")}</h2>
         <p>${esc(val(sc.intro, state) || "")}</p>
@@ -40,20 +40,25 @@ const Arcade = {
       else if (Game.inPlay()) { const st = Mission.stats(); st.games = st.games || {}; st.games[sc.id] = { score: r.score, max: r.max }; Store.save(); }
       const el = document.createElement("div");
       el.className = "a-over";
+      const T = TOON();
+      const starRow = T
+        ? [0, 1, 2].map((i) => `<b class="${i < stars ? "on" : ""}" style="animation-delay:${0.15 + i * 0.22}s">★</b>`).join("")
+        : [0, 1, 2].map((i) => `<i class="${i < stars ? "on" : ""}" style="animation-delay:${0.1 + i * 0.16}s">${ICON.starFill}</i>`).join("");
       el.innerHTML = `<div class="a-rules a-result">
-        <div class="a-stars">${[0, 1, 2].map((i) => `<i class="${i < stars ? "on" : ""}" style="animation-delay:${0.1 + i * 0.16}s">${ICON.starFill}</i>`).join("")}</div>
-        <h2>${esc(r.title || (stars === 3 ? "Чисто" : stars === 2 ? "Хорошо" : "Засчитано"))}</h2>
+        <div class="a-stars">${starRow}</div>
+        <h2>${esc(r.title || (stars === 3 ? (T ? "Идеально" : "Чисто") : stars === 2 ? "Хорошо" : "Засчитано"))}</h2>
         <p class="a-score">${esc(r.line || `${r.score} из ${r.max}`)}${r.record ? " <u>рекорд</u>" : ""}</p>
-        ${daily ? '<p class="a-daily">Первая тренировка за день: репутация ×2</p>' : ""}
+        ${daily ? (T ? '<p class="a-daily">🔥 Тренировка дня: опыт ×2</p>' : '<p class="a-daily">Первая тренировка за день: репутация ×2</p>') : ""}
         ${r.notes && r.notes.length ? `<div class="a-notes">${r.notes.map((n) => `<div>${n}</div>`).join("")}</div>` : ""}
-        ${sc.sova ? `<div class="o-sova"><div class="o-sova-ava">${avatar("sova", "sm")}</div><p>${esc(val(sc.sova, state, r))}</p></div>` : ""}
+        ${sc.sova ? `<div class="o-sova"><div class="o-sova-ava">${T ? Toon.owl(stars >= 2 ? "happy" : "") : avatar("sova", "sm")}</div><p>${esc(val(sc.sova, state, r))}</p></div>` : ""}
         <div class="row center">
           <button class="btn primary" data-act="next">${sc.training ? "К тренировкам" : "Дальше"}</button>
           ${sc.training ? '<button class="btn ghost" data-act="again">Ещё раз</button>' : ""}
         </div>
       </div>`;
       $("#scene").appendChild(el);
-      Sound.sfx(stars >= 2 ? "ok" : "note");
+      if (T) { Sound.sfx(stars >= 2 ? "win" : "ok"); if (stars === 3) Juice.confetti({ x: innerWidth / 2, y: innerHeight * 0.4 }, 90); }
+      else Sound.sfx(stars >= 2 ? "ok" : "note");
       if (xp) setTimeout(() => Juice.xp(xp, $(".a-stars", el)), 600);
       if (r.badge && stars === 3) setTimeout(() => Juice.badge(r.badge), 800);
       el.addEventListener("click", (e) => {
@@ -86,7 +91,7 @@ const Decode = {
     $("#scene").innerHTML = `<section class="a-game a-decode"><div class="a-card"></div></section>`;
     const card = $(".a-card");
     Music.play("calm");
-    await Arcade.intro(sc, { ico: "cipher", keys: ["Нажимай слова по порядку", "Лишние слова — ловушки", "Фразу можно прослушать"] });
+    await Arcade.intro(sc, { ico: "cipher", emo: "🧩", keys: sc.keys || ["Нажимай слова по порядку", "Лишние слова — ловушки", "Фразу можно прослушать"] });
     if (tok.dead) return null;
     const lv = level();
     const items = val(sc.items, state);
@@ -102,7 +107,7 @@ const Decode = {
       if (items[i].phrase) Phrases.unlock(items[i].phrase);
     }
     Music.stop();
-    const act = await Arcade.result(sc, { score, max: items.length * 100, xp, notes, line: `Собрано без ошибок: ${clean} из ${items.length}` });
+    const act = await Arcade.result(sc, { score, max: items.length * 100, xp, notes, line: `${TOON() ? "Чисто собрано" : "Собрано без ошибок"}: ${clean} из ${items.length}`, badge: sc.badge });
     return act === "again" ? { again: true } : null;
   },
 
@@ -111,7 +116,14 @@ const Decode = {
       const words = it.en.split(/\s+/);
       const tiles = shuffle([...words.map((w) => ({ w })), ...(it.extra || []).map((w) => ({ w }))]);
       let pos = 0, lives = 3, done = false, heard = 0;
-      card.innerHTML = `
+      const T = TOON();
+      card.innerHTML = T ? `
+        <header class="a-top"><span class="a-kicker">Шифровка ${idx + 1} из ${total}</span><div class="a-hearts"></div></header>
+        <div class="a-timer"><i></i></div>
+        <div class="a-prompt"><div class="a-ava">${Face.svg("owl")}</div><p><small>Собери по-английски</small>«${esc(it.ru)}»</p></div>
+        <div class="a-line"></div>
+        <div class="a-tiles">${tiles.map((t, k) => `<button class="a-tile" data-k="${k}">${esc(t.w)}</button>`).join("")}</div>
+        <footer class="a-foot"><button class="btn ghost small" data-act="hear">🔊 Послушать</button><span class="muted small">Ошибка стоит сердечко. Три ошибки — покажу ответ.</span></footer>` : `
         <header class="a-top"><span class="a-kicker">Фраза ${idx + 1} из ${total}</span><div class="a-hearts"></div></header>
         <div class="a-timer"><i></i></div>
         <div class="a-prompt"><p><small>Собери по-английски</small>${esc(it.ru)}</p></div>
@@ -121,7 +133,7 @@ const Decode = {
       const line = $(".a-line", card), hearts = $(".a-hearts", card);
       const draw = () => {
         line.innerHTML = words.map((w, i) => (i < pos ? `<b>${esc(w)}</b>` : `<i></i>`)).join("");
-        hearts.innerHTML = [0, 1, 2].map((i) => `<span class="${i < lives ? "on" : ""}"></span>`).join("");
+        hearts.innerHTML = [0, 1, 2].map((i) => `<span class="${i < lives ? "on" : ""}">${T ? "♥" : ""}</span>`).join("");
       };
       draw();
       const finish = async (ok) => {
@@ -136,6 +148,7 @@ const Decode = {
         const mistakes = 3 - lives;
         const points = ok ? Math.max(40, 100 - mistakes * 20 - heard * 5) : 0;
         Sound.sfx(ok ? (mistakes ? "ok" : "combo") : "wrong");
+        if (T) { if (ok) { Juice.sparks(line, "#3de0a8", 18); Juice.float(mistakes ? "Собрано" : "Чисто!", line, "ok big"); } else Juice.float("Вот как надо", line, "bad"); }
         await raceDead(tok, Promise.race([Voice.sayAsync(it.en, { who: "guest", rate: 0.9 }), sleep(4200)]));
         await sleep(ok ? 500 : 1300);
         resolve({ points });
@@ -175,7 +188,7 @@ const Crack = {
   async run(sc, tok) {
     $("#scene").innerHTML = `<section class="a-game a-crack"><div class="a-card"></div></section>`;
     const card = $(".a-card");
-    await Arcade.intro(sc, { ico: "wave", keys: sc.keys || ["Слушай и набирай", "Можно повторить и замедлить", "Клавиатура тоже работает"] });
+    await Arcade.intro(sc, { ico: "wave", emo: "📼", keys: sc.keys || ["Слушай и набирай", "Можно повторить и замедлить", "Клавиатура тоже работает"] });
     if (tok.dead) return null;
     const lv = level();
     const items = val(sc.items, state);
@@ -207,14 +220,17 @@ const Crack = {
       const keys = kind === "num" ? "123456789" : kind === "abc" ? "QWERTYUIOPASDFGHJKLZXCVBNM" : "1234567890ABCD";
       let cur = 0, mistakes = 0, replays = 0, done = false, busy = false;
       const who = it.who || sc.who || "guest";
+      const T = TOON();
       card.innerHTML = `
         <header class="a-top"><span class="a-kicker">${esc(sc.label || "Запись")} ${idx + 1} из ${total}</span><span class="a-kicker dim">${esc(PEOPLE[who] ? PEOPLE[who].name : "")}</span></header>
-        <div class="a-tape">
-          <div class="a-wave">${"<i></i>".repeat(28)}</div>
-          <div class="a-tape-btns"><button class="btn small" data-act="play">${ICON.play} Ещё раз</button><button class="btn ghost small" data-act="slow">Медленно</button></div>
+        <div class="a-tape">${T
+          ? `<div class="a-reel"></div><div class="a-wave">${"<i></i>".repeat(18)}</div><div class="a-reel"></div>
+          <div class="a-tape-btns"><button class="btn small" data-act="play">▶ Ещё раз</button><button class="btn ghost small" data-act="slow">🐢 Медленно</button></div>`
+          : `<div class="a-wave">${"<i></i>".repeat(28)}</div>
+          <div class="a-tape-btns"><button class="btn small" data-act="play">${ICON.play} Ещё раз</button><button class="btn ghost small" data-act="slow">Медленно</button></div>`}
         </div>
         <div class="a-fields"></div>
-        <div class="a-pad k-${kind}">${keys.split("").map((k) => `<button data-k="${k}">${k}</button>`).join("")}<button data-k="back" class="wide">⌫</button>${kind === "num" ? '<button data-k="0">0</button>' : ""}<button data-act="skip" class="wide dim">Не знаю</button></div>
+        <div class="a-pad k-${kind}${T && kind === "abc" ? " abc" : ""}">${keys.split("").map((k) => `<button data-k="${k}">${k}</button>`).join("")}<button data-k="back" class="wide">⌫</button>${kind === "num" ? '<button data-k="0">0</button>' : ""}<button data-act="skip" class="wide dim">Не знаю</button></div>
         <div class="a-loglist">${log.map((l) => `<div class="${l.ok ? "ok" : "bad"}">${esc(l.it.note || l.it.say)}</div>`).join("")}</div>`;
       const box = $(".a-fields", card), tape = $(".a-tape", card);
       const draw = (flash) => {
@@ -239,6 +255,7 @@ const Crack = {
         const points = ok ? Math.max(30, 100 - mistakes * 25 - Math.max(0, replays - 1) * 8) : 0;
         Sound.sfx(ok ? (mistakes ? "ok" : "combo") : "wrong");
         if (ok) Juice.hit(box, { first: !mistakes, base: 6 });
+        if (ok && T) Juice.float(mistakes ? "Записано" : "С первого раза!", box, "ok big");
         const row = document.createElement("div");
         row.className = ok ? "ok" : "bad";
         row.innerHTML = `${esc(it.note || "")}${lv.subs !== "none" ? ` <span class="english">${enHTML(it.say)}</span>${it.tip ? ` <em>${esc(it.tip)}</em>` : ""}` : ""}`;

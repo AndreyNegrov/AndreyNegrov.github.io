@@ -72,9 +72,12 @@ const level = () => LEVELS[Settings.get().difficulty] || LEVELS.calm;
 
 const Store = {
   key: "iney-v2",
-  keyFor(season) { return season === 4 ? "iney-moon" : season === 3 ? "iney-relay" : season === 2 ? "iney-s2d" : "iney-v2"; },
+  // Сезоны на общем движке (js/packs.js) знают свой номер на титуле и ключ сохранения.
+  pack(season) { return typeof Pack !== "undefined" ? Pack.bySeason(season) : null; },
+  keyFor(season) { const p = this.pack(season); return p ? p.meta.key : season === 2 ? "iney-s2d" : "iney-v2"; },
+  modern(key = this.key) { return typeof PACKS !== "undefined" && Object.values(PACKS).some((p) => p.meta.key === key); },
   fresh() {
-    return { season: this.key === "iney-relay" || this.key === "iney-moon" ? 3 : this.key === "iney-s2d" ? 2 : 1, step: 0, started: false, flags: {}, sus: {}, met: {}, notes: [], words: {}, intel: {}, reports: {},
+    return { season: this.modern() ? 3 : this.key === "iney-s2d" ? 2 : 1, step: 0, started: false, flags: {}, sus: {}, met: {}, notes: [], words: {}, intel: {}, reports: {},
       boards: {}, gadgets: {}, live: {}, liveTrap: {}, checkpoint: null, marks: {},
       legend: null, heat: 0, dossier: {}, clues: {}, phrases: {}, mstats: {}, missions: {}, shift: {}, ord: null };
   },
@@ -84,11 +87,12 @@ const Store = {
   },
   use(season) {
     this.key = this.keyFor(season);
-    // Сезоны 3 и 4 идут на одном движке: таблицы сезона подменяет Pack, внутри игры оба — «сезон 3».
-    if (typeof Pack !== "undefined") Pack.use(season === 4 ? "moon" : "relay");
+    // Сезоны с номером 3 и выше идут на одном движке: таблицы сезона подменяет Pack, внутри игры все они — «сезон 3».
+    const p = this.pack(season);
+    if (typeof Pack !== "undefined") Pack.use(p ? p.meta.id : "relay");
     state = this.load();
     state.season = season >= 3 ? 3 : season === 2 ? 2 : 1;
-    if (season === 3 && typeof migrateS3 !== "undefined") migrateS3(state);
+    if (p && p.migrate) p.migrate(state);
   },
   load() {
     try { return Object.assign(this.fresh(), JSON.parse(localStorage.getItem(this.key) || "null") || {}); }
@@ -120,6 +124,24 @@ const ICON = {
   close: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   radio: '<svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="14" rx="2"/><path d="M10 7V3M10 11h4M10 14h4"/></svg>'
 };
+
+// ───────── вид: ночной (основной) или мультяшный (сезон «Онбординг») ─────────
+// У каждого вида свои таблицы стилей: <link data-theme="night|toon"> в index.html. Включены только стили текущего вида.
+// Мультяшный вид включается внутри сезона с meta.theme = "toon"; титул, тренировки и остальные сезоны — ночные.
+const Theme = {
+  cur: "night",
+  set(name = "night") {
+    if (this.cur === name) return;
+    this.cur = name;
+    $$("link[data-theme]").forEach((l) => { l.media = l.dataset.theme === name ? "all" : "not all"; });
+    document.body.dataset.theme = name;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = name === "toon" ? "#07090d" : "#0b0c0e";
+    // Частицы у видов разные: недолетевшие искры прошлого вида убираем.
+    if (typeof Juice !== "undefined") Juice.parts = [];
+  }
+};
+function TOON() { return Theme.cur === "toon"; }
 
 // ───────── подозрение ─────────
 function susPeople() {
@@ -305,10 +327,12 @@ const UI = {
     });
   },
 
-  // src — картинка или "svg:<сцена>" (рисованный фон из Scenery).
+  // src — картинка, "set:<сцена>" (декорация из Sets) или "svg:<сцена>" (мультяшный фон из Scenery).
   setBg(src, look = "day") {
-    const drawn = /^set:/.test(src) && typeof Sets !== "undefined";
-    const kind = drawn ? "bg-set" : /flat/.test(src) ? "bg-flat" : /hall/.test(src) ? "bg-hall" : /cafe/.test(src) ? "bg-cafe" : /dock/.test(src) ? "bg-dock" : "";
+    const set = /^set:/.test(src) && typeof Sets !== "undefined";
+    const toon = /^svg:/.test(src) && typeof Scenery !== "undefined";
+    const drawn = set || toon;
+    const kind = set ? "bg-set" : toon ? "bg-svg" : /flat/.test(src) ? "bg-flat" : /hall/.test(src) ? "bg-hall" : /cafe/.test(src) ? "bg-cafe" : /dock/.test(src) ? "bg-dock" : "";
     document.body.classList.toggle("bg-drawn", drawn);
     const cur = $(`#bg-${this.bgActive}`);
     const box = $(".bg-box", cur);
@@ -319,7 +343,7 @@ const UI = {
     const nextId = this.bgActive === "a" ? "b" : "a";
     const next = $(`#bg-${nextId}`);
     next.innerHTML = drawn
-      ? `<div class="bg-box look-${look} ${kind}" data-src="${src}">${Sets.html(src.slice(4))}<div class="fx"></div></div>`
+      ? `<div class="bg-box look-${look} ${kind}" data-src="${src}">${set ? Sets.html(src.slice(4)) : Scenery.html(src.slice(4))}<div class="fx"></div></div>`
       : `<div class="bg-box look-${look}${kind ? " " + kind : ""}" data-src="${src}"><img src="${src}" alt=""><div class="fx">${src.endsWith("flat.jpg") ? FLAT_FX : ""}</div></div>`;
     requestAnimationFrame(() => { next.classList.add("on"); cur.classList.remove("on"); });
     this.bgActive = nextId;
@@ -428,7 +452,7 @@ const UI = {
       const v = state.heat || 0;
       const tone = v >= 70 ? "danger" : v >= 35 ? "warn" : "calm";
       box.innerHTML = `<div class="sus heat ${tone} ${pulse ? "pulse" : ""}" title="Засветка: ${v} из 100. На 100 легенда сгорит.">
-        <span class="heat-ico">${ICON.eye}</span><div><span>Засветка</span><div class="sus-bar"><i style="width:${v}%"></i></div></div></div>`;
+        <span class="heat-ico">${TOON() ? (v >= 70 ? "🔥" : "👁") : ICON.eye}</span><div><span>Засветка</span><div class="sus-bar"><i style="width:${v}%"></i></div></div></div>`;
       return;
     }
     box.innerHTML = susPeople().filter((p) => state.met[p]).map((p) => {

@@ -133,32 +133,34 @@ const Caseboard = {
   async run(sc, tok) {
     const suspects = sc.suspects;
     const cards = shuffle(val(sc.cards, state)).map((c) => ({ ...c, mine: !c.clue || Clues.has(c.clue) }));
+    // Мультяшный сезон: карточки на кнопках, фото чуть наискось, «улики» вместо «фактов».
+    const T = TOON(), pin = T ? '<span class="cb-pin"></span>' : "";
     $("#scene").innerHTML = `
       <section class="a-game a-board">
         <div class="cb-board n${suspects.length}">
           <div class="cb-title english">${esc(sc.boardTitle || "")}</div>
           <div class="cb-cols">${suspects.map((w, i) => `
             <div class="cb-col" data-who="${w}">
-              <button class="cb-photo" data-who="${w}">${avatar(w, "cb-face")}<b>${esc(PEOPLE[w].name)}</b><kbd>${i + 1}</kbd></button>
+              <button class="cb-photo" data-who="${w}"${T ? ` style="--r:${[-3, 2, -2][i % 3]}deg"` : ""}>${pin}${avatar(w, "cb-face")}<b>${esc(PEOPLE[w].name)}</b><kbd>${i + 1}</kbd></button>
               <div class="cb-notes"></div>
             </div>`).join("")}</div>
         </div>
         <aside class="a-card cb-side">
-          <header class="a-top"><span class="a-kicker">Факт <b class="cb-n">1</b> из ${cards.length}</span><span class="a-kicker dim cb-miss"></span></header>
+          <header class="a-top"><span class="a-kicker">${T ? "Улика" : "Факт"} <b class="cb-n">1</b> из ${cards.length}</span><span class="a-kicker dim cb-miss"></span></header>
           <div class="cb-card"></div>
-          <p class="muted small cb-tip">Прочитай карточку и нажми на того, о ком она. Клавиши 1–${suspects.length}.</p>
+          <p class="muted small cb-tip">${T ? "Прочитай карточку и нажми на того, к кому она относится." : "Прочитай карточку и нажми на того, о ком она."} Клавиши 1–${suspects.length}.</p>
         </aside>
       </section>`;
     const root = $(".a-board");
     Music.play("calm");
-    await Arcade.intro(sc, { ico: "board", keys: ["Карточка — факт по-английски", "Нажми на того, о ком она", "В конце — главный вопрос"] });
+    await Arcade.intro(sc, { ico: "board", emo: "🧵", keys: sc.keys || ["Карточка — факт по-английски", "Нажми на того, о ком она", "В конце — главный вопрос"] });
     if (tok.dead) return null;
     let mistakes = 0, xp = 0, i = 0;
     const showCard = () => {
       const c = cards[i];
       $(".cb-n", root).textContent = String(i + 1);
-      $(".cb-card", root).innerHTML = `<div class="cb-paper"><p class="english">${enHTML(c.en)}</p>
-        <button class="cb-ru" data-act="ru">по-русски</button><em hidden>${esc(c.ru)}</em>${c.mine ? "" : "<small>от Совы — ты этого не узнал(а) сам(а)</small>"}</div>`;
+      $(".cb-card", root).innerHTML = `<div class="cb-paper">${pin}<p class="english">${enHTML(c.en)}</p>
+        <button class="cb-ru" data-act="ru">по-русски</button><em hidden>${esc(c.ru)}</em>${c.mine ? "" : T ? "<small>от Совы — ты эту улику не нашёл(ла)</small>" : "<small>от Совы — ты этого не узнал(а) сам(а)</small>"}</div>`;
       Sound.sfx("whoosh");
     };
     showCard();
@@ -180,6 +182,7 @@ const Caseboard = {
         const note = document.createElement("div");
         note.className = "cb-note";
         note.textContent = c.en;
+        if (T) { note.style.setProperty("--r", (Math.random() * 6 - 3).toFixed(1) + "deg"); note.insertAdjacentHTML("afterbegin", pin); }
         $(".cb-notes", col).appendChild(note);
         Sound.sfx("pin");
         if (c.mine) xp += 4;
@@ -201,8 +204,8 @@ const Caseboard = {
     off();
     if (tok.dead || !pinned) return null;
     $(".cb-side", root).innerHTML = `<header class="a-top"><span class="a-kicker">Вывод</span></header>
-      <div class="cb-card"><div class="cb-paper q"><p class="english">${enHTML(sc.question)}</p><em>${esc(sc.questionRu)}</em></div></div>
-      <p class="muted small cb-tip">Посмотри на доску и нажми на человека.</p>`;
+      <div class="cb-card"><div class="cb-paper q">${pin}<p class="english">${enHTML(sc.question)}</p><em>${esc(sc.questionRu)}</em></div></div>
+      <p class="muted small cb-tip">Посмотри на доску и нажми на ${T ? "подозреваемого" : "человека"}.</p>`;
     root.classList.add("final");
     await new Promise((resolve) => {
       root.onclick = (e) => {
@@ -221,6 +224,7 @@ const Caseboard = {
         st.textContent = sc.stamp || "THE TOP";
         p.appendChild(st);
         Sound.sfx("stamp");
+        if (T) Juice.confetti(p, 80);
         root.onclick = null;
         setTimeout(resolve, 1300);
       };

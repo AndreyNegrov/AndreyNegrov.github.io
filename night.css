@@ -732,5 +732,15 @@ body.s3 .kicker, body.s3 #hud-day, body.s3 .nb-body h4, body.s3 .modal-card h4, 
 .t-tab:hover { color: #fff; }
 .t-tab.on { background: linear-gradient(135deg, var(--acc), var(--acc-2)); color: #fff; }
 .t-tab.on span { color: rgba(255, 255, 255, 0.82); }
+/* Три сезона не влезают в строку на телефоне: вкладки уходят в прокрутку, страница вбок не едет. */
+@media (max-width: 760px) {
+  body.s3 .o-hero { min-width: 0; }
+  .t-tabs { max-width: 100%; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .t-tabs::-webkit-scrollbar { display: none; }
+  .t-tab { flex: none; padding: 8px 12px; }
+}
 /* Общие правила для значков (обводка, без заливки) декорациям не нужны: у каждой фигуры свои цвета. */
 .bg-box svg.set { stroke: none; fill: none; stroke-width: 1; stroke-linecap: butt; stroke-linejoin: miter; }
+/* Рисованный город мультяшного сезона «Онбординг» — фон его вкладки на титуле. */
+.bg-box.bg-svg svg.scenery { position: absolute; inset: 0; width: 100%; height: 100%; display: block; stroke: none; fill: none; stroke-width: 1; stroke-linecap: butt; stroke-linejoin: miter; }
+.bg-box.bg-svg svg.scenery text { stroke: none; }

@@ -67,7 +67,16 @@ const BADGES = {
   stars: { ico: "star", name: "Все звёзды", how: "Собрать все звёзды сезона" },
   phrases: { ico: "chat", name: "Разговорник", how: "Сказать вслух пятнадцать фраз-инструментов" },
   streak3: { ico: "target", name: "Три дня подряд", how: "Тренироваться три дня подряд" },
-  echo: { ico: "wave", name: "Эхо", how: "Повторить пять фраз без единой ошибки" }
+  echo: { ico: "wave", name: "Эхо", how: "Повторить пять фраз без единой ошибки" },
+  // Сезон «Онбординг»
+  snap: { ico: "doc", name: "Скриншотер", how: "Успеть сохранить удалённое сообщение" },
+  speller: { ico: "chat", name: "Эйч-оу-эл-эл", how: "Продиктовать фамилию по буквам с первого раза" },
+  nosy: { ico: "lock", name: "Нижний ящик", how: "Открыть то, что просили не открывать" },
+  explorer: { ico: "eye", name: "Любопытный", how: "Прочитать всё, что лежит в офисе" },
+  decoder: { ico: "cipher", name: "Шифровальщик", how: "Собрать шифровку без ошибок" },
+  cracker: { ico: "wave", name: "Перехват", how: "Записать журнал двери без ошибок" },
+  smooth: { ico: "chat", name: "Ни одной неловкой паузы", how: "Идеальная поездка в лифте" },
+  chatty: { ico: "cup", name: "Душа компании", how: "Задержать Грейс, не потеряв её терпения" }
 };
 
 const Profile = {
@@ -320,50 +329,91 @@ const Juice = {
   }
 };
 
-// ───────── музыка: тихий ночной луп для меню и мини-игр ─────────
+// ───────── музыка: тихий луп для меню и мини-игр ─────────
+// Два стиля: ночной (медленный, без ударных) и мультяшный для сезона «Онбординг» (шпионский грув с хэтом и бочкой).
 const Music = (() => {
-  let timer = null, step = 0, nextT = 0, mode = null, out = null;
-  const BPM = 92, S = 60 / BPM / 2;
-  const N = { D2: 73.4, E2: 82.4, F2: 87.3, G2: 98, A2: 110, C3: 130.8, D3: 146.8, E3: 164.8, F3: 174.6, A3: 220, C4: 261.6, D4: 293.7, E4: 329.6, F4: 349.2, G4: 392, A4: 440, C5: 523.3 };
-  const BASS = {
-    calm: ["A2", 0, 0, "A2", 0, 0, "E3", 0, "F2", 0, 0, "F2", 0, 0, "C3", 0, "D2", 0, 0, "D2", 0, 0, "A2", 0, "E2", 0, 0, "E2", 0, 0, "E3", 0],
-    tense: ["A2", 0, "A2", 0, "A2", 0, "C3", 0, "A2", 0, "A2", 0, "G2", 0, "E2", 0, "F2", 0, "F2", 0, "F2", 0, "A2", 0, "E2", 0, "E2", 0, "E2", 0, "D3", 0]
+  let timer = null, step = 0, nextT = 0, mode = null, out = null, style = "night";
+  const N = { A1: 55, C2: 65.4, D2: 73.4, E2: 82.4, F2: 87.3, G2: 98, A2: 110, C3: 130.8, D3: 146.8, E3: 164.8, F3: 174.6, G3: 196, A3: 220, B3: 246.9,
+    C4: 261.6, D4: 293.7, E4: 329.6, F4: 349.2, G4: 392, A4: 440, C5: 523.3, E5: 659.3 };
+  const STYLES = {
+    night: {
+      S: 60 / 92 / 2, fadeIn: 1.2, fadeOut: 0.2, attack: 0.02,
+      BASS: {
+        calm: ["A2", 0, 0, "A2", 0, 0, "E3", 0, "F2", 0, 0, "F2", 0, 0, "C3", 0, "D2", 0, 0, "D2", 0, 0, "A2", 0, "E2", 0, 0, "E2", 0, 0, "E3", 0],
+        tense: ["A2", 0, "A2", 0, "A2", 0, "C3", 0, "A2", 0, "A2", 0, "G2", 0, "E2", 0, "F2", 0, "F2", 0, "F2", 0, "A2", 0, "E2", 0, "E2", 0, "E2", 0, "D3", 0]
+      },
+      LEAD: {
+        calm: [0, 0, 0, 0, "E4", 0, 0, 0, 0, 0, "C4", 0, 0, 0, 0, 0, 0, 0, 0, 0, "D4", 0, 0, "F4", 0, 0, 0, 0, "E4", 0, 0, 0],
+        tense: [0, 0, "A4", 0, 0, 0, 0, 0, 0, 0, "E4", 0, 0, 0, "G4", 0, 0, 0, "F4", 0, 0, 0, 0, 0, 0, 0, "E4", 0, 0, 0, 0, 0]
+      },
+      note(i, b, l, t, S) {
+        if (b) tone(N[b], t, S * 2.6, "sine", 0.22, 300, 0.02);
+        if (l) tone(N[l], t, S * 5, "sine", 0.045, 0, 0.02);
+      }
+    },
+    toon: {
+      S: 60 / 104 / 2, fadeIn: 0.6, fadeOut: 0.12, attack: 0.012,
+      BASS: {
+        calm: ["A2", 0, "A2", "C3", 0, "E3", "D3", 0, "F2", 0, "F2", "A2", 0, "C3", "A2", 0, "D2", 0, "D2", "F2", 0, "A2", "F2", 0, "E2", 0, "E2", "G2", 0, "B3", "E3", 0],
+        tense: ["A2", "A2", 0, "A2", "C3", 0, "A2", "G2", "A2", "A2", 0, "A2", "D3", 0, "C3", "G2", "F2", "F2", 0, "F2", "A2", 0, "F2", "E2", "E2", "E2", 0, "E2", "G2", 0, "E3", "D3"]
+      },
+      LEAD: {
+        calm: [0, 0, "E4", 0, 0, "A4", 0, "G4", 0, 0, "C4", 0, 0, "F4", 0, "E4", 0, 0, "D4", 0, 0, "F4", 0, "A4", 0, 0, "E4", 0, "G4", 0, "E4", 0],
+        tense: ["A4", 0, 0, "C5", 0, 0, "A4", 0, 0, "E4", 0, 0, "G4", 0, 0, 0, "F4", 0, 0, "A4", 0, 0, "C5", 0, "E5", 0, 0, "B3", 0, "E4", 0, 0]
+      },
+      note(i, b, l, t, S) {
+        if (b) tone(N[b], t, S * 1.5, "triangle", 0.26, 420, 0.012);
+        if (l) { tone(N[l], t, S * 2.4, "sine", 0.075, 0, 0.012); tone(N[l] * 2, t, S * 1.2, "sine", 0.02, 0, 0.012); }
+        if (i % 2 === 1) hat(t, mode === "tense" ? 0.07 : 0.045);
+        if (i % 8 === 0 || (mode === "tense" && i % 8 === 5)) kick(t);
+      }
+    }
   };
-  const LEAD = {
-    calm: [0, 0, 0, 0, "E4", 0, 0, 0, 0, 0, "C4", 0, 0, 0, 0, 0, 0, 0, 0, 0, "D4", 0, 0, "F4", 0, 0, 0, 0, "E4", 0, 0, 0],
-    tense: [0, 0, "A4", 0, 0, 0, 0, 0, 0, 0, "E4", 0, 0, 0, "G4", 0, 0, 0, "F4", 0, 0, 0, 0, 0, 0, 0, "E4", 0, 0, 0, 0, 0]
-  };
-  function tone(freq, t, dur, type, vol, lp) {
+  function tone(freq, t, dur, type, vol, lp, attack) {
     const cx = Sound.ctx, o = cx.createOscillator(), g = cx.createGain();
     o.type = type; o.frequency.value = freq;
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(vol, t + 0.02);
+    g.gain.linearRampToValueAtTime(vol, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     let node = o;
     if (lp) { const f = cx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = lp; o.connect(f); node = f; }
     node.connect(g); g.connect(out);
     o.start(t); o.stop(t + dur + 0.05);
   }
+  function hat(t, vol) {
+    const cx = Sound.ctx, len = Math.floor(cx.sampleRate * 0.05), buf = cx.createBuffer(1, len, cx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const s = cx.createBufferSource(), f = cx.createBiquadFilter(), g = cx.createGain();
+    s.buffer = buf; f.type = "highpass"; f.frequency.value = 6500; g.gain.value = vol;
+    s.connect(f); f.connect(g); g.connect(out); s.start(t);
+  }
+  function kick(t) {
+    const cx = Sound.ctx, o = cx.createOscillator(), g = cx.createGain();
+    o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
+    g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.25);
+  }
   function schedule() {
-    const cx = Sound.ctx;
+    const cx = Sound.ctx, st = STYLES[style];
     if (!cx || !mode) return;
     while (nextT < cx.currentTime + 0.25) {
-      const i = step % 32, b = BASS[mode][i], l = LEAD[mode][i];
-      if (b) tone(N[b], nextT, S * 2.6, "sine", 0.22, 300);
-      if (l) tone(N[l], nextT, S * 5, "sine", 0.045);
-      nextT += S;
+      const i = step % 32;
+      st.note(i, st.BASS[mode][i], st.LEAD[mode][i], nextT, st.S);
+      nextT += st.S;
       step += 1;
     }
   }
   return {
     play(m = "calm") {
       if (!Sound.ensure()) return;
-      if (mode === m && timer) return;
+      const want = typeof TOON === "function" && TOON() ? "toon" : "night";
+      if (mode === m && style === want && timer) return;
       this.stop();
       mode = m;
+      style = want;
       out = Sound.ctx.createGain();
       out.gain.value = 0;
-      out.gain.linearRampToValueAtTime(1, Sound.ctx.currentTime + 1.2);
+      out.gain.linearRampToValueAtTime(1, Sound.ctx.currentTime + STYLES[style].fadeIn);
       out.connect(Sound.musicBus);
       step = 0;
       nextT = Sound.ctx.currentTime + 0.08;
@@ -374,9 +424,9 @@ const Music = (() => {
       timer = null;
       mode = null;
       if (out && Sound.ctx) {
-        const o = out;
-        try { o.gain.cancelScheduledValues(Sound.ctx.currentTime); o.gain.setTargetAtTime(0, Sound.ctx.currentTime, 0.2); } catch { /* контекст закрыт */ }
-        setTimeout(() => { try { o.disconnect(); } catch { /* уже отключён */ } }, 900);
+        const o = out, k = STYLES[style].fadeOut;
+        try { o.gain.cancelScheduledValues(Sound.ctx.currentTime); o.gain.setTargetAtTime(0, Sound.ctx.currentTime, k); } catch { /* контекст закрыт */ }
+        setTimeout(() => { try { o.disconnect(); } catch { /* уже отключён */ } }, k > 0.15 ? 900 : 700);
       }
       out = null;
     }

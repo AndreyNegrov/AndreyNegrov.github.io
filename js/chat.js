@@ -2,8 +2,9 @@
 // Короткие сообщения вместо стен текста. Игрок отвечает голосом или текстом, по-английски.
 
 const CHAT_APPS = {
-  sova: { title: "Сова", sub: "в сети · шифрованный чат", who: "sova", cls: "app-sova" },
-  relay: { title: "Kit", sub: "Relay · служебный чат", who: "kit", cls: "app-relay" }
+  sova: { title: "Сова", sub: "в сети · шифрованный чат", who: "sova", cls: "app-sova", label: "Сова · шифрованный чат" },
+  relay: { title: "Kit", sub: "Relay · служебный чат", who: "kit", cls: "app-relay", label: "Relay · служебный чат" },
+  loop: { title: "Grace Hollis", sub: "Loop · рабочий чат Murmur", who: "grace", cls: "app-loop", label: "Loop · рабочий чат" }
 };
 
 const Chat = {
@@ -72,7 +73,7 @@ const Chat = {
     for (const step of sc.steps) {
       if (tok.dead) return;
       if (step.when && !step.when(state)) continue;
-      if (step.app) { C.app = step.app; this.header(C); this.bubble(C, step.app === "sova" ? "Сова · шифрованный чат" : "Relay · служебный чат", "sys"); await sleep(400); continue; }
+      if (step.app) { C.app = step.app; this.header(C); this.bubble(C, (CHAT_APPS[step.app] || CHAT_APPS.relay).label, "sys"); await sleep(400); continue; }
       if (step.from) {
         const text = val(step.text, state);
         await this.typing(C, text.length);
@@ -157,6 +158,7 @@ const Chat = {
       if (!missing.length) {
         if (tries === 1) Mission.stats().first += 1;
         Juice.hit(box, { first: tries === 1, voice: ReplyBox.via === "voice" });
+        if (TOON()) this.bubble(C, tries === 1 ? "👍" : "👌", "them emoji");
         for (const a of acks) await ack(a);
         if (me.ok) await ack(val(me.ok, state));
         break;
