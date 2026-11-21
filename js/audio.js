@@ -1,7 +1,7 @@
 // Звук: фон локаций, шумы и эффекты на Web Audio, голоса персонажей.
 
 const Sound = (() => {
-  let ctx = null, master, amb, sfxBus, voiceBus;
+  let ctx = null, master, amb, sfxBus, voiceBus, musicBus;
   const buffers = {};
   let current = null;
   let staticNode = null;
@@ -15,6 +15,7 @@ const Sound = (() => {
     amb = ctx.createGain(); amb.connect(master);
     sfxBus = ctx.createGain(); sfxBus.connect(master);
     voiceBus = ctx.createGain(); voiceBus.connect(master);
+    musicBus = ctx.createGain(); musicBus.connect(master);
     applyVolumes();
     return ctx;
   }
@@ -24,6 +25,7 @@ const Sound = (() => {
     amb.gain.value = s.ambVol;
     sfxBus.gain.value = Math.max(0.35, s.ambVol);
     voiceBus.gain.value = s.voiceVol;
+    musicBus.gain.value = (s.musicVol ?? 0.5) * 0.6;
   }
   function noise(type) {
     if (!buffers[type]) {
@@ -176,7 +178,26 @@ const Sound = (() => {
     ok: () => { tone(660, 0.15, { vol: 0.08 }); tone(990, 0.25, { vol: 0.08, at: 0.1 }); },
     bad: () => { tone(220, 0.25, { vol: 0.12, type: "triangle" }); tone(180, 0.3, { vol: 0.1, type: "triangle", at: 0.12 }); },
     note: () => tone(1046, 0.12, { vol: 0.05 }),
-    click: () => burst(0.03, { freq: 3000, vol: 0.15 })
+    click: () => burst(0.03, { freq: 3000, vol: 0.15 }),
+    // игровые звуки сезона «Онбординг»
+    pop: () => tone(740, 0.09, { vol: 0.1, type: "triangle" }),
+    xp: () => { tone(1175, 0.07, { vol: 0.06 }); tone(1568, 0.14, { vol: 0.06, at: 0.06 }); },
+    combo: () => [784, 988, 1319].forEach((f, i) => tone(f, 0.12, { vol: 0.08, at: i * 0.07, type: "triangle" })),
+    levelup: () => { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.22, { vol: 0.09, at: i * 0.09, type: "triangle" })); tone(2093, 0.7, { vol: 0.05, at: 0.45 }); },
+    win: () => { [392, 523, 659, 784].forEach((f, i) => tone(f, 0.13, { vol: 0.1, at: i * 0.11, type: "triangle" })); tone(1047, 0.6, { vol: 0.1, at: 0.46, type: "triangle" }); tone(1319, 0.6, { vol: 0.06, at: 0.46 }); },
+    wrong: () => { tone(196, 0.16, { vol: 0.09, type: "sawtooth", lp: 900 }); tone(147, 0.24, { vol: 0.09, type: "sawtooth", lp: 800, at: 0.1 }); },
+    whoosh: () => burst(0.28, { freq: 900, q: 0.5, vol: 0.14, noiseType: "pink" }),
+    stamp: () => { burst(0.1, { freq: 150, q: 1, vol: 0.9, type: "lowpass", noiseType: "brown" }); tone(92, 0.14, { vol: 0.25, type: "triangle" }); },
+    pin: () => { tone(1500, 0.05, { vol: 0.08 }); burst(0.03, { freq: 4000, vol: 0.12 }); },
+    key: () => tone(620, 0.05, { vol: 0.07, type: "square", lp: 1800 }),
+    ding: () => { tone(1568, 0.5, { vol: 0.1 }); tone(2093, 0.6, { vol: 0.05, at: 0.02 }); },
+    star: () => { tone(1319, 0.1, { vol: 0.09 }); tone(1760, 0.28, { vol: 0.09, at: 0.07 }); },
+    tick: () => burst(0.02, { freq: 5000, vol: 0.09 }),
+    shutter: () => { burst(0.05, { freq: 3500, vol: 0.3 }); burst(0.07, { freq: 1800, vol: 0.25, at: 0.08 }); },
+    drawer: () => burst(0.26, { freq: 320, q: 0.7, vol: 0.4, type: "lowpass", noiseType: "brown" }),
+    freeze: () => [2093, 1568, 1319, 988, 784].forEach((f, i) => tone(f, 0.2, { vol: 0.05, at: i * 0.05 })),
+    steps: () => { for (let k = 0; k < 4; k++) burst(0.07, { freq: 140, q: 1, vol: 0.5, at: k * 0.32, type: "lowpass", noiseType: "brown" }); },
+    awkward: () => { tone(330, 0.5, { vol: 0.04, type: "sine" }); tone(311, 0.7, { vol: 0.04, type: "sine", at: 0.25 }); }
   };
   function sfx(name) {
     if (!ensure() || !SFX[name]) return;
@@ -185,7 +206,8 @@ const Sound = (() => {
 
   return {
     ensure, applyVolumes, setAmbience, setWindow, staticOn, staticLevel, staticOff, babble, sfx, filter, gain, chain,
-    get ctx() { return ctx; }, get voiceBus() { return voiceBus; }
+    note(freq, dur = 0.12, o = {}) { if (ensure()) tone(freq, dur, { vol: 0.09, type: "triangle", ...o }); },
+    get ctx() { return ctx; }, get voiceBus() { return voiceBus; }, get musicBus() { return musicBus; }
   };
 })();
 
@@ -204,9 +226,14 @@ const Voice = (() => {
   const MALE = /\bmale\b|guy|david|mark|george|ryan|christopher|eric|brian|andrew|roger|steffan|thomas|daniel|alex|fred|liam|william|james|dmitry|pavel|maxim/i;
   const hash = (s) => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-  function pick(lang, g, seed) {
+  function pick(lang, g, seed, prefer) {
     const pool = voices.filter((v) => (v.lang || "").toLowerCase().replace("_", "-").startsWith(lang));
     if (!pool.length) return null;
+    for (const want of prefer || []) {
+      const re = new RegExp(want, "i");
+      const hit = pool.find((v) => re.test(v.name) && /natural|online|neural/i.test(v.name)) || pool.find((v) => re.test(v.name + " " + v.lang));
+      if (hit) return hit;
+    }
     const nice = pool.filter((v) => /natural|online|neural|google/i.test(v.name));
     const base = nice.length ? nice : pool;
     const byG = base.filter((v) => (g === "f" ? FEMALE.test(v.name) && !MALE.test(v.name) : MALE.test(v.name)));
@@ -218,14 +245,14 @@ const Voice = (() => {
     let resolve;
     const done = new Promise((r) => { resolve = r; });
     const lang = o.lang === "ru" ? "ru" : "en";
-    const v = synth ? pick(lang, o.g, o.seed) : null;
+    const v = synth ? pick(lang, o.g, o.seed, o.prefer) : null;
     if (!synth || (lang === "ru" && !v)) {
       const t = setTimeout(() => resolve(true), lang === "ru" ? 700 : 10);
       return { done, stop() { clearTimeout(t); resolve(false); }, progress: () => 1 };
     }
     const u = new SpeechSynthesisUtterance(text);
     if (v) u.voice = v;
-    u.lang = lang === "ru" ? "ru-RU" : "en-US";
+    u.lang = v && v.lang ? v.lang : lang === "ru" ? "ru-RU" : "en-US";
     u.rate = clamp(o.rate, 0.5, 1.6);
     u.pitch = clamp(o.pitch ?? 1, 0, 2);
     u.volume = clamp(o.volume ?? 1, 0, 1);
@@ -316,6 +343,7 @@ const Voice = (() => {
         if (fx === "phone") node = Sound.chain(node, Sound.filter("highpass", 320), Sound.filter("lowpass", 3200));
         if (fx === "dock") node = Sound.chain(node, Sound.filter("lowpass", 2200), Sound.gain(0.75));
         if (fx === "table") node = Sound.chain(node, Sound.filter("lowpass", 900), Sound.gain(0.55));
+        if (fx === "aside") node = Sound.chain(node, Sound.filter("lowpass", 1800), Sound.gain(0.5));
         Sound.chain(node, Sound.gain(o.volume ?? 1), Sound.voiceBus);
         src.onended = () => finish(!stopped);
         startAt = ctx.currentTime;
@@ -349,7 +377,7 @@ const Voice = (() => {
     };
   }
 
-  const FX_VOL = { clean: 1, wall: 0.55, dock: 0.7, table: 0.4, radio: 0.9, phone: 0.9 };
+  const FX_VOL = { clean: 1, wall: 0.55, dock: 0.7, table: 0.4, radio: 0.9, phone: 0.9, aside: 0.5 };
 
   function say(text, opts = {}) {
     const person = opts.who && PEOPLE[opts.who] ? PEOPLE[opts.who] : null;
@@ -358,7 +386,7 @@ const Voice = (() => {
     const s = Settings.get();
     const fx = opts.fx || "clean";
     const o = {
-      lang, fx, g: pv.g, pitch: pv.pitch, cloud: pv.cloud, style: pv.style,
+      lang, fx, g: pv.g, pitch: pv.pitch, cloud: pv.cloud, style: pv.style, prefer: pv.prefer,
       seed: hash(opts.who || pv.cloud || "guest"),
       rate: (opts.rate || 1) * (pv.rate || 1) * (lang === "ru" ? 1 : level().rate) * s.speed,
       volume: opts.volume ?? 1

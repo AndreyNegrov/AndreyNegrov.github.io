@@ -35,6 +35,7 @@ function hasPhrase(t, p) {
 }
 function matchFact(text, f) {
   const t = norm(text);
+  if (f.test) return !!f.test(text, t);
   if (f.all) return f.all.every((g) => (Array.isArray(g) ? g : [g]).some((p) => hasPhrase(t, p)));
   return (val(f.any, state) || []).some((p) => hasPhrase(t, p));
 }
@@ -53,7 +54,7 @@ const Settings = {
   key: "iney-settings",
   data: null,
   defaults: { difficulty: "calm", provider: "none", apiKey: "", model: "", baseUrl: "", cloudVoices: false,
-    voiceVol: 1, ambVol: 0.7, speed: 1 },
+    voiceVol: 1, ambVol: 0.7, musicVol: 0.5, speed: 1 },
   get() {
     if (!this.data) {
       try { this.data = { ...this.defaults, ...JSON.parse(localStorage.getItem(this.key) || "{}") }; }
@@ -71,9 +72,23 @@ const level = () => LEVELS[Settings.get().difficulty] || LEVELS.calm;
 
 const Store = {
   key: "iney-v2",
+  keyFor(season) { return season === 4 ? "iney-moon" : season === 3 ? "iney-relay" : season === 2 ? "iney-s2d" : "iney-v2"; },
   fresh() {
-    return { step: 0, started: false, flags: {}, sus: {}, met: {}, notes: [], words: {}, intel: {}, reports: {},
-      boards: {}, gadgets: {}, live: {}, checkpoint: null, marks: {} };
+    return { season: this.key === "iney-relay" || this.key === "iney-moon" ? 3 : this.key === "iney-s2d" ? 2 : 1, step: 0, started: false, flags: {}, sus: {}, met: {}, notes: [], words: {}, intel: {}, reports: {},
+      boards: {}, gadgets: {}, live: {}, liveTrap: {}, checkpoint: null, marks: {},
+      legend: null, heat: 0, dossier: {}, clues: {}, phrases: {}, mstats: {}, missions: {}, shift: {}, ord: null };
+  },
+  peek(key) {
+    try { return JSON.parse(localStorage.getItem(key) || "null"); }
+    catch { return null; }
+  },
+  use(season) {
+    this.key = this.keyFor(season);
+    // Сезоны 3 и 4 идут на одном движке: таблицы сезона подменяет Pack, внутри игры оба — «сезон 3».
+    if (typeof Pack !== "undefined") Pack.use(season === 4 ? "moon" : "relay");
+    state = this.load();
+    state.season = season >= 3 ? 3 : season === 2 ? 2 : 1;
+    if (season === 3 && typeof migrateS3 !== "undefined") migrateS3(state);
   },
   load() {
     try { return Object.assign(this.fresh(), JSON.parse(localStorage.getItem(this.key) || "null") || {}); }
@@ -107,15 +122,27 @@ const ICON = {
 };
 
 // ───────── подозрение ─────────
-const SUS_PEOPLE = ["helen", "rita"];
+function susPeople() {
+  return state && state.season >= 2 ? [] : ["helen", "rita"];
+}
+function dayName(n) {
+  if (state && state.season === 3) return (typeof MISSIONS !== "undefined" && MISSIONS[n] && MISSIONS[n].title) || "";
+  const names = state && state.season === 2
+    ? { 1: "Пятница", 2: "Суббота", 3: "Воскресенье" }
+    : DAYS;
+  return names[n] || "";
+}
 function addSus(who, amount, reason) {
-  if (!who || !amount || !SUS_PEOPLE.includes(who)) return;
+  if (!who || !amount || !susPeople().includes(who)) return;
   const k = amount > 0 ? level().sus : 1;
   state.sus[who] = clamp(Math.round((state.sus[who] || 0) + amount * k), 0, 100);
   state.met[who] = true;
   Store.save();
   UI.renderSus(who);
-  if (amount > 0) UI.toast(`<b>${esc(PEOPLE[who].name)}</b> насторожилась${reason ? ": " + esc(reason) : ""}`, "bad");
+  if (amount > 0) {
+    const male = PEOPLE[who] && PEOPLE[who].gender === "m";
+    UI.toast(`<b>${esc(PEOPLE[who].name)}</b> ${male ? "насторожился" : "насторожилась"}${reason ? ": " + esc(reason) : ""}`, "bad");
+  }
 }
 
 // ───────── блокнот ─────────
@@ -206,6 +233,7 @@ function enHTML(text, { gaps = false } = {}) {
 
 function avatar(who, cls = "") {
   const p = PEOPLE[who] || PEOPLE.guest;
+  if (p.face && typeof Face !== "undefined") return `<span class="ava ava-face ${cls}">${Face.svg(p.face)}</span>`;
   return p.img
     ? `<img class="ava ${cls}" src="${p.img}" alt="">`
     : `<div class="ava ava-letter ${cls}">${esc(p.initial || p.name[0])}</div>`;
@@ -277,17 +305,22 @@ const UI = {
     });
   },
 
+  // src — картинка или "svg:<сцена>" (рисованный фон из Scenery).
   setBg(src, look = "day") {
-    const kind = /flat/.test(src) ? "bg-flat" : /hall/.test(src) ? "bg-hall" : /cafe/.test(src) ? "bg-cafe" : /dock/.test(src) ? "bg-dock" : "";
+    const drawn = /^set:/.test(src) && typeof Sets !== "undefined";
+    const kind = drawn ? "bg-set" : /flat/.test(src) ? "bg-flat" : /hall/.test(src) ? "bg-hall" : /cafe/.test(src) ? "bg-cafe" : /dock/.test(src) ? "bg-dock" : "";
+    document.body.classList.toggle("bg-drawn", drawn);
     const cur = $(`#bg-${this.bgActive}`);
-    const img = $("img", cur);
-    if (img && img.getAttribute("src") === src) {
-      $(".bg-box", cur).className = "bg-box look-" + look + (kind ? " " + kind : "");
+    const box = $(".bg-box", cur);
+    if (box && box.dataset.src === src) {
+      box.className = "bg-box look-" + look + (kind ? " " + kind : "");
       return;
     }
     const nextId = this.bgActive === "a" ? "b" : "a";
     const next = $(`#bg-${nextId}`);
-    next.innerHTML = `<div class="bg-box look-${look}${kind ? " " + kind : ""}"><img src="${src}" alt=""><div class="fx">${src.endsWith("flat.jpg") ? FLAT_FX : ""}</div></div>`;
+    next.innerHTML = drawn
+      ? `<div class="bg-box look-${look} ${kind}" data-src="${src}">${Sets.html(src.slice(4))}<div class="fx"></div></div>`
+      : `<div class="bg-box look-${look}${kind ? " " + kind : ""}" data-src="${src}"><img src="${src}" alt=""><div class="fx">${src.endsWith("flat.jpg") ? FLAT_FX : ""}</div></div>`;
     requestAnimationFrame(() => { next.classList.add("on"); cur.classList.remove("on"); });
     this.bgActive = nextId;
   },
@@ -342,7 +375,12 @@ const UI = {
   hud(sc) {
     const hud = $("#hud");
     hud.hidden = false;
-    $("#hud-day").textContent = sc.day ? `День ${sc.day} · ${DAYS[sc.day]}` : "";
+    document.body.classList.toggle("s3", state.season === 3);
+    document.body.dataset.m = state.season === 3 && sc.mission ? sc.mission : "";
+    if (typeof Juice !== "undefined") { if (state.season === 3) Juice.hud(); else $("#hud-xp").innerHTML = ""; }
+    $("#hud-day").textContent = state.season === 3
+      ? (sc.mission ? `Миссия ${sc.mission} · ${dayName(sc.mission)}` : "")
+      : sc.day ? `День ${sc.day} · ${dayName(sc.day)}` : "";
     $("#hud-time").textContent = sc.time || (sc.clock ? sc.clock[0] : "");
     $("#hud-place").textContent = sc.place || "";
     this.goal(val(sc.goal, state) || "");
@@ -356,7 +394,10 @@ const UI = {
     const t = document.createElement("div");
     t.className = "toast " + kind;
     t.innerHTML = html;
-    $("#toasts").appendChild(t);
+    const box = $("#toasts");
+    const cap = innerWidth < 760 ? 1 : 3;   // на телефоне одна плашка за раз: экран маленький
+    while (box.children.length >= cap) box.firstChild.remove();
+    box.appendChild(t);
     requestAnimationFrame(() => t.classList.add("in"));
     setTimeout(() => { t.classList.remove("in"); setTimeout(() => t.remove(), 400); }, ms);
   },
@@ -383,7 +424,14 @@ const UI = {
 
   renderSus(pulse) {
     const box = $("#hud-sus");
-    box.innerHTML = SUS_PEOPLE.filter((p) => state.met[p]).map((p) => {
+    if (state.season === 3) {
+      const v = state.heat || 0;
+      const tone = v >= 70 ? "danger" : v >= 35 ? "warn" : "calm";
+      box.innerHTML = `<div class="sus heat ${tone} ${pulse ? "pulse" : ""}" title="Засветка: ${v} из 100. На 100 легенда сгорит.">
+        <span class="heat-ico">${ICON.eye}</span><div><span>Засветка</span><div class="sus-bar"><i style="width:${v}%"></i></div></div></div>`;
+      return;
+    }
+    box.innerHTML = susPeople().filter((p) => state.met[p]).map((p) => {
       const v = state.sus[p] || 0;
       const tone = v >= 70 ? "danger" : v >= 35 ? "warn" : "calm";
       return `<div class="sus ${tone} ${pulse === p ? "pulse" : ""}" title="Подозрение: ${v} из 100">
@@ -407,14 +455,19 @@ const UI = {
   },
   renderNotebook() {
     const nb = $("#notebook");
+    const s3 = state.season === 3 && typeof Kit !== "undefined";
+    const tabs = s3 ? Kit.notebookTabs() : [["notes", "Записи"], ["words", "Слова"]];
+    if (!tabs.some(([k]) => k === this.nbTab)) this.nbTab = "notes";
     const tab = this.nbTab;
     let body = "";
-    if (tab === "notes") {
+    const extra = s3 ? Kit.notebookBody(tab) : null;
+    if (extra != null) body = extra;
+    else if (tab === "notes") {
       const byDay = {};
       state.notes.forEach((n) => { (byDay[n.day] = byDay[n.day] || []).push(n); });
       const days = Object.keys(byDay).sort((a, b) => b - a);
       body = `<form class="nb-add"><input type="text" placeholder="Записать своё и нажать Enter" autocomplete="off"></form>` +
-        (days.length ? days.map((d) => `<h4>День ${d} · ${DAYS[d] || ""}</h4>` +
+        (days.length ? days.map((d) => `<h4>${state.season === 3 ? "Миссия" : "День"} ${d} · ${dayName(d)}</h4>` +
           byDay[d].slice().reverse().map((n) => noteHTML(n)).join("")).join("")
           : `<p class="muted">Пока пусто. Сюда попадает всё, что вы услышали и увидели.</p>`);
     } else {
@@ -428,7 +481,7 @@ const UI = {
     nb.innerHTML = `
       <div class="nb-head">
         <b>Блокнот</b>
-        <div class="tabs"><button data-tab="notes" class="${tab === "notes" ? "on" : ""}">Записи</button><button data-tab="words" class="${tab === "words" ? "on" : ""}">Слова</button></div>
+        <div class="tabs">${tabs.map(([k, label]) => `<button data-tab="${k}" class="${tab === k ? "on" : ""}">${label}</button>`).join("")}</div>
         <button class="icon-btn" data-nb-close>${ICON.close}</button>
       </div>
       <div class="nb-body">${body}</div>`;
@@ -462,12 +515,16 @@ function noteHTML(n, { draggable = false } = {}) {
 
 // ───────── поле ответа: рация на пробеле + текст ─────────
 function ReplyBox(host, opts = {}) {
-  const ph = opts.placeholder || "или напишите по-английски и нажмите Enter";
+  const ph = opts.placeholder || "или напиши по-английски и нажми Enter";
+  const label = opts.label || "Говорить";
+  const touch = matchMedia("(pointer: coarse)").matches;
+  const idle = !Mic.supported() ? "голос работает в Chrome и Edge" : touch ? "нажми, скажи и нажми ещё раз" : "нажми и говори · или держи пробел";
   host.innerHTML = `
     <div class="reply">
       <button type="button" class="mic-btn">
         <span class="mic-ico">${ICON.mic}</span>
-        <span class="mic-txt"><b>${esc(opts.label || "Говорить")}</b><small>${Mic.supported() ? "держите кнопку или пробел" : "голос работает в Chrome и Edge"}</small></span>
+        <span class="mic-txt"><b>${esc(label)}</b><small>${idle}</small></span>
+        <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       </button>
       <form class="type-row">
         <input type="text" autocomplete="off" spellcheck="false" placeholder="${esc(ph)}">
@@ -475,7 +532,13 @@ function ReplyBox(host, opts = {}) {
       </form>
     </div>`;
   const btn = $(".mic-btn", host), form = $("form", host), input = $("input", host);
-  let resolver = null, enabled = false, live = false;
+  const micB = $(".mic-txt b", host), micS = $(".mic-txt small", host);
+  let resolver = null, enabled = false, live = false, asking = false, mode = "tap";
+  function paint(on) {
+    btn.classList.toggle("on", on);
+    micB.textContent = on ? "Слушаю…" : label;
+    micS.textContent = on ? (mode === "hold" ? "отпусти пробел, когда договоришь" : "нажми ещё раз, когда договоришь") : idle;
+  }
 
   function setEnabled(on) {
     enabled = on;
@@ -483,9 +546,10 @@ function ReplyBox(host, opts = {}) {
     input.disabled = !on;
     btn.disabled = !on;
   }
-  function submit(t) {
+  function submit(t, via = "text") {
     t = String(t || "").trim();
     if (!t || !enabled || !resolver) return;
+    ReplyBox.via = via;
     input.value = "";
     const r = resolver;
     resolver = null;
@@ -493,22 +557,41 @@ function ReplyBox(host, opts = {}) {
     r(t);
   }
   const handler = {
-    start() {
-      if (!enabled) return;
-      if (!Mic.supported()) { UI.toast("Голосовой ввод работает в Chrome и Edge. Напишите текстом.", "info"); input.focus(); return; }
+    start(how = "hold") {
+      if (!enabled || live || asking) return;
+      if (!Mic.supported()) { UI.toast("Голосовой ввод работает в Chrome и Edge. Напиши текстом.", "info"); input.focus(); return; }
+      if (Mic.perm() === "denied") {
+        UI.toast("Микрофон для этой страницы запрещён. Нажми на значок слева от адреса сайта и разреши микрофон. Пока можно отвечать текстом.", "info", 9000);
+        input.focus();
+        return;
+      }
+      // Первый раз спрашиваем доступ отдельно: окно браузера не обрывает запись, а ответ запоминается.
+      if (Mic.perm() === "prompt" && !Mic.isFile()) {
+        asking = true;
+        UI.toast("Браузер спросит про микрофон. Разреши один раз — дальше спрашивать не будет.", "info", 7000);
+        Mic.ask().then((ok) => {
+          asking = false;
+          if (!ok) { UI.toast("Без микрофона можно отвечать текстом. Включить его можно значком слева от адреса сайта.", "info", 8000); return; }
+          if (how === "tap") handler.start("tap");
+          else UI.toast("Микрофон включён. Держи пробел и говори.", "ok");
+        });
+        return;
+      }
+      Mic.fileNote();
       if (!opts.keepVoice) Voice.stop();
       Sound.sfx("ptt-on");
-      if (!Mic.start((t) => { input.value = t; })) { UI.toast("Микрофон не запустился. Напишите текстом.", "bad"); return; }
+      mode = how;
+      if (!Mic.start((t) => { input.value = t; }, () => handler.end())) { UI.toast("Микрофон не запустился. Напиши текстом.", "bad"); return; }
       if (opts.onStart) opts.onStart();
       live = true;
-      btn.classList.add("on");
+      paint(true);
       input.value = "";
       input.placeholder = "слушаю…";
     },
     async end() {
       if (!live) return;
       live = false;
-      btn.classList.remove("on");
+      paint(false);
       Sound.sfx("ptt-off");
       if (opts.onEnd) opts.onEnd();
       const t = await Mic.stop();
@@ -516,21 +599,25 @@ function ReplyBox(host, opts = {}) {
       if (!t) {
         const err = Mic.error();
         UI.toast(err === "not-allowed" || err === "service-not-allowed"
-          ? "Нет доступа к микрофону. Разрешите его в адресной строке браузера."
-          : "Не расслышал. Держите кнопку, пока говорите.", "info");
+          ? "Нет доступа к микрофону. Разреши его значком слева от адреса сайта."
+          : err === "network" ? "Распознаванию речи нужен интернет. Пока можно ответить текстом."
+          : "Не расслышал. Скажи ещё раз — погромче и ближе к микрофону.", "info", 6000);
         return;
       }
-      submit(t);
+      submit(t, "voice");
     }
   };
-  btn.addEventListener("pointerdown", (e) => { e.preventDefault(); PTT.press(); });
-  btn.addEventListener("pointerup", () => PTT.release());
-  btn.addEventListener("pointerleave", () => PTT.release());
-  form.addEventListener("submit", (e) => { e.preventDefault(); submit(input.value); });
+  btn.addEventListener("click", () => { if (live) handler.end(); else handler.start("tap"); });
+  form.addEventListener("submit", (e) => { e.preventDefault(); submit(input.value, "text"); });
   setEnabled(false);
   PTT.bind(handler);
   return {
-    wait() { setEnabled(true); return new Promise((r) => { resolver = r; }); },
+    wait() {
+      setEnabled(true);
+      // Кто в прошлый раз печатал — сразу получает курсор в поле; кто говорил — пробел остаётся рацией.
+      if (ReplyBox.via === "text" && !matchMedia("(pointer: coarse)").matches) input.focus({ preventScroll: true });
+      return new Promise((r) => { resolver = r; });
+    },
     disable() { setEnabled(false); },
     cancel() {
       if (!resolver) return;

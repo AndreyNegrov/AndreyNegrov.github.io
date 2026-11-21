@@ -1,18 +1,36 @@
-// Сезон 1 «Квартира 4B». Весь текст игры: люди, словарь, сцены, порядок прохождения.
+// Текст игры: люди, словарь, сцены. Сезон 1 — «Квартира 4B», сезон 2 — «Звонок».
 
 const PEOPLE = {
   remezov: { name: "Ремезов", role: "подполковник, на связи", img: "art/remezov.jpg", lang: "ru",
     voice: { g: "m", pitch: 0.9, rate: 1, cloud: "onyx", style: "Calm, dry, low voice of a tired Russian intelligence officer. Speaks Russian." } },
-  helen: { name: "Helen", role: "хозяйка квартиры", img: "art/helen.jpg",
+  helen: { name: "Helen", role: "хозяйка квартиры", img: "art/helen.jpg", gender: "f",
     voice: { g: "f", pitch: 1.05, rate: 0.95, cloud: "coral", style: "Friendly landlady in her fifties, a little too curious." } },
-  mark: { name: "Mark", role: "сосед за стеной", initial: "M",
+  mark: { name: "Mark", role: "сосед за стеной", initial: "M", gender: "m",
     voice: { g: "m", pitch: 1.05, rate: 1, cloud: "ash", style: "Young man on the phone, relaxed but a bit nervous." } },
-  rita: { name: "Rita", role: "кофейня на первом этаже", img: "art/rita.jpg",
+  rita: { name: "Rita", role: "кофейня на первом этаже", img: "art/rita.jpg", gender: "f",
     voice: { g: "f", pitch: 0.95, rate: 1, cloud: "nova", style: "Warm, tired café owner. Direct." } },
   owen: { name: "Owen", role: "водитель Northline", img: "art/owen.jpg",
     voice: { g: "m", pitch: 0.8, rate: 0.95, cloud: "echo", style: "Tired van driver, low voice." } },
   danny: { name: "Danny", role: "напарник Оуэна", initial: "D",
     voice: { g: "m", pitch: 1.2, rate: 1.05, cloud: "fable", style: "Young nervous guy." } },
+  june: { name: "June", role: "сидит у окна", initial: "J", gender: "f",
+    voice: { g: "f", pitch: 0.96, rate: 0.92, cloud: "shimmer", style: "Quiet woman around forty. Polite, never in a hurry, no extra words." } },
+  sam: { name: "Sam", role: "брат Марка", initial: "S", gender: "m",
+    voice: { g: "m", pitch: 1.08, rate: 1, cloud: "echo", style: "Younger than Mark, tense, short radio phrases." } },
+  ade: { name: "Mrs. Adeyemi", role: "управляющая отеля", initial: "A", gender: "f",
+    voice: { g: "f", pitch: 0.94, rate: 0.94, cloud: "sage", style: "Hotel manager in her fifties. Calm, precise, not unkind." } },
+  nina: { name: "Nina", role: "переводчица", initial: "N", gender: "f",
+    voice: { g: "f", pitch: 1.04, rate: 0.96, cloud: "shimmer", style: "Woman around thirty. Clear, quiet, careful English." } },
+  graham: { name: "Graham", role: "гость", initial: "G", gender: "m",
+    voice: { g: "m", pitch: 0.86, rate: 0.95, cloud: "echo", style: "Polite man in his forties. Smooth, never loud." } },
+  ed: { name: "Ed", role: "водитель такси", initial: "E", gender: "m",
+    voice: { g: "m", pitch: 0.92, rate: 1, cloud: "ash", style: "Taxi driver. Short tired sentences." } },
+  dana: { name: "Dana", role: "подруга Миры", img: "art/dana.jpg", gender: "f",
+    voice: { g: "f", pitch: 1.08, rate: 1, cloud: "nova", style: "Young woman calling, worried. Clear and direct." } },
+  leo: { name: "Leo", role: "Мира была у него", initial: "L", gender: "m",
+    voice: { g: "m", pitch: 0.9, rate: 1, cloud: "onyx", style: "Man answering his phone at night. Short, a bit guarded." } },
+  samira: { name: "Samira", role: "стажёр", initial: "S", gender: "f",
+    voice: { g: "f", pitch: 1.14, rate: 1.05, cloud: "shimmer", style: "Young intern. Quiet, a little scared." } },
   base: { name: "Base", role: "диспетчер Northline", initial: "B",
     voice: { g: "f", pitch: 0.85, rate: 1, cloud: "sage", style: "Cold, efficient radio dispatcher." } },
   worker: { name: "Worker", role: "грузчик на доке", initial: "W",
@@ -82,7 +100,30 @@ const GLOSSARY = {
   "all units": "всем постам", tonight: "сегодня ночью", "on the gate": "на воротах",
   "bring him down": "спустите его", "change of plan": "план меняется", move: "перевозить",
   "his light is on": "у него горит свет", "hurry up": "быстрее", "fifteen minutes": "пятнадцать минут",
-  help: "помогите", fragile: "хрупкое", security: "охрана"
+  help: "помогите", fragile: "хрупкое", security: "охрана",
+  // сезон 2
+  june: "Джун", sam: "Сэм", buyer: "покупатель, покупательница", sits: "сидит",
+  "always sits": "всегда сидит (на своём месте)", heavy: "тяжёлый", napkin: "салфетка",
+  usual: "обычный (заказ)", cellar: "подвал", basement: "подвал", empty: "пустой",
+  sack: "мешок", bag: "сумка, мешок", beans: "зёрна", brother: "брат", key: "ключ",
+  drove: "вёз, ехал за рулём", hear: "слышать", radio: "радио, рация",
+  "other place": "другое место", "not glass": "не стекло", "crate seven": "ящик номер семь",
+  "after eleven": "после одиннадцати", "at ten": "в десять", "let them hear": "пусть услышат",
+  "the dock is taped": "док опечатан", taped: "опечатан", tape: "лента, скотч",
+  upstairs: "наверху", listens: "слушает", woman: "женщина", real: "настоящий",
+  fake: "фальшивый", lie: "ложь", promise: "обещать, обещание", police: "полиция",
+  seven: "семь", sunday: "воскресенье", friday: "пятница", saturday: "суббота",
+  "two zero one four": "два-ноль-один-четыре", "on this phone": "по этому телефону",
+  "blue van": "синий фургон", full: "полный", write: "писать, записывать",
+  story: "история, версия", pipe: "труба", life: "жизнь", soft: "мягкий",
+  clear: "вне подозрения; ясно", lose: "потерять",
+  room: "комната, номер", "room number": "номер комнаты", taxi: "такси",
+  safe: "сейф", folder: "папка", coat: "пальто", "blue coat": "синее пальто",
+  connect: "соединить (по телефону)", guest: "гость", breakfast: "завтрак",
+  coach: "междугородний автобус", "spare key": "запасной ключ",
+  "eight four zero": "восемь-четыре-ноль", "come down": "спуститься вниз",
+  rank: "стоянка (такси)", clerk: "портье, администратор", note: "записать, запись",
+  "do not": "не делай"
 };
 
 // Утечки, которые выдают легенду в любом разговоре.
@@ -584,7 +625,162 @@ const SCENES = {
     ]
   },
 
-  "ending": { type: "ending", day: 3, place: "01:15", bg: "art/flat.jpg", look: "night", ambience: "room" }
+  "ending": {
+    type: "ending", day: 3, place: "01:15", bg: "art/flat.jpg", look: "night", ambience: "room",
+    kicker: "Эпилог · 01:15", night: "d3-night", reports: ["d1-report", "d2-report"],
+    susStat: [["helen", "подозрение Хелен"]], done: "Конец первого сезона.",
+    judge: (got) => got.size >= 3 && got.has("code3") && got.has("room") ? "best" : got.size >= 1 ? "partial" : "fail"
+  },
+
+// ───────────── СЕЗОН 2. Входящий звонок ─────────────
+  "s2d1-brief": {
+    type: "brief", day: 1, time: "22:30", place: "Ваша квартира", bg: "art/flat.jpg", look: "day",
+    kicker: "День 1 · Пятница", title: "Она звонит вам",
+    text: [
+      "Мира должна была позвонить мне в девять. Не позвонила.",
+      "Её телефон сейчас у Даны. Это подруга, они ужинали. Мира оставила Дане свой телефон и ваш номер: если не вернусь к десяти, позвони.",
+      "Сейчас половина одиннадцатого. Дана звонит вам. Это не чат и не допрос. Трубку взяли вы.",
+      "Узнайте три вещи: куда Мира поехала, к кому и во сколько обещала вернуться."
+    ],
+    goals: ["Снять трубку", "Куда поехала", "К кому и к скольки обещала вернуться"]
+  },
+
+  "s2d1-dana": {
+    type: "talk", day: 1, time: "22:35", place: "Ваша квартира · Дана звонит", bg: "art/flat.jpg", look: "day", ambience: "room",
+    npc: "dana",
+    goal: "Дана звонит вам. Мира оставила ей телефон и этот номер. Узнайте, куда Мира поехала и к кому.",
+    persona: "Dana, Mira's friend. She is calling because Mira left her phone and this number, and Mira is not back by ten. Worried, clear, not hostile.",
+    situation: "Incoming phone call at the player's home. Dana called them. They did not call her.",
+    forbid: [COVER_LEAK],
+    beats: [
+      { say: "Hi. I'm Dana. Mira left her phone with me. She said to call this number if she wasn't back by ten.",
+        hint: "Покажите, что поняли: она не вернулась.",
+        facts: [{ id: "back", label: "она не вернулась", ai: "understands Mira is not back, or asks where she is",
+          any: ["not back", "isn't back", "didn't come", "did not come", "where", "missing", "ten"] }],
+        ask: { back: "She's not back. Do you understand?" },
+        ok: "Yes. It's half past ten." },
+      { say: "She went to King Street to meet a man. His name is Leo.",
+        hint: "Повторите улицу и имя.",
+        facts: [
+          { id: "king", label: "Кинг-стрит", ai: "says King Street", any: ["king"] },
+          { id: "leo", label: "Лео", ai: "says the man's name is Leo", any: ["leo"] }
+        ],
+        ask: { king: "Which street?", leo: "What is his name?" },
+        ok: "King Street. Leo." },
+      { say: "She said she would be back by ten. Please find her.",
+        hint: "Повторите время, к которому она обещала вернуться.",
+        facts: [{ id: "ten", label: "к десяти", ai: "says she was supposed to be back by ten",
+          any: ["ten", "10"] }],
+        ask: { ten: "Back by what time?" },
+        ok: "By ten. And she isn't here." }
+    ],
+    end: { say: "I'll keep her phone. Call me if you find her." }
+  },
+
+  "s2d1-report": {
+    type: "talk", day: 1, time: "22:50", place: "Звонок Ремезову", bg: "art/flat.jpg", look: "day", ambience: "room",
+    npc: "remezov", report: true,
+    goal: "Скажите Ремезову, куда Мира поехала, к кому и к скольки обещала вернуться.",
+    persona: "Lieutenant Colonel Remezov. Short Russian lines. He needs the English facts from Dana's call.",
+    situation: "The player calls Remezov after Dana's incoming call about Mira.",
+    forbid: [],
+    beats: [
+      { say: "Слушаю. Куда, к кому, к скольки. По-английски.", maxTries: 5,
+        hint: "King Street. Leo. Back by ten.",
+        facts: [
+          { id: "king", label: "Кинг-стрит", ai: "says King Street", any: ["king"] },
+          { id: "leo", label: "к Лео", ai: "says she went to meet Leo", any: ["leo"] },
+          { id: "ten", label: "обещала к десяти", ai: "says she was due back by ten", any: ["ten", "10"] }
+        ],
+        ask: { king: "Куда?", leo: "К кому?", ten: "К скольки?" } }
+    ],
+    verdict: [
+      { min: 3, say: "Лео нам не клиент. Завтра вы сами ему звоните. Один вопрос: куда Мира уехала от него." },
+      { min: 1, say: "Мало. Завтра всё равно звоните Лео и спросите, где она сейчас." },
+      { min: 0, say: "Я не знаю, куда она поехала. Перезвоните Дане.", retry: "s2d1-dana" }
+    ]
+  },
+
+  "s2d2-brief": {
+    type: "brief", day: 2, time: "10:00", place: "Ваша квартира", bg: "art/flat.jpg", look: "day",
+    kicker: "День 2 · Суббота", title: "Вы звоните Лео",
+    text: [
+      "Дана звонила вам. Теперь вы звоните Лео.",
+      "Мира вчера поехала к нему на Кинг-стрит и к десяти не вернулась.",
+      "Спросите, куда она уехала от него. Он скажет прямо."
+    ],
+    goals: ["Позвонить Лео", "Куда Мира уехала от него"]
+  },
+
+  "s2d2-leo": {
+    type: "talk", day: 2, time: "10:10", place: "Вы звоните Лео", bg: "art/flat.jpg", look: "day", ambience: "room",
+    npc: "leo",
+    goal: "Трубку берёт Лео. Спросите, куда Мира уехала от него.",
+    persona: "Leo. Mira came to see him yesterday and then left. He answers the phone, a bit guarded, but he tells the truth.",
+    situation: "The player is calling Leo the morning after Dana's call. They ask where Mira went after she left him.",
+    forbid: [COVER_LEAK],
+    beats: [
+      { say: "Yes? Who is this?",
+        hint: "Скажите, что звоните из-за Миры.",
+        facts: [{ id: "mira", label: "звоните из-за Миры", ai: "says they are calling about Mira",
+          any: ["mira", "about her", "looking for"] }],
+        ask: { mira: "Who? About what?" },
+        ok: "Mira. She was here." },
+      { say: "She left at nine. She took a taxi to the station. Her train is at eleven.",
+        hint: "Повторите: вокзал и одиннадцать.",
+        facts: [
+          { id: "station", label: "вокзал", ai: "says the station", any: ["station"] },
+          { id: "eleven", label: "поезд в одиннадцать", ai: "says the train is at eleven", any: ["eleven", "11"] }
+        ],
+        ask: { station: "Where did she go?", eleven: "What time is the train?" },
+        ok: "The station. Eleven." }
+    ],
+    end: { say: "That's all I know. She didn't say more." }
+  },
+
+  "s2d2-report": {
+    type: "talk", day: 2, time: "10:20", place: "Звонок Ремезову", bg: "art/flat.jpg", look: "day", ambience: "room",
+    npc: "remezov", report: true,
+    goal: "Скажите, куда Мира уехала от Лео и во сколько поезд.",
+    persona: "Lieutenant Colonel Remezov. He will send people to the station if he hears the place and the time.",
+    situation: "Report after the call to Leo.",
+    forbid: [],
+    beats: [
+      { say: "Слушаю. Где она сейчас? По-английски.", maxTries: 4,
+        hint: "She went to the station. The train is at eleven.",
+        facts: [
+          { id: "station", label: "вокзал", ai: "says Mira went to the station", any: ["station"] },
+          { id: "eleven", label: "поезд в одиннадцать", ai: "says the train is at eleven", any: ["eleven", "11"] }
+        ],
+        ask: { station: "Куда?", eleven: "Во сколько поезд?" } }
+    ],
+    verdict: [
+      { min: 2, say: "Вокзал, одиннадцать. Встретим её у поезда." },
+      { min: 1, say: "Одного места мало. Но людей я отправлю туда, что вы назвали." },
+      { min: 0, say: "Куда ехать, я не услышал. Наберите Лео ещё раз.", retry: "s2d2-leo" }
+    ]
+  },
+
+  "s2-ending": {
+    type: "ending", day: 2, place: "11:00", bg: "art/flat.jpg", look: "day", ambience: "room",
+    kicker: "Эпилог · одиннадцать", fromReport: "s2d2-report", book: 2,
+    reports: ["s2d1-report", "s2d2-report"],
+    susStat: [],
+    done: "Конец второго сезона.",
+    facts: [
+      { id: "station", label: "вокзал" },
+      { id: "eleven", label: "поезд в одиннадцать" }
+    ],
+    replay: () => "s2d2-leo",
+    judge: (got, s) => {
+      const dana = new Set((s.reports["s2d1-report"] && s.reports["s2d1-report"].got) || []);
+      const hasPlace = got.has("station") && got.has("eleven");
+      const hasDana = dana.has("leo") && dana.has("king");
+      if (hasPlace && hasDana) return "best";
+      if (hasPlace || hasDana || got.size || dana.size) return "partial";
+      return "fail";
+    }
+  }
 };
 
 const FLOW = [
@@ -609,3 +805,55 @@ const INTRO = [
       "Потом доклад мне по рации. По-английски: в этом городе по-русски не говорят даже по телефону. Чего не сказали, того для меня не было."
     ] }
 ];
+
+const FLOW2 = [
+  "s2d1-brief", "s2d1-dana", "s2d1-report",
+  "s2d2-brief", "s2d2-leo", "s2d2-report",
+  "s2-ending"
+];
+
+const INTRO2 = [
+  { title: "Мира не позвонила", img: "art/flat.jpg",
+    text: "В девять Мира должна была выйти на связь. Девять прошло. Телефон у неё сел ещё за ужином, и она оставила его подруге." },
+  { title: "Дана звонит вам", who: "remezov",
+    text: "Подругу зовут Дана. Мира сказала ей: если не вернусь к десяти, позвони по этому номеру. Сейчас больше десяти. Трубку берёте вы. Вы ей не звонили." },
+  { title: "Что спросить", who: "remezov",
+    steps: [
+      "Куда Мира поехала.",
+      "К кому.",
+      "К какому часу обещала вернуться.",
+      "Потом позвоните мне и скажите это по-английски. Завтра, если будет кому, позвоните уже вы."
+    ] }
+];
+
+const ENDINGS2 = {
+  best: {
+    title: "У поезда",
+    text: () => [
+      "Дана позвонила не зря. Мира уехала от Лео на вокзал, поезд в одиннадцать.",
+      "Её встретили у вагона. Телефон так и остался у Даны, Мира заберёт его сама.",
+      "Ремезов сказал только: «Трубку сняли вовремя»."
+    ]
+  },
+  partial: {
+    title: "Не весь адрес",
+    text: (s) => {
+      const leo = new Set((s.reports["s2d2-report"] && s.reports["s2d2-report"].got) || []);
+      if (leo.has("station") && !leo.has("eleven")) {
+        return ["Вокзал вы назвали, час поезда нет. Люди приехали на вокзал и разошлись по платформам. Миру нашли позже, уже в городе."];
+      }
+      if (!leo.has("station")) {
+        return ["Куда она уехала от Лео, вы не сказали. На Кинг-стрит к утру было пусто. Мира нашлась сама, на следующий день."];
+      }
+      return ["Часть звонка дошла. Миру нашли, но не у поезда и не вовремя."];
+    }
+  },
+  fail: {
+    title: "Трубку не поняли",
+    text: () => [
+      "Дана звонила, чтобы сказать, куда делась Мира. Этого в докладе не было.",
+      "В одиннадцать поезд ушёл. Где Мира, снова неизвестно.",
+      "Звонок Лео можно пройти ещё раз."
+    ]
+  }
+};

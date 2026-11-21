@@ -29,7 +29,7 @@ const Board = {
           <div class="bd-head">
             <div><p class="kicker">Доска улик</p><h2>${esc(sc.title)}</h2><p class="muted">${esc(sc.intro)}</p></div>
             <div class="row">
-              <button class="btn ghost" data-act="replay">Ещё раз ночь</button>
+              <button class="btn ghost" data-act="replay">${esc(sc.again || "Ещё раз ночь")}</button>
               <button class="btn primary" data-act="done">Выйти на связь</button>
             </div>
           </div>

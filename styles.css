@@ -161,6 +161,65 @@ svg .fill { fill: currentColor; stroke: none; }
 }
 .title .subtitle { letter-spacing: 0.45em; text-transform: uppercase; color: var(--frost); margin: 0 0 18px; }
 .title .lead { max-width: 580px; }
+.title.hub { overflow: auto; justify-content: center; padding: 28px 16px 36px; }
+.title.hub h1 { font-size: clamp(52px, 8vw, 96px); }
+.season-row {
+  width: min(880px, 100%); display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  margin: 8px 0 16px; text-align: left;
+}
+.season {
+  background: rgba(8, 12, 18, 0.72); border: 1px solid var(--line); border-radius: 20px;
+  padding: 16px 18px 14px; backdrop-filter: blur(12px);
+}
+.season h2 { margin: 0 0 8px; font-size: 26px; font-weight: 500; letter-spacing: 0; }
+.season p { margin: 0 0 4px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.season .kicker { color: var(--frost); }
+.season .row { justify-content: flex-start; }
+.place-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.place {
+  text-align: left; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line);
+  border-radius: 16px; padding: 14px; color: var(--ink); display: grid; gap: 6px;
+}
+.place b { font-size: 18px; }
+.place span, .place i { color: var(--muted); font-size: 14px; font-style: normal; }
+.place.done { border-color: rgba(95, 224, 160, 0.55); }
+.place:disabled { opacity: 0.7; }
+
+body.phone-on .bg-box img { filter: brightness(1.35) saturate(0.95) contrast(1.02) !important; }
+body.phone-on #vignette { opacity: 0.35; }
+.phone-app {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  padding: 84px 20px 24px;
+}
+.phone {
+  width: min(480px, 100%); height: min(720px, 100%);
+  background: #f3f6fb; color: #1a2330;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 28px; display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+}
+.phone-top { display: flex; gap: 10px; align-items: center; padding: 14px 16px; background: #fff; border-bottom: 1px solid #e2e8f0; color: #1a2330; }
+.phone-top span { display: block; color: #5c6b7c; font-size: 13px; }
+.phone-log { flex: 1; overflow: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #f3f6fb; }
+.bubble { max-width: 88%; padding: 10px 14px; border-radius: 16px; line-height: 1.45; color: #1a2330; }
+.bubble.them { align-self: flex-start; background: #fff; border: 1px solid #e2e8f0; border-bottom-left-radius: 5px; }
+.bubble.me { align-self: flex-end; background: #d7e8ff; border-bottom-right-radius: 5px; }
+.bubble.sys { align-self: center; background: transparent; color: #3d4d60; font-size: 14px; text-align: center; max-width: 100%; }
+.bubble .who { display: block; font-size: 11px; color: #3d7ec9; margin-bottom: 2px; }
+.voice-chip { background: transparent; color: #3d7ec9; border: 0; padding: 0; }
+.phone-hint { margin: 0; padding: 8px 16px 0; color: #3d4d60; font-size: 14px; min-height: 1.2em; background: #f3f6fb; }
+.phone-compose { border-top: 1px solid #e2e8f0; padding: 10px 12px 14px; background: #fff; }
+.phone-compose .reply { grid-template-columns: 1fr; gap: 8px; }
+.phone-compose .mic-btn { width: 100%; justify-content: center; }
+.phone-compose .type-row { width: 100%; min-width: 0; }
+.phone-compose .type-row input {
+  flex: 1 1 180px; width: auto; min-width: 160px; min-height: 44px;
+  background: #fff; color: #121820; border-color: #c5d0dc;
+}
+.phone-compose .type-row input::placeholder { color: #7b8b9c; }
+@media (max-height: 760px) {
+  .title.hub { justify-content: flex-start; }
+}
 .card-scene {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   padding: 90px 20px 30px; overflow: auto;
@@ -720,6 +779,8 @@ body:has(#notebook:not([hidden])) .phone-hang { right: min(460px, calc(100vw - 1
   .title h1 { font-size: 64px; letter-spacing: 0.12em; margin-left: 0.12em; }
   .title .subtitle { letter-spacing: 0.22em; }
   .title .lead { font-size: 16px; }
+  .season-row, .place-grid { grid-template-columns: 1fr; }
+  .season h2 { font-size: 22px; }
   .card-scene { padding: 84px 12px 16px; align-items: stretch; }
   .story-card, .story-card.wide { padding: 18px 16px; border-radius: 18px; }
   .story-card h1 { font-size: 26px; }

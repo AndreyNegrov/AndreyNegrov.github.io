@@ -36,7 +36,7 @@ const Listen = {
         active: [], queue: { wall: [], dock: [], radio: [] }, pendingSee: [],
         stats: { full: 0, part: 0, miss: 0 }, seenSpots: new Set(), scopeView: null, finished: false, torn: false
       };
-      if (sc.live) L.live = { got: new Set(), closed: false, deadline: toMin(sc.live.deadline), history: [] };
+      if (sc.live) L.live = { got: new Set(), traps: new Set(), closed: false, deadline: toMin(val(sc.live.deadline, state)), history: [] };
       this.mount(L);
       UI.setTime(fmtMin(L.now));
       UI.onReplay = (n) => this.spendRecorder(L, n);
@@ -59,12 +59,12 @@ const Listen = {
         ${r ? `<div class="ls-scanner" hidden>
           <div class="scan-top"><b class="scan-freq">000.00</b><span>МГц</span><span class="scan-lock">канал</span></div>
           <div class="scan-dial"><input type="range" min="${r.min}" max="${r.max}" step="0.05" value="${L.freq}">
-            ${state.flags.knowsFreq ? `<i class="scan-mark" style="left:${((r.freq - r.min) / (r.max - r.min)) * 100}%"><span>скотч Льва</span></i>` : ""}</div>
+            ${state.flags.knowsFreq ? `<i class="scan-mark" style="left:${((r.freq - r.min) / (r.max - r.min)) * 100}%"><span>${esc((L.sc.radio && L.sc.radio.mark) || "скотч Льва")}</span></i>` : ""}</div>
           <div class="scan-meter">${"<i></i>".repeat(6)}</div>
           <small>Мышь, колесо или стрелки ← →. С Shift — крупнее шаг.</small>
         </div>` : ""}
         ${sc.live ? `<div class="ls-live">
-          <div class="live-head">${avatar("remezov", "sm")}<div><b>Ремезов на связи</b><span>группа входит в ${esc(sc.live.deadline)}</span></div></div>
+          <div class="live-head">${avatar("remezov", "sm")}<div><b>Ремезов на связи</b><span>${esc(val(sc.live.note, state) || ("группа входит в " + val(sc.live.deadline, state)))}</span></div></div>
           <ul class="live-facts">${sc.live.facts.map((f) => `<li data-f="${f.id}">${esc(f.label)}</li>`).join("")}</ul>
           <div class="live-last">Докладывайте, как только узнаете.</div>
           <div class="live-reply"></div>
@@ -539,6 +539,7 @@ const Listen = {
       }
       if (L.live.closed || L.tok.dead) return;
       const wrong = (sc.live.wrong || []).find((w) => matchFact(text, w));
+      const trapHits = (sc.live.traps || []).filter((t) => matchFact(text, t));
       const acks = [];
       ids.forEach((id) => {
         const f = sc.live.facts.find((x) => x.id === id);
@@ -547,8 +548,9 @@ const Listen = {
         if (li) li.classList.add("ok");
         acks.push(f.ack);
       });
+      if (!acks.length) trapHits.forEach((t) => L.live.traps.add(t.id));
       Sound.sfx("squelch");
-      const answer = acks.length ? acks.join(" ") : wrong ? wrong.say : reply || "Не понял. Повторите.";
+      const answer = acks.length ? acks.join(" ") : trapHits.length ? trapHits[0].ack : wrong ? wrong.say : reply || "Не понял. Повторите.";
       L.live.history.push({ who: "Ремезов", text: answer });
       last.innerHTML = `<b>Ремезов:</b> ${esc(answer)}`;
       if (acks.length) Sound.sfx("ok");
@@ -559,12 +561,15 @@ const Listen = {
     L.live.closed = true;
     if (L.reply) L.reply.disable();
     state.live[L.sc.id] = [...L.live.got];
+    state.liveTrap = state.liveTrap || {};
+    state.liveTrap[L.sc.id] = [...(L.live.traps || [])];
     L.live.got.forEach((id) => { state.intel[id] = true; });
     Store.save();
     Sound.sfx("squelch");
     const last = $(".live-last", L.el);
+    const deadline = val(L.sc.live.deadline, state);
     if (last) last.innerHTML = "<b>Ремезов:</b> Группа пошла. Ждите.";
-    UI.caption(`${L.sc.live.deadline}. Группа пошла.`, "", 6000);
+    UI.caption(`${deadline}. Группа пошла.`, "", 6000);
   },
 
   finish(L) {

@@ -58,7 +58,7 @@ const Shift = {
       if ((state.sus.rita || 0) >= sc.failAt) {
         await this.speak(S, "You know what? This isn't working. Go home.", { who: "rita" });
         this.teardown(S);
-        return S.resolve({ fail: "Рита уволила вас после первой же смены. Место Льва потеряно." });
+        return S.resolve({ fail: sc.failText || "Рита уволила вас после смены. Место Льва потеряно." });
       }
       sc.table.filter((t) => t.after === i + 1).forEach((t) => this.tableTalk(S, t));
       if (sc.call && sc.call.after === i + 1) await this.call(S);
@@ -214,6 +214,7 @@ const Shift = {
       return;
     }
     cu.done = true;
+    if (cu.c.onRight) cu.c.onRight(state);
     S.good += 1;
     const tip = cu.patience > 0.6 ? 2 : 1;
     S.tips += tip;
@@ -259,12 +260,13 @@ const Shift = {
     S.tableBusy += 1;
     const card = $(".table4", S.el);
     const subs = $(".t4-subs", S.el);
-    $(".t4-who", S.el).textContent = state.flags.askedDrivers ? "Owen и Danny, Northline" : "двое в куртках Northline";
+    $(".t4-who", S.el).textContent = t.label || (state.flags.askedDrivers ? "Owen и Danny, Northline" : "двое в куртках Northline");
     UI.caption(t.see);
     card.classList.add("talking");
     await sleep(2600);
     for (const l of t.lines) {
       if (S.tok.dead) return;
+      if (l.when && !l.when(state)) continue;
       await S.queue;
       const clear = S.atTable;
       const words = l.text.split(/\s+/);
@@ -288,7 +290,7 @@ const Shift = {
 
   async call(S) {
     const c = S.sc.call;
-    while (S.customer && !S.tok.dead) await sleep(200);
+    while ((S.customer || S.tableBusy) && !S.tok.dead) await sleep(200);
     S.onCall = true;
     if (S.atTable) this.toggleTable(S, false);
     const overlay = document.createElement("div");

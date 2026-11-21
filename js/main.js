@@ -37,7 +37,9 @@ const Game = {
   paused: false,
   playing: false,
 
-  day() { const sc = SCENES[FLOW[state.step]]; return sc ? sc.day : 1; },
+  day() { const sc = SCENES[this.flow()[state.step]]; return sc ? sc.day : 1; },
+  flow() { return state.season === 3 ? FLOW3 : state.season === 2 ? FLOW2 : FLOW; },
+  introList() { return state.season === 2 ? INTRO2 : INTRO; },
   clockText() { return $("#hud-time").textContent || ""; },
   inPlay() { return this.playing; },
   onLeave(fn) { this.cleanups.push(fn); },
@@ -47,6 +49,7 @@ const Game = {
     this.cleanups = [];
     fns.forEach((f) => { try { f(); } catch (e) { console.warn(e); } });
     Voice.stop();
+    Music.stop();
     Sound.staticOff();
     PTT.unbind();
     Mic.abort();
@@ -61,45 +64,124 @@ const Game = {
     this.title();
   },
 
-  title() {
+  title(pick) {
     this.leave();
     this.playing = false;
     UI.hideHud();
-    UI.setBg("art/flat.jpg", "night");
+    document.body.classList.add("s3");
+    document.body.dataset.m = "";
     Sound.setAmbience(null);
-    const has = state.started && state.step > 0;
-    $("#scene").innerHTML = `
-      <section class="title">
-        <p class="kicker">Сезон 1</p>
-        <h1>ИНЕЙ</h1>
-        <p class="subtitle">Квартира 4B</p>
-        <p class="lead">Английский здесь — это работа под прикрытием. Слушать через стену, ловить рацию, держать легенду и докладывать.</p>
-        <div class="row center">
-          ${has ? '<button class="btn primary" data-act="continue">Продолжить</button>' : ""}
-          <button class="btn ${has ? "ghost" : "primary"}" data-act="new">${has ? "Начать сезон заново" : "Начать"}</button>
-          <button class="btn ghost" data-act="settings">Настройки</button>
+    this.titleMusic();
+    // Какой сезон показать: выбранный вкладкой, иначе последний сыгранный, иначе новый.
+    let last = null;
+    try { last = localStorage.getItem("iney-last-pack"); } catch { /* без хранилища показываем новый сезон */ }
+    const pid = PACKS[pick] ? pick : PACKS[last] ? last : "moon";
+    const pk = PACKS[pid], M = pk.meta;
+    Pack.use(pid);
+    UI.setBg(M.bg, M.look);
+    const saves = { 1: Store.peek("iney-v2"), 2: Store.peek("iney-s2d"), 3: Store.peek("iney-relay"), 4: Store.peek("iney-moon") };
+    const has = (n) => !!(saves[n] && saves[n].started && saves[n].step > 0);
+    const sv = saves[M.season], hasCur = has(M.season);
+    const where = hasCur ? SCENES[pk.FLOW[Math.min(sv.step, pk.FLOW.length - 1)]] : null;
+    const stars = hasCur ? Object.values(sv.missions || {}).reduce((a, x) => a + (x.stars || 0), 0) : 0;
+    const P = Profile.get(), rank = Profile.rank();
+    const trained = Profile.trainedToday();
+    const card = (season, kicker, name, lead, on) => `
+      <article class="season">
+        <p class="kicker">${kicker}</p>
+        <h2>${name}</h2>
+        <p>${lead}</p>
+        <div class="row">
+          ${on ? `<button class="btn primary small" data-act="continue" data-season="${season}">Продолжить</button>` : ""}
+          <button class="btn ${on ? "ghost" : "primary"} small" data-act="new" data-season="${season}">${on ? "Заново" : "Начать"}</button>
         </div>
-        <p class="muted small">Лучше всего в Chrome или Edge, в наушниках и с микрофоном.</p>
+      </article>`;
+    const path = Object.entries(pk.MISSIONS).map(([n, m]) => {
+      const st = sv && sv.missions && sv.missions[n];
+      const cur = where ? where.mission === Number(n) : Number(n) === 1;
+      const st3 = st ? [1, 2, 3].map((i) => `<i class="${i <= st.stars ? "on" : ""}">${ICON.starFill}</i>`).join("") : "";
+      return `<li class="${st ? "done" : ""} ${cur ? "cur" : ""}"><i class="t-ico">${ICON[st && !cur ? "check" : m.ico] || ICON.pin}</i><div><small>${M.unit} ${n}${cur ? " · ты здесь" : ""}</small><b>${esc(m.title)}</b></div><em>${st3}</em></li>`;
+    }).join("");
+    const tabs = Pack.list().map((id) => {
+      const m = PACKS[id].meta, played = has(m.season);
+      return `<button class="t-tab ${id === pid ? "on" : ""}" data-act="pack" data-pack="${id}"><b>${esc(m.tab)}</b><span>${id === "moon" && !played ? "новый" : played ? "начат" : "не начат"}</span></button>`;
+    }).join("");
+    $("#scene").innerHTML = `
+      <section class="title hub o-title">
+        <header class="t-top">
+          <div class="t-brand"><i>${ICON.snow}</i><div><b>Иней</b><span>английский под прикрытием</span></div></div>
+          <button class="t-agent" data-act="coll" title="Личное дело"><i>${rank.mark}</i><div><span>Агент Иней</span><b>${esc(rank.name)}</b><div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div></button>
+        </header>
+        <div class="t-main">
+          <article class="o-hero">
+            <div class="t-tabs">${tabs}</div>
+            <p class="kicker">${esc(M.kicker)}</p>
+            <h1>${esc(M.title)}</h1>
+            <p class="lead">${esc(M.lead)}</p>
+            <div class="row">
+              ${hasCur ? `<button class="btn primary" data-act="continue" data-season="${M.season}">Продолжить${where && where.mission ? " · " + M.unit.toLowerCase() + " " + where.mission : ""}</button>` : ""}
+              <button class="btn ${hasCur ? "ghost" : "primary"}" data-act="new" data-season="${M.season}">${hasCur ? "Начать заново" : esc(M.cta)}</button>
+            </div>
+            <p class="t-note">Отвечаешь голосом или текстом — как удобнее. Проверяется смысл, а не точные слова. Лучше в Chrome или Edge, в наушниках.</p>${Mic.isFile() ? `<p class="t-note t-warn">${ICON.mic}<span>Игра открыта как файл: браузер будет спрашивать про микрофон каждый раз. Запусти <b>play.cmd</b> в папке игры — спросит один раз и запомнит.</span></p>` : ""}
+          </article>
+          <ol class="t-path">${path}${stars ? `<li class="t-total"><b>Звёзд собрано</b><em>${stars} из 18</em></li>` : ""}</ol>
+        </div>
+        <nav class="t-links">
+          <button data-act="train">${ICON.target}<b>Тренировка</b>${trained ? "" : "<u>×2 сегодня</u>"}</button>
+          <button data-act="coll">${ICON.shield}<b>Личное дело</b><span>${Object.keys(P.badges).length}/${Object.keys(BADGES).length}</span></button>
+          <button data-act="settings">${ICON.gear}<b>Настройки</b></button>
+        </nav>
+        <details class="o-archive">
+          <summary>Архив: первые сезоны</summary>
+          <div class="season-row">
+            ${card(1, "Сезон 1", "Квартира 4B", "Лев пропал. На складе напротив пишут одно, а грузят другое.", has(1))}
+            ${card(2, "Сезон 2", "Звонок", "Мира не вернулась к десяти. Её подруга звонит вам сама.", has(2))}
+          </div>
+        </details>
       </section>`;
     $(".title").addEventListener("click", (e) => {
       const a = e.target.closest("[data-act]");
       if (!a) return;
       Sound.ensure();
-      if (a.dataset.act === "continue") this.run();
-      else if (a.dataset.act === "new") {
-        if (has && !confirm("Начать сезон заново? Прогресс сотрётся.")) return;
+      Sound.sfx("click");
+      if (a.dataset.act === "pack") return this.title(a.dataset.pack);
+      if (a.dataset.act === "settings") return this.settings(() => this.title(pid));
+      if (a.dataset.act === "train") return Arcade.hub();
+      if (a.dataset.act === "coll") return Arcade.collection();
+      const season = Number(a.dataset.season);
+      const modern = season >= 3;
+      if (modern) { try { localStorage.setItem("iney-last-pack", season === 4 ? "moon" : "relay"); } catch { /* не страшно */ } }
+      if (a.dataset.act === "new") {
+        if (has(season) && !confirm(modern ? "Начать сезон заново? Прогресс миссий сотрётся, уровень и отметки останутся." : "Начать этот сезон заново? Его прогресс сотрётся.")) return;
+        Store.use(season);
         Store.reset();
+        if (modern) { state.season = 3; state.started = true; state.step = 0; Store.save(); return this.run(); }
         this.intro(0);
-      } else if (a.dataset.act === "settings") this.settings();
+      } else if (a.dataset.act === "continue") {
+        Store.use(season);
+        document.body.classList.toggle("s3", modern);
+        this.run();
+      }
     });
+  },
+
+  // Музыка меню включается после первого касания: раньше браузер звук не даёт.
+  titleMusic() {
+    const go = () => { if (!this.playing && $(".o-title, .a-hub, .a-coll")) Music.play("calm"); };
+    if (Sound.ctx && Sound.ctx.state === "running") return go();
+    const once = () => { document.removeEventListener("pointerdown", once); Sound.ensure(); setTimeout(go, 60); };
+    document.addEventListener("pointerdown", once);
+    this.onLeave(() => document.removeEventListener("pointerdown", once));
   },
 
   intro(i) {
     this.leave();
     this.playing = false;
     UI.hideHud();
-    if (i >= INTRO.length) return this.chooseLevel();
-    const s = INTRO[i];
+    document.body.classList.remove("s3");
+    const intro = this.introList();
+    if (i >= intro.length) return this.chooseLevel();
+    const s = intro[i];
     UI.setBg(s.img || "art/cabinet.jpg", "dusk");
     Sound.setAmbience("room");
     const text = s.text || (s.steps || []).join(" ");
@@ -107,7 +189,7 @@ const Game = {
       <section class="card-scene">
         <article class="story-card">
           ${s.who ? `<div class="person">${avatar(s.who, "lg")}<div><b>Подполковник Ремезов</b><span>${esc(PEOPLE[s.who].role)}</span></div></div>` : ""}
-          <p class="kicker">Вступление · ${i + 1} из ${INTRO.length}</p>
+          <p class="kicker">Вступление · ${i + 1} из ${intro.length}</p>
           <h1>${esc(s.title)}</h1>
           ${s.text ? `<p class="lead">${esc(s.text)}</p>` : ""}
           ${s.steps ? `<div class="steps">${s.steps.map((t, k) => `<div class="step"><span class="num">${k + 1}</span><p>${esc(t)}</p></div>`).join("")}</div>` : ""}
@@ -160,11 +242,15 @@ const Game = {
 
   async run() {
     this.leave();
-    const id = FLOW[state.step];
+    const id = this.flow()[state.step];
     const sc = SCENES[id];
     if (!sc) return this.title();
-    if (sc.skip && sc.skip(state)) { state.step += 1; Store.save(); return this.run(); }
+    if ((sc.skip && sc.skip(state)) || (sc.when && !sc.when(state))) { state.step += 1; Store.save(); return this.run(); }
     state.started = true;
+    if (sc.missionStart) {
+      state.marks = { ...(state.marks || {}), ["m" + sc.mission]: Store.snapshot() };
+      Mission.begin(sc.mission);
+    }
     state.checkpoint = Store.snapshot();
     if (sc.type === "listen") state.marks = { ...(state.marks || {}), [id]: state.checkpoint };
     Store.save();
@@ -173,10 +259,11 @@ const Game = {
     this.paused = false;
     UI.setBg(sc.bg, sc.look || "day");
     UI.hud(sc);
-    Sound.setAmbience(sc.ambience || "room");
-    if (SUS_PEOPLE.includes(sc.npc)) { state.met[sc.npc] = true; UI.renderSus(); }
+    Sound.setAmbience(sc.ambience || (state.season === 3 ? (sc.look === "night" ? "night" : "room") : "room"));
+    if (susPeople().includes(sc.npc)) { state.met[sc.npc] = true; UI.renderSus(); }
     let result;
     try {
+      if (sc.chapter) { $("#scene").innerHTML = ""; await Kit.chapter(sc.chapter); if (tok.dead) return; }
       result = await ENGINES[sc.type](sc, tok);
     } catch (e) {
       console.error(e);
@@ -185,7 +272,13 @@ const Game = {
     }
     if (tok.dead) return;
     if (result && result.fail) return this.fail(result.fail);
-    if (result && result.goto) { state.step = FLOW.indexOf(result.goto); Store.save(); return this.run(); }
+    if (result && result.goto) {
+      const dest = SCENES[result.goto];
+      (dest && dest.resetOnReplay || []).forEach((f) => { state.flags[f] = false; });
+      state.step = this.flow().indexOf(result.goto);
+      Store.save();
+      return this.run();
+    }
     state.step += 1;
     Store.save();
     this.run();
@@ -193,13 +286,14 @@ const Game = {
 
   retryScene() {
     UI.closeModal();
-    const id = FLOW[state.step];
+    const id = this.flow()[state.step];
     const night = REPLAY_NIGHT[id];
     if (night && state.marks && state.marks[night]) Store.restore(state.marks[night]);
     else if (night) {
       state.notes = state.notes.filter((n) => n.scene !== night);
       delete state.boards[id];
-      state.step = FLOW.indexOf(night);
+      (SCENES[night] && SCENES[night].resetOnReplay || []).forEach((f) => { state.flags[f] = false; });
+      state.step = this.flow().indexOf(night);
       Store.save();
     } else if (state.checkpoint) Store.restore(state.checkpoint);
     UI.bumpNotes();
@@ -216,7 +310,7 @@ const Game = {
             <p class="kicker">${esc(sc.kicker)}</p>
             <h1>${esc(sc.title)}</h1>
             ${paras.map((p) => `<p class="lead">${esc(p)}</p>`).join("")}
-            ${sc.goals ? `<ul class="goals">${sc.goals.map((g) => `<li>${esc(g)}</li>`).join("")}</ul>` : ""}
+            ${(val(sc.goals, state) || []).length ? `<ul class="goals">${val(sc.goals, state).map((g) => `<li>${esc(g)}</li>`).join("")}</ul>` : ""}
             <div class="row">
               ${Game.canVoiceRu() ? '<button class="btn ghost" data-act="voice">Голос Ремезова</button>' : ""}
               <button class="btn primary" data-act="go">Приступить</button>
@@ -287,43 +381,52 @@ const Game = {
 
   ending(sc) {
     return new Promise(() => {
-      const got = new Set(state.live["d3-night"] || []);
-      const all = SCENES["d3-night"].live.facts;
-      const kind = got.size >= 3 && got.has("code3") && got.has("room") ? "best" : got.size >= 1 ? "partial" : "fail";
-      const e = ENDINGS[kind];
-      const reps = ["d1-report", "d2-report"].map((id) => state.reports[id]).filter(Boolean);
+      const night = sc.night;
+      const fromReport = sc.fromReport && state.reports[sc.fromReport];
+      const got = new Set(fromReport ? fromReport.got : (state.live[night] || []));
+      const all = sc.facts || (night && SCENES[night] && SCENES[night].live ? SCENES[night].live.facts : []);
+      const required = all.filter((f) => !f.optional);
+      const gotReq = required.filter((f) => got.has(f.id)).length;
+      const kind = sc.judge(got, state);
+      const book = sc.book === 2 ? ENDINGS2 : ENDINGS;
+      const e = book[kind];
+      const reps = (sc.reports || []).map((id) => state.reports[id]).filter(Boolean);
       const repGot = reps.reduce((a, r) => a + r.got.length, 0);
       const repTotal = reps.reduce((a, r) => a + r.total, 0);
-      const missing = all.filter((f) => !got.has(f.id)).map((f) => f.label);
+      const missing = required.filter((f) => !got.has(f.id)).map((f) => f.label);
+      const susStat = sc.susStat || [["helen", "подозрение Хелен"]];
       Sound.setAmbience("room");
       $("#scene").innerHTML = `
         <section class="card-scene">
           <article class="story-card wide ending ${kind}">
-            <p class="kicker">Эпилог · 01:15</p>
+            <p class="kicker">${esc(sc.kicker || "Эпилог")}</p>
             <h1>${esc(e.title)}</h1>
             ${e.text(state).filter(Boolean).map((p) => `<p class="lead">${esc(p)}</p>`).join("")}
             ${missing.length && kind !== "best" ? `<p class="muted">Группе не хватило: ${esc(missing.join(", "))}.</p>` : ""}
             <div class="stats">
-              <div><b>${got.size}/${all.length}</b><span>живой доклад</span></div>
+              <div><b>${gotReq}/${required.length}</b><span>живой доклад</span></div>
               <div><b>${Math.min(repGot, repTotal)}/${repTotal || 0}</b><span>утренние доклады</span></div>
               <div><b>${Object.keys(state.words).length}</b><span>слов в досье</span></div>
-              <div><b>${state.sus.helen || 0}</b><span>подозрение Хелен</span></div>
+              ${susStat.map(([id, label]) => `<div><b>${state.sus[id] || 0}</b><span>${esc(label)}</span></div>`).join("")}
             </div>
             <div class="row">
-              ${kind !== "best" ? '<button class="btn primary" data-act="night">Переиграть последнюю ночь</button>' : ""}
+              ${kind !== "best" ? `<button class="btn primary" data-act="night">${sc.replay ? "Пройти это место ещё раз" : "Переиграть последнюю ночь"}</button>` : ""}
               <button class="btn ${kind === "best" ? "primary" : "ghost"}" data-act="again">Сезон заново</button>
               <button class="btn ghost" data-act="title">Главное меню</button>
             </div>
-            ${kind !== "fail" ? '<p class="muted small">Конец первого сезона.</p>' : ""}
+            ${kind !== "fail" ? `<p class="muted small">${esc(sc.done || "")}</p>` : ""}
           </article>
         </section>`;
       $(".story-card").addEventListener("click", (ev) => {
         const a = ev.target.closest("[data-act]");
         if (!a) return;
         if (a.dataset.act === "night") {
-          const mark = state.marks && state.marks["d3-night"];
+          const back = (sc.replay && sc.replay(state)) || night;
+          if (back === "s2d1-switch") state.flags.toldRoom = false;
+          if (back === "s2d3-desk") state.flags.gaveKey = false;
+          const mark = state.marks && state.marks[back];
           if (mark) Store.restore(mark);
-          state.step = FLOW.indexOf("d3-night");
+          state.step = this.flow().indexOf(back);
           Store.save();
           this.run();
         } else if (a.dataset.act === "again") { Store.reset(); this.intro(0); }
@@ -360,7 +463,7 @@ const Game = {
       <div class="menu-list">
         <button class="btn primary" data-m="resume">Продолжить</button>
         <button class="btn ghost" data-m="settings">Настройки и сложность</button>
-        <button class="btn ghost" data-m="retry">${REPLAY_NIGHT[FLOW[state.step]] ? "Переиграть ночь" : "Переиграть сцену"}</button>
+        <button class="btn ghost" data-m="retry">${REPLAY_NIGHT[this.flow()[state.step]] ? "Переиграть ночь" : "Переиграть сцену"}</button>
         <button class="btn ghost" data-m="title">Главное меню</button>
       </div>
       <p class="muted small">Пробел — говорить. N — блокнот. Esc — пауза. Любое английское слово можно нажать.</p>`, "menu");
@@ -401,6 +504,7 @@ const Game = {
       <section><h4>Звук</h4>
         <label>Голоса <input type="range" name="voiceVol" min="0" max="1" step="0.05" value="${s.voiceVol}"></label>
         <label>Фон <input type="range" name="ambVol" min="0" max="1" step="0.05" value="${s.ambVol}"></label>
+        <label>Музыка <input type="range" name="musicVol" min="0" max="1" step="0.05" value="${s.musicVol ?? 0.5}"></label>
         <label>Скорость речи <input type="range" name="speed" min="0.7" max="1.2" step="0.05" value="${s.speed}"></label>
       </section>
       <div class="row"><button class="btn primary" data-s="close">Готово</button><button class="btn ghost danger-text" data-s="reset">Стереть прогресс</button></div>`, "settings");
@@ -462,14 +566,54 @@ const ENGINES = {
   listen: (sc, tok) => Listen.run(sc, tok),
   shift: (sc, tok) => Shift.run(sc, tok),
   board: (sc, tok) => Board.run(sc, tok),
-  ending: (sc) => Game.ending(sc)
+  hub: (sc, tok) => Desk.hub(sc, tok),
+  switch: (sc, tok) => Desk.switch(sc, tok),
+  witness: (sc, tok) => Desk.witness(sc, tok),
+  phone: (sc, tok) => Phone.run(sc, tok),
+  ending: (sc) => Game.ending(sc),
+  chat: (sc, tok) => Chat.run(sc, tok),
+  legend: (sc) => Kit.legend(sc),
+  conv: (sc, tok) => Conv.run(sc, tok),
+  rounds: (sc, tok) => Rounds.run(sc, tok),
+  eaves: (sc, tok) => Eaves.run(sc, tok),
+  stall: (sc, tok) => Stall.run(sc, tok),
+  debrief: (sc) => Kit.debrief(sc),
+  finale: (sc) => Kit.finale(sc),
+  decode: (sc, tok) => Decode.run(sc, tok),
+  crack: (sc, tok) => Crack.run(sc, tok),
+  lift: (sc, tok) => Lift.run(sc, tok),
+  search: (sc, tok) => Search.run(sc, tok),
+  caseboard: (sc, tok) => Caseboard.run(sc, tok),
+  order: (sc) => OrderCard.run(sc),
+  bagcheck: (sc, tok) => BagCheck.run(sc, tok),
+  ride: (sc, tok) => Ride.run(sc, tok),
+  drop: (sc, tok) => Drop.run(sc, tok),
+  rate: (sc) => Rate.run(sc),
+  doc: (sc, tok) => Doc.run(sc, tok),
+  hear: (sc, tok) => Hear.run(sc, tok)
 };
 
 const REPLAY_NIGHT = {
   "d1-board": "d1-night",
   "d1-report": "d1-night",
   "d2-board": "d2-night",
-  "d2-report": "d2-night"
+  "d2-report": "d2-night",
+  "s2d1-board": "s2d1-nina",
+  "s2d1-report": "s2d1-nina",
+  "s2d2-board": "s2d2-hub",
+  "s2d2-report": "s2d2-hub"
 };
 
 Game.boot();
+
+// Enter нажимает главную кнопку экрана, когда она одна: «Дальше», «Принять заказ», «Начать».
+window.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" || e.repeat || !document.body.classList.contains("s3")) return;
+  const a = document.activeElement;
+  if (a && ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "SUMMARY"].includes(a.tagName)) return;
+  if (!$("#modal").hidden) return;
+  const main = [...document.querySelectorAll("#scene .btn.primary:not(:disabled), #scene .o-ring-btn")].filter((b) => (b.checkVisibility ? b.checkVisibility() : b.offsetParent !== null));
+  if (main.length !== 1) return;
+  e.preventDefault();
+  main[0].click();
+});

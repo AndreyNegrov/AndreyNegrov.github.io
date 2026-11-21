@@ -35,7 +35,7 @@ const Talk = {
       const beat = resolveBeat(raw);
       const who = beat.who || sc.npc;
       const lang = PEOPLE[who].lang === "ru" ? "ru" : "en";
-      const susKey = SUS_PEOPLE.includes(who) ? who : sc.sus;
+      const susKey = susPeople().includes(who) ? who : sc.sus;
       const facts = beat.facts || [];
       const got = new Set();
       const dropped = new Set();
@@ -44,6 +44,7 @@ const Talk = {
       ui.setNpc(who, embedded && who !== sc.npc ? "рядом и слышит" : "");
       ui.hint(beat.hint);
       await say(who, beat.say);
+      if (beat.record && beat.say) Notes.add({ kind: "heard", src: "phone", scene: sc.id, who, time: sc.time || "", text: beat.say });
 
       while (!tok.dead) {
         const text = await raceDead(tok, ui.reply.wait());
@@ -70,10 +71,12 @@ const Talk = {
           state.flags[key] = true;
           ui.sys("Получилось: " + b.label, "ok");
           Sound.sfx("ok");
+          if (b.note) Notes.add({ kind: "heard", src: "talk", scene: sc.id, who, time: sc.time || "", text: b.note });
           if (b.reply) lines.push(b.reply);
         }
         for (const f of r.leakHits) {
-          addSus(f.susKey || susKey, f.sus || 20, f.label);
+          if (f.flag) state.flags[f.flag] = true;
+          addSus(f.susKey || susKey, f.sus == null ? 20 : f.sus, f.label);
           ui.sys("Лишнее: " + f.label, "bad");
           if (!r.ai && f.reply) lines.push(f.reply);
         }
@@ -305,7 +308,10 @@ const Talk = {
 };
 
 function resolveBeat(b) {
-  return { ...b, say: val(b.say, state), facts: val(b.facts, state), hint: val(b.hint, state) };
+  const beat = { ...b, say: val(b.say, state), facts: val(b.facts, state), hint: val(b.hint, state) };
+  if (typeof b.bonus === "function") beat.bonus = b.bonus(state) || [];
+  if (typeof b.forbid === "function") beat.forbid = b.forbid(state) || [];
+  return beat;
 }
 
 function raceDead(tok, promise) {
