@@ -614,7 +614,8 @@ const ENGINES = {
   hear: (sc, tok) => Hear.run(sc, tok),
   city: (sc, tok) => City.run(sc, tok),
   sort: (sc, tok) => HaloPlay.sort(sc, tok),
-  ask: (sc, tok) => HaloPlay.ask(sc, tok)
+  ask: (sc, tok) => HaloPlay.ask(sc, tok),
+  soon: (sc) => HaloPlay.soon(sc)
 };
 
 const REPLAY_NIGHT = {

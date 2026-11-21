@@ -1,6 +1,6 @@
 {
-  "style": "tools/art/style-halo-night.txt",
-  "note": "Первая ночь. Техника как в пробе графического романа, ночная палитра.",
+  "style": "tools/art/style-halo-gouache.txt",
+  "note": "Первая ночь, проба гуаши. Те же кадры и те же seeds, что у туши. Тушь сохранена в art/halo-ink.",
   "files": [
     {"file": "bg-taxi.jpg", "what": "Ночной проспект через стекло такси без руля", "scene": "h1-taxi", "seed": 46, "prompt": "tools/art/prompts/bg-taxi.txt"},
     {"file": "bg-avenue.jpg", "what": "Проспект: машины стоят, дроны висят", "scene": "h1-avenue", "seed": 18, "prompt": "tools/art/prompts/bg-avenue.txt"},
@@ -24,6 +24,11 @@
     {"file": "p-grey-calm.jpg", "what": "Патрульный серых, спокойный", "scene": "h1-voss", "seed": 31, "prompt": "tools/art/prompts/p-grey-calm.txt"},
     {"file": "p-neighbor-calm.jpg", "what": "Пожилой житель, спокойный", "scene": "h1-lobby", "seed": 41, "prompt": "tools/art/prompts/p-neighbor-calm.txt"},
     {"file": "p-neighbor-worried.jpg", "what": "Пожилой житель, встревоженный", "scene": "h1-lobby", "seed": 41, "prompt": "tools/art/prompts/p-neighbor-worried.txt"},
-    {"file": "p-worker-friendly.jpg", "what": "Рабочий депо, приветливый", "scene": "h1-depot", "seed": 53, "prompt": "tools/art/prompts/p-worker-friendly.txt"}
+    {"file": "p-worker-friendly.jpg", "what": "Рабочий депо, приветливый", "scene": "h1-depot", "seed": 53, "prompt": "tools/art/prompts/p-worker-friendly.txt"},
+    {"file": "p-halo-calm.jpg", "what": "Голос города: маяк крупно", "scene": "h1-taxi", "seed": 61, "prompt": "tools/art/prompts/p-halo-calm.txt"},
+    {"file": "p-kiosk-calm.jpg", "what": "Киоск с пустым экраном", "scene": "h1-depot", "seed": 62, "prompt": "tools/art/prompts/p-kiosk-calm.txt"},
+    {"file": "p-passer-calm.jpg", "what": "Прохожий в пассаже", "scene": "h1-arcade", "seed": 63, "prompt": "tools/art/prompts/p-passer-calm.txt"},
+    {"file": "p-lesson-calm.jpg", "what": "Пустой светящийся экран урока", "scene": "h1-midnight", "seed": 74, "prompt": "tools/art/prompts/p-lesson-calm.txt"},
+    {"file": "p-shade-calm.jpg", "what": "Тихий голос на браслете", "scene": "h1-booth", "seed": 75, "prompt": "tools/art/prompts/p-shade-calm.txt"}
   ]
 }

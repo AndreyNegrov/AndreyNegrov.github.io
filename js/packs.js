@@ -47,9 +47,9 @@ const Pack = {
 PACKS.halo = {
   ...HALO,
   meta: {
-    id: "halo", season: 6, key: "iney-halo", tab: "Город слушается", isNew: true,
+    id: "halo", season: 6, key: "iney-halo", tab: "Город слушается", isNew: true, theme: "toon",
     heat: "След", failKicker: "Не вышло",
-    kicker: "Первая ночь", title: "Город слушается", unit: "Ночь", cta: "Сесть в такси",
+    kicker: "Шесть ночей", title: "Город слушается", unit: "Ночь", cta: "Сесть в такси",
     lead: "2031 год, остров Хейло. Здесь нет руля и выключателей: город слушается голоса. Ты приехал на ночную смену.",
     bg: "art/halo/bg-title.jpg", look: "cine",
     dossierNote: "Ночь на острове Хейло. Команды пишет Леджер.",

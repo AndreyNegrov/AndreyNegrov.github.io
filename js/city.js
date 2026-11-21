@@ -214,43 +214,64 @@ const City = (() => {
     const diagram = !!sc.diagram;
     const verbs = sc.verbs || ["stop", "go", "open", "close"];
     $("#scene").innerHTML = `
-      <section class="cy ${diagram ? "diagram" : "plain"}">
-        <div class="cy-stage">
+      <section class="o-conv o-ui-face cy ${diagram ? "diagram" : "plain"}">
+        <div class="o-stage">
           <div class="cy-zone"><i></i><span>${esc(sc.zone || "")}</span></div>
           <div class="cy-board" hidden></div>
+          ${sc.artBoard ? `<div class="cy-artboard"></div>` : ""}
           <svg class="cy-map" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet"></svg>
           <div class="cy-flash" hidden></div>
-          <div class="cy-line" hidden></div>
         </div>
-        <aside class="cy-side">
+        <aside class="o-side">
           <div class="cy-task"><span>${esc(sc.kicker || "Задача")}</span><b></b></div>
-          <div class="cy-chat"></div>
+          <div class="o-log"></div>
           <p class="cy-card english" hidden></p>
-          <div class="cy-halo" hidden><span>Halo</span><p class="english"></p></div>
           <ol class="cy-ledger"></ol>
           <div class="cy-verbs"><span>Твои команды</span><div>${verbs.map((v) => `<i>${esc(labelOf(v))}</i>`).join("")}</div></div>
-          <p class="cy-hint" hidden></p>
-          <div class="cy-reply e-reply"></div>
+          <div class="o-hint" hidden></div>
+          <div class="o-reply e-reply"></div>
         </aside>
       </section>`;
-    const root = $(".cy"), map = $(".cy-map", root), lineBox = $(".cy-line", root), chat = $(".cy-chat", root);
-    const reply = ReplyBox($(".cy-reply", root), { label: "Сказать городу", placeholder: "команда и Enter" });
+    const root = $(".cy"), map = $(".cy-map", root), log = $(".o-log", root);
+    const reply = ReplyBox($(".o-reply", root), { label: "Сказать городу", placeholder: "команда и Enter" });
     let trickle = 0, ear = false;
     const stopTrickle = () => { if (trickle) { clearInterval(trickle); trickle = 0; } };
     const setLabel = () => reply.setLabel(ear ? "Ответить Сове" : "Сказать городу");
-    const pushChat = (who, text, ru) => {
+    const logLine = (who, text, ru) => {
       const p = PEOPLE[who] || {};
       const mine = who === "you";
       const el = document.createElement("div");
-      el.className = "cy-msg" + (mine ? " me" : "");
-      el.innerHTML = `${mine ? "" : avatar(who, "sm")}<div><span>${esc(mine ? "Вы" : (p.name || who))}</span><p>${ru ? esc(text) : enHTML(text)}</p></div>`;
-      chat.appendChild(el);
-      chat.scrollTop = chat.scrollHeight;
+      el.className = "msg " + (mine ? "me" : "npc") + (ru ? " ru" : "");
+      el.innerHTML = `<div class="msg-who">${esc(mine ? "Вы" : (p.name || who))}${ru && !mine ? " · чат" : ""}</div><div class="msg-txt">${ru || mine ? esc(text) : enHTML(text)}</div>`;
+      log.appendChild(el);
+      log.scrollTop = log.scrollHeight;
     };
     Game.onLeave(() => { stopTrickle(); reply.destroy(); });
 
     const draw = () => {
       const board = $(".cy-board", root);
+      const art = $(".cy-artboard", root);
+      if (art) {
+        const tile = {
+          door: "art/halo/tile-door.jpg",
+          "door-open": "art/halo/tile-door-open.jpg",
+          light: "art/halo/tile-lamp.jpg",
+          lift: "art/halo/tile-lift.jpg",
+          lobby: "art/halo/tile-bell-amber.jpg",
+          fire: "art/halo/tile-bell-red.jpg"
+        };
+        const cell = (o) => {
+          const open = o.kind === "door" && o.st.open === "open";
+          const off = o.st.power === "off";
+          const called = o.st.call === "called";
+          const src = o.kind === "alarm" ? tile[o.tag] || tile.lobby : o.kind === "door" && open ? tile["door-open"] : tile[o.kind];
+          const label = o.kind === "alarm" ? (o.tag === "fire" ? "fire" : "lobby") : String(o.n);
+          const cls = [open ? "open" : "", off ? "off" : "", called ? "on" : ""].filter(Boolean).join(" ");
+          return `<figure class="${cls}"><img src="${src}" alt=""><b>${esc(label)}</b></figure>`;
+        };
+        const row = (kind) => sim.objects.filter((o) => o.kind === kind && !o.hidden).map(cell).join("");
+        art.innerHTML = `<div class="ab-row lights">${row("light")}</div><div class="ab-row doors">${row("door")}</div><div class="ab-row lifts">${row("lift")}</div><div class="ab-row alarms">${row("alarm")}</div>`;
+      }
       if (!diagram) { map.innerHTML = ""; board.hidden = true; return; }
       map.innerHTML = (sc.plan ? sc.plan(sim) : "") + sim.objects.filter((o) => !o.hidden).map(glyph).join("");
       const rows = sim.objects.filter((o) => o.panel && !o.hidden);
@@ -263,7 +284,7 @@ const City = (() => {
       }).join("");
     };
     const setTask = (t) => { $(".cy-task b", root).textContent = t || ""; UI.goal(t || ""); };
-    const hint = (t) => { const h = $(".cy-hint", root); h.hidden = !t; h.innerHTML = t || ""; };
+    const hint = (t) => { const h = $(".o-hint", root); h.hidden = !t; h.innerHTML = t ? `<p>${t}</p>` : ""; };
     const card = (t) => { const c = $(".cy-card", root); c.hidden = !t; c.innerHTML = t ? enHTML(t) : ""; };
     const ledger = (verb, what) => {
       const ol = $(".cy-ledger", root), li = document.createElement("li");
@@ -278,27 +299,20 @@ const City = (() => {
       if (ru) {
         ear = true;
         setLabel();
-        pushChat(who, text, true);
+        logLine(who, text, true);
         Sound.sfx("squelch");
         await raceDead(tok, sleep(clamp(900 + text.length * 42, 1600, 5200)));
         return;
       }
       ear = false;
       setLabel();
-      lineBox.hidden = false;
-      lineBox.className = `cy-line ${ru ? "ru" : ""} who-${who}`;
-      lineBox.innerHTML = `${avatar(who, "sm")}<div><span>${esc(p.name || who)}</span><p class="${ru ? "" : "english"}">${ru ? esc(text) : enHTML(text)}</p></div>`;
-      if (ru) { Sound.sfx("squelch"); await raceDead(tok, sleep(clamp(900 + text.length * 42, 1600, 5200))); }
-      else await raceDead(tok, Voice.sayAsync(text, { who, fx: opts.fx }));
+      logLine(who, text, false);
+      await raceDead(tok, Voice.sayAsync(text, { who, fx: opts.fx }));
     };
     const halo = async (text, quiet) => {
       if (tok.dead) return;
-      const box = $(".cy-halo", root);
-      box.hidden = false;
-      $("p", box).innerHTML = enHTML(text);
-      root.classList.add("halo-on");
+      logLine("halo", text, false);
       if (!quiet) await raceDead(tok, Voice.sayAsync(text, { who: "halo" }));
-      root.classList.remove("halo-on");
     };
     const api = {
       sim, sc, say, halo, hint, draw, setTask,
@@ -363,7 +377,7 @@ const City = (() => {
             if (tok.dead) return null;
             break;
           }
-          if (ear) pushChat("you", text, isRussian(text));
+          logLine("you", text, isRussian(text));
           const cmd = parse(text, sc);
           if (cmd.empty) continue;
           if (cmd.russian) { await api.sova("Город слышит только английский. По-русски можно говорить со мной, но не с ним."); continue; }

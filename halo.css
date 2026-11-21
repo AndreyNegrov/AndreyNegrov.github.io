@@ -13,9 +13,52 @@
 .bg-box.bg-missing[data-src*="booth"] { background: linear-gradient(180deg, #243456, #1a2238 60%, #141a2a); }
 .bg-box.bg-missing[data-src*="roof"] { background: radial-gradient(1100px 500px at 40% 80%, #1e3358, #0e1830 70%); }
 
-.cy {
+.cy:not(.o-conv) {
   position: absolute; inset: 72px 16px 16px;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 14px;
+}
+.o-conv.cy .o-stage { position: relative; }
+.o-conv.cy .cy-zone { position: absolute; z-index: 3; top: 0; left: 0; }
+.o-conv.cy .cy-board { position: absolute; z-index: 3; top: 0; right: 0; }
+.o-conv.cy .cy-flash { border-radius: 28px; }
+.o-conv.cy .cy-task { padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
+.o-conv.cy .cy-ledger { max-height: 88px; }
+.o-conv.cy .cy-verbs { margin-top: 0; }
+.cy.diagram .cy-map {
+  width: min(100%, 880px); height: min(58vh, 480px);
+  background: rgba(8, 14, 28, 0.72); border: 1px solid var(--line); border-radius: 22px;
+}
+.cy-artboard {
+  position: absolute; z-index: 2; left: 12px; right: 12px; top: 46px; bottom: 12px;
+  display: flex; flex-direction: column; justify-content: center; gap: 16px;
+}
+.cy-artboard .ab-row { display: flex; justify-content: center; gap: 8px; }
+.cy-artboard figure { margin: 0; width: 74px; text-align: center; }
+.cy-artboard img {
+  width: 74px; height: 86px; object-fit: cover; object-position: center;
+  border-radius: 14px; background: #12182c;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+.cy-artboard .doors { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); width: min(100%, 760px); margin: 0 auto; gap: 8px; }
+.cy-artboard .doors figure, .cy-artboard .doors img { width: 100%; }
+.cy-artboard .doors img { height: auto; aspect-ratio: 3 / 4; }
+.cy-artboard b {
+  display: inline-block; margin-top: 6px; padding: 1px 8px; border-radius: 99px;
+  background: rgba(8, 12, 24, 0.78); font-size: 14px; font-weight: 800; letter-spacing: 0.02em;
+}
+.cy-artboard .off img { filter: grayscale(1) brightness(0.38); }
+.cy-artboard .on img { box-shadow: 0 0 0 3px #ffd36e, 0 10px 24px rgba(0, 0, 0, 0.35); }
+.cy-artboard .open b { color: #ffd36e; }
+.cy-artboard .alarms figure { width: 92px; }
+.cy-artboard .alarms img { width: 92px; }
+.o-bust .o-photo, .o-face-slot .o-photo, .o-tile .o-photo, .o-call-ava .o-photo {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block;
+}
+body[data-theme="toon"] .cy-sort {
+  inset: auto; left: 50%; top: 88px; transform: translateX(-50%);
+  width: min(640px, calc(100vw - 32px)); max-height: calc(100vh - 110px); overflow: auto;
+  background: var(--o-card, #1e1650); border: 1px solid var(--line); border-radius: 26px;
+  padding: 28px 24px 22px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
 .cy-stage {
   position: relative; min-width: 0; min-height: 0; border-radius: 22px; overflow: hidden;

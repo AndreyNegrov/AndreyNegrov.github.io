@@ -53,7 +53,7 @@ const Toon = {
           <div class="t-chips">
             <div class="t-chip ${trained ? "hot" : ""}" title="Дней подряд с тренировкой">🔥 ${P.streak || 0}</div>
             <button class="t-chip" data-act="coll" title="Коллекция стикеров">🏅 ${nBadges}/${allBadges}</button>
-            ${stars ? `<div class="t-chip" title="Звёзды за миссии">⭐ ${stars}/18</div>` : ""}
+            ${stars ? `<div class="t-chip" title="Звёзды за миссии">⭐ ${stars}/${Math.max(1, Object.keys(pk.MISSIONS).length) * 3}</div>` : ""}
           </div>
         </header>
         <h1 class="t-logo">ИНЕЙ</h1>
@@ -88,7 +88,12 @@ const Toon = {
     const cast = sc.cast || [sc.npc];
     const P = (w) => PEOPLE[w];
     // Лицо в «слоте»: его можно перерисовать с другим настроением, не трогая остальное.
-    const slot = (w, bare) => `<div class="o-face-slot" data-face="${w}" data-bare="${bare ? 1 : 0}">${Face.svg(P(w).face, "", { bare })}</div>`;
+    const slot = (w, bare) => {
+      const p = P(w) || {};
+      const src = (p.faces && p.faces.calm) || p.img;
+      const inner = src ? `<img class="o-photo" src="${src}" alt="">` : Face.svg(p.face || (w === "sova" ? "owl" : {}), "", { bare });
+      return `<div class="o-face-slot" data-face="${w}" data-bare="${bare ? 1 : 0}">${inner}</div>`;
+    };
     if (kind === "video") {
       return `<div class="o-vc">
         <div class="o-vc-top"><span class="o-rec"></span><b>${esc(sc.title || "Call")}</b><span class="o-vc-time">00:00</span></div>
@@ -120,7 +125,12 @@ const Toon = {
   convFaces(root, moodT, dead) {
     const drawFace = (who, mood) => {
       const el = $(`[data-face="${who}"]`, root);
-      if (el) el.innerHTML = Face.svg(PEOPLE[who].face, "", { bare: el.dataset.bare === "1", mood });
+      if (!el) return null;
+      const p = PEOPLE[who] || {};
+      const src = (p.faces && (p.faces[mood] || p.faces.calm)) || p.img;
+      el.innerHTML = src
+        ? `<img class="o-photo" src="${src}" alt="">`
+        : Face.svg(p.face || (who === "sova" ? "owl" : {}), "", { bare: el.dataset.bare === "1", mood });
       return el;
     };
     const restMood = () => ((state.heat || 0) >= 60 ? "sus" : "");

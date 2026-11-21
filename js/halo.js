@@ -98,11 +98,20 @@ const HALO = (() => {
 
   const SUSPECTS = ["dee", "voss"];
   const DOSSIER_FIELDS = [{ id: "role", ru: "Кто это" }, { id: "note", ru: "Заметка" }];
+  const empty = (title, emo) => ({
+    ico: "pin", emo, title,
+    goal: { label: "Ночь ещё не собрана", test: () => false }
+  });
   const MISSIONS = {
     1: {
-      ico: "mic", title: "Stop",
+      ico: "mic", emo: "🎤", title: "Stop",
       goal: { label: "Точные команды в вестибюле и тихая проверка", test: (s) => !!(s.flags.c5 && s.flags.lt && s.flags.lf && s.flags.al && s.flags.vossClean) }
-    }
+    },
+    2: empty("Повторяй за мной", "🔁"),
+    3: empty("Квартал семь", "💡"),
+    4: empty("Не прикажи", "🤫"),
+    5: empty("Глухие места", "🔇"),
+    6: empty("Буквально", "📏")
   };
   const CAST = {
     dee: "Dee Park, thirty-five, runs the night shift at Halo Works. Dry humor. She never gives commands: a command costs money here. She speaks in questions and short clear sentences.",
@@ -115,7 +124,7 @@ const HALO = (() => {
   };
 
   const people = {
-    sova: { name: "Сова", role: "куратор", lang: "ru", gender: "f", initial: "С",
+    sova: { name: "Сова", role: "куратор", lang: "ru", gender: "f", initial: "С", face: "owl",
       voice: { g: "f", pitch: 1, rate: 1.05, prefer: ["Svetlana", "Dariya", "Irina", "ru-RU"], cloud: "sage", style: "Dry, short, calm handler. Speaks Russian." } },
     you: { name: "Вы", role: "Alex Frost", initial: "A", voice: { g: "m", rate: 0.9 } },
     dee: { name: "Dee Park", role: "ночная смена, Halo Works", gender: "f", initial: "D", img: "art/halo/p-dee-calm.jpg",
@@ -131,19 +140,19 @@ const HALO = (() => {
       voice: { g: "m", pitch: 0.86, rate: 0.92, prefer: ["George", "Guy", "en-US"], cloud: "echo", style: "Older man, polite, a little worried." } },
     worker: { name: "Worker", role: "ночная смена, Halo Works", gender: "m", initial: "W", img: "art/halo/p-worker-friendly.jpg",
       voice: { g: "m", pitch: 1.02, rate: 1.02, prefer: ["Christopher", "Eric", "en-US"], cloud: "echo", style: "Surprised night worker. Friendly." } },
-    passer: { name: "Passer", role: "прохожий", gender: "m", initial: "P",
+    passer: { name: "Passer", role: "прохожий", gender: "m", initial: "P", img: "art/halo/p-passer-calm.jpg",
       voice: { g: "m", pitch: 1.04, rate: 1.06, prefer: ["Eric", "Christopher", "en-US"], cloud: "echo", style: "Casual person on the street. One breath." } },
-    kiosk: { name: "Киоск", role: "Halo Works", gender: "f", initial: "K",
+    kiosk: { name: "Киоск", role: "Halo Works", gender: "f", initial: "K", img: "art/halo/p-kiosk-calm.jpg",
       voice: { g: "f", pitch: 1.04, rate: 1, prefer: ["Aria", "Jenny", "en-US"], cloud: "shimmer", style: "Flat polite safety kiosk. Very clear." } },
-    cab: { name: "Такси", role: "без водителя", gender: "f", initial: "T",
+    cab: { name: "Такси", role: "без водителя", gender: "f", initial: "T", img: "art/halo/p-halo-calm.jpg",
       voice: { g: "f", pitch: 1.02, rate: 1, prefer: ["Aria", "Jenny", "en-US"], cloud: "shimmer", style: "Calm car. Short instructions." } },
-    halo: { name: "Halo", role: "город", gender: "f", initial: "H",
+    halo: { name: "Halo", role: "город", gender: "f", initial: "H", img: "art/halo/p-halo-calm.jpg",
       voice: { g: "f", pitch: 0.94, rate: 0.96, prefer: ["Aria", "Jenny", "en-US"], cloud: "sage", style: "The city. Even, calm, no emotion. Reports what it did." } },
-    lesson: { name: "Голос", role: "из динамика", gender: "f", initial: "•",
+    lesson: { name: "Голос", role: "из динамика", gender: "f", initial: "•", img: "art/halo/p-lesson-calm.jpg",
       voice: { g: "f", pitch: 1.05, rate: 0.9, prefer: ["Jenny", "Aria", "en-US"], cloud: "coral", style: "Warm, quiet, close, like a small speaker. Kind." } },
-    shade: { name: "Голос на браслете", role: "тихий", gender: "m", initial: "•",
+    shade: { name: "Голос на браслете", role: "тихий", gender: "m", initial: "•", img: "art/halo/p-shade-calm.jpg",
       voice: { g: "m", pitch: 0.82, rate: 0.94, prefer: ["Guy", "George", "en-US"], cloud: "ash", style: "Quiet man. Few words. Never loud." } },
-    echo: { name: "Запись", role: "динамик", initial: "•",
+    echo: { name: "Запись", role: "динамик", initial: "•", img: "art/halo/p-lesson-calm.jpg",
       voice: { g: "m", pitch: 0.9, rate: 0.72, prefer: ["Guy", "Christopher", "en-US"], cloud: "echo", style: "Slow, heavy accent, saying a sentence one piece at a time." } }
   };
   const glossary = {
@@ -180,7 +189,7 @@ const HALO = (() => {
     boot(s) { if (!s.legend) s.legend = { city: "pending", job: "tech", ride: "night" }; },
     chapter: { n: 1, title: "Stop", sub: "Хейло · 21:14" },
     time: "21:14", place: "Такси", bg: "art/halo/bg-taxi.jpg",
-    kicker: "Машина", zone: "Mission Row",
+    kicker: "Машина", zone: "Mission Row", face: "cab",
     verbs: ["stop", "open", "go"],
     objects: [
       { id: "taxi", kind: "car", mine: true, x: 500, y: 400 },
@@ -514,7 +523,7 @@ const HALO = (() => {
   S["h1-lobby"] = night({
     type: "city", time: "22:10", place: "Вестибюль", bg: "art/halo/bg-lobby.jpg",
     kicker: "Узел", zone: "Вестибюль",
-    diagram: true,
+    artBoard: true,
     verbs: ["open", "close", "call", "on", "off"],
     objects: [
       door(1, 120, 150, "closed"), door(2, 210, 150, "closed"), door(3, 300, 150, "closed"), door(4, 390, 150, "closed"),
@@ -845,7 +854,14 @@ const HALO = (() => {
         : "Ди смотрела и молчала. Пока она не спросила."
   });
 
-  const FLOW = ["h1-taxi", "h1-avenue", "h1-arcade", "h1-sort", "h1-depot", "h1-cart", "h1-lobby", "h1-voss", "h1-booth", "h1-ask", "h1-roof", "h1-midnight", "h1-debrief"];
+  [2, 3, 4, 5, 6].forEach((n) => {
+    S["h" + n + "-soon"] = night({
+      type: "soon", mission: n, time: "21:00", place: "Хейло", bg: "art/halo/bg-title.jpg",
+      title: MISSIONS[n].title
+    });
+  });
+
+  const FLOW = ["h1-taxi", "h1-avenue", "h1-arcade", "h1-sort", "h1-depot", "h1-cart", "h1-lobby", "h1-voss", "h1-booth", "h1-ask", "h1-roof", "h1-midnight", "h1-debrief", "h2-soon", "h3-soon", "h4-soon", "h5-soon", "h6-soon"];
 
   Object.entries(S).forEach(([id, sc]) => { SCENES[id] = sc; });
 
@@ -981,6 +997,27 @@ const HALO = (() => {
     });
   }
 
-  HaloPlay = { sort, ask };
+  async function soon(sc) {
+    $("#scene").innerHTML = `
+      <section class="cy-sort">
+        <p class="kicker">Ночь ${sc.mission} из 6</p>
+        <h2>${esc(sc.title)}</h2>
+        <p class="cy-rule">Этой ночи ещё нет.</p>
+        <button class="btn primary" data-act="back">На заставку</button>
+      </section>`;
+    return new Promise((resolve) => {
+      const el = $(".cy-sort");
+      const on = (e) => {
+        if (!e.target.closest("[data-act]")) return;
+        el.removeEventListener("click", on);
+        Game.title();
+        resolve(null);
+      };
+      el.addEventListener("click", on);
+      Game.onLeave(() => el.removeEventListener("click", on));
+    });
+  }
+
+  HaloPlay = { sort, ask, soon };
   return { LEGEND, LEGEND_GROUPS, PHRASES, EXPLAIN, CLUES, SUSPECTS, DOSSIER_FIELDS, MISSIONS, CAST, ORDERS: {}, PLANS, FINALE: {}, FLOW, people, glossary };
 })();
