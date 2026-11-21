@@ -70,7 +70,7 @@ const Game = {
     // Какой сезон показать: выбранный вкладкой, иначе последний сыгранный, иначе новый.
     let last = null;
     try { last = localStorage.getItem("iney-last-pack"); } catch { /* без хранилища показываем новый сезон */ }
-    const pid = PACKS[pick] ? pick : PACKS[last] ? last : "moon";
+    const pid = PACKS[pick] ? pick : PACKS[last] ? last : "halo";
     const pk = PACKS[pid], M = pk.meta;
     // У мультяшного сезона и титул свой, мультяшный (Toon.title в js/toon.js).
     const toon = M.theme === "toon";
@@ -136,7 +136,7 @@ const Game = {
             </div>
             <p class="t-note">Отвечаешь голосом или текстом — как удобнее. Проверяется смысл, а не точные слова. Лучше в Chrome или Edge, в наушниках.</p>${Mic.isFile() ? `<p class="t-note t-warn">${ICON.mic}<span>Игра открыта как файл: браузер будет спрашивать про микрофон каждый раз. Запусти <b>play.cmd</b> в папке игры — спросит один раз и запомнит.</span></p>` : ""}
           </article>
-          <ol class="t-path">${path}${stars ? `<li class="t-total"><b>Звёзд собрано</b><em>${stars} из 18</em></li>` : ""}</ol>
+          <ol class="t-path">${path}${stars ? `<li class="t-total"><b>Звёзд собрано</b><em>${stars} из ${Math.max(1, Object.keys(pk.MISSIONS || {}).length) * 3}</em></li>` : ""}</ol>
         </div>
         <nav class="t-links">
           <button data-act="train">${ICON.target}<b>Тренировка</b>${trained ? "" : "<u>×2 сегодня</u>"}</button>
@@ -263,6 +263,7 @@ const Game = {
     if (!sc) return this.title();
     if ((sc.skip && sc.skip(state)) || (sc.when && !sc.when(state))) { state.step += 1; Store.save(); return this.run(); }
     state.started = true;
+    if (typeof sc.boot === "function") sc.boot(state);
     if (sc.missionStart) {
       state.marks = { ...(state.marks || {}), ["m" + sc.mission]: Store.snapshot() };
       Mission.begin(sc.mission);
@@ -460,7 +461,7 @@ const Game = {
       <section class="card-scene">
         <article class="story-card fail">
           ${TOON() ? '<div class="fail-ico">🔥</div>' : ""}
-          <p class="kicker">Легенда сгорела</p>
+          <p class="kicker">${esc((typeof Pack !== "undefined" && Pack.meta().failKicker) || "Легенда сгорела")}</p>
           <h1>Провал</h1>
           <p class="lead">${esc(text)}</p>
           <div class="row"><button class="btn primary" data-act="retry">Переиграть сцену</button><button class="btn ghost" data-act="title">Главное меню</button></div>
@@ -610,7 +611,10 @@ const ENGINES = {
   drop: (sc, tok) => Drop.run(sc, tok),
   rate: (sc) => Rate.run(sc),
   doc: (sc, tok) => Doc.run(sc, tok),
-  hear: (sc, tok) => Hear.run(sc, tok)
+  hear: (sc, tok) => Hear.run(sc, tok),
+  city: (sc, tok) => City.run(sc, tok),
+  sort: (sc, tok) => HaloPlay.sort(sc, tok),
+  ask: (sc, tok) => HaloPlay.ask(sc, tok)
 };
 
 const REPLAY_NIGHT = {

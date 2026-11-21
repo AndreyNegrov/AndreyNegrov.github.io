@@ -197,7 +197,7 @@ const Eaves = {
         : "<b>Отвлёк(ла)</b> Ты роняешь велосипедный замок. Все смотрят на звук, а не на тебя.", "ok", 4200);
       Juice.float("внимание сброшено", $(".o-eye", E.el), "ok");
     } else if (id === "freeze") {
-      if (!(state.heat > 0)) return UI.toast("Засветки нет — остужать нечего.", "info");
+      if (!(state.heat > 0)) return UI.toast(heatName() + " и так на нуле.", "info");
       if (!Gadgets.use("freeze")) return;
       Heat.add(-25);
     }
@@ -301,8 +301,10 @@ const Eaves = {
     const who = line.who || sc.target;
     const words = line.text.split(/\s+/);
     let keep = words.map(() => true);
-    if (dist === "mid") keep = words.map(() => Math.random() > 0.45);
-    if (dist === "far") keep = words.map(() => false);
+    if (dist === "half") keep = words.map(() => Math.random() < 0.5);
+    else if (dist === "third") keep = words.map((_, i) => i % 3 === 2);
+    else if (dist === "mid") keep = words.map(() => Math.random() > 0.45);
+    else if (dist === "far") keep = words.map(() => false);
     E.talking = true;
     $(".o-waves", E.el).classList.add("on");
     $$(`.o-tok.target`, E.el).forEach((t) => t.classList.add("speaking"));
@@ -349,6 +351,7 @@ const Eaves = {
       add("Не разобрать: слишком далеко.", "miss");
       return;
     }
+    if (dist === "near" && (line.nearHeat || sc.nearHeat)) Heat.add(line.nearHeat || sc.nearHeat, "слишком близко к будке");
     const full = heard === words.length;
     const text = full ? line.text : words.map((w, i) => (keep[i] ? w : "…")).join(" ").replace(/(…\s*)+/g, "… ").trim();
     if (full) E.stats.full += 1; else E.stats.part += 1;
@@ -405,8 +408,12 @@ const Eaves = {
     $$(`.o-tok.target`, E.el).forEach((t) => t.classList.remove("looking"));
     E.attn = ok ? 25 : 35;
     E.noticeNow = false;
-    if (!ok) { const desk = E.sc.spots.findIndex((s) => s.dist === "far"); E.paused = false; this.move(E, desk); }
-    if (Heat.over()) { this.teardown(E); return E.resolve({ fail: "Тебя застукали у чужого разговора слишком явно. Легенда сгорела." }); }
+    if (!ok) {
+      const desk = E.sc.spots.findIndex((s) => s.dist === "far" || s.dist === "third");
+      E.paused = false;
+      if (desk >= 0) this.move(E, desk);
+    }
+    if (Heat.over() && sc.heatFail !== false) { this.teardown(E); return E.resolve({ fail: "Тебя застукали у чужого разговора слишком явно. Легенда сгорела." }); }
     E.paused = false;
   },
 
@@ -481,7 +488,7 @@ const Stall = {
           ui.sys(TOON() ? "🍪 Ты протягиваешь Грейс печенье. Она вздыхает и остаётся." : "Ты переводишь разговор на пустяк. Напряжение спадает.", "ok");
           ui.mood(sc.npc, "happy", 1800);
         } else if (id === "freeze") {
-          if (!(state.heat > 0)) return UI.toast("Засветки нет — остужать нечего.", "info");
+          if (!(state.heat > 0)) return UI.toast(heatName() + " и так на нуле.", "info");
           if (!Gadgets.use("freeze")) return;
           Heat.add(-25);
         }

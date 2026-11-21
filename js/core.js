@@ -338,6 +338,7 @@ const UI = {
     const box = $(".bg-box", cur);
     if (box && box.dataset.src === src) {
       box.className = "bg-box look-" + look + (kind ? " " + kind : "");
+      if (!drawn && !$("img", box)) box.classList.add("bg-missing");
       return;
     }
     const nextId = this.bgActive === "a" ? "b" : "a";
@@ -345,6 +346,12 @@ const UI = {
     next.innerHTML = drawn
       ? `<div class="bg-box look-${look} ${kind}" data-src="${src}">${set ? Sets.html(src.slice(4)) : Scenery.html(src.slice(4))}<div class="fx"></div></div>`
       : `<div class="bg-box look-${look}${kind ? " " + kind : ""}" data-src="${src}"><img src="${src}" alt=""><div class="fx">${src.endsWith("flat.jpg") ? FLAT_FX : ""}</div></div>`;
+    const missing = $("img", next);
+    if (missing) missing.addEventListener("error", () => {
+      const box = missing.closest(".bg-box");
+      missing.remove();
+      if (box) box.classList.add("bg-missing");
+    });
     requestAnimationFrame(() => { next.classList.add("on"); cur.classList.remove("on"); });
     this.bgActive = nextId;
   },
@@ -403,7 +410,7 @@ const UI = {
     document.body.dataset.m = state.season === 3 && sc.mission ? sc.mission : "";
     if (typeof Juice !== "undefined") { if (state.season === 3) Juice.hud(); else $("#hud-xp").innerHTML = ""; }
     $("#hud-day").textContent = state.season === 3
-      ? (sc.mission ? `Миссия ${sc.mission} · ${dayName(sc.mission)}` : "")
+      ? (sc.mission ? `${(typeof Pack !== "undefined" && Pack.meta().unit) || "Миссия"} ${sc.mission} · ${dayName(sc.mission)}` : "")
       : sc.day ? `День ${sc.day} · ${dayName(sc.day)}` : "";
     $("#hud-time").textContent = sc.time || (sc.clock ? sc.clock[0] : "");
     $("#hud-place").textContent = sc.place || "";
@@ -451,8 +458,9 @@ const UI = {
     if (state.season === 3) {
       const v = state.heat || 0;
       const tone = v >= 70 ? "danger" : v >= 35 ? "warn" : "calm";
-      box.innerHTML = `<div class="sus heat ${tone} ${pulse ? "pulse" : ""}" title="Засветка: ${v} из 100. На 100 легенда сгорит.">
-        <span class="heat-ico">${TOON() ? (v >= 70 ? "🔥" : "👁") : ICON.eye}</span><div><span>Засветка</span><div class="sus-bar"><i style="width:${v}%"></i></div></div></div>`;
+      const heat = typeof heatName === "function" ? heatName() : "Засветка";
+      box.innerHTML = `<div class="sus heat ${tone} ${pulse ? "pulse" : ""}" title="${heat}: ${v} из 100.">
+        <span class="heat-ico">${TOON() ? (v >= 70 ? "🔥" : "👁") : ICON.eye}</span><div><span>${heat}</span><div class="sus-bar"><i style="width:${v}%"></i></div></div></div>`;
       return;
     }
     box.innerHTML = susPeople().filter((p) => state.met[p]).map((p) => {
@@ -540,7 +548,7 @@ function noteHTML(n, { draggable = false } = {}) {
 // ───────── поле ответа: рация на пробеле + текст ─────────
 function ReplyBox(host, opts = {}) {
   const ph = opts.placeholder || "или напиши по-английски и нажми Enter";
-  const label = opts.label || "Говорить";
+  let label = opts.label || "Говорить";
   const touch = matchMedia("(pointer: coarse)").matches;
   const idle = !Mic.supported() ? "голос работает в Chrome и Edge" : touch ? "нажми, скажи и нажми ещё раз" : "нажми и говори · или держи пробел";
   host.innerHTML = `
@@ -650,6 +658,7 @@ function ReplyBox(host, opts = {}) {
       setEnabled(false);
       r(null);
     },
+    setLabel(next) { label = next; if (!live) micB.textContent = next; },
     destroy() { PTT.unbind(handler); Mic.abort(); }
   };
 }

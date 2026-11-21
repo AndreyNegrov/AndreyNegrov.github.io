@@ -41,7 +41,21 @@ const Pack = {
   },
   meta(id = this.cur) { return (PACKS[id] || PACKS.relay).meta; },
   bySeason(n) { return Object.values(PACKS).find((p) => p.meta.season === n) || null; },
-  list: () => ["moon", "relay", "office"]
+  list: () => ["halo", "moon", "relay", "office"]
+};
+
+PACKS.halo = {
+  ...HALO,
+  meta: {
+    id: "halo", season: 6, key: "iney-halo", tab: "Город слушается", isNew: true,
+    heat: "След", failKicker: "Не вышло",
+    kicker: "Первая ночь", title: "Город слушается", unit: "Ночь", cta: "Сесть в такси",
+    lead: "2031 год, остров Хейло. Здесь нет руля и выключателей: город слушается голоса. Ты приехал на ночную смену.",
+    bg: "art/halo/bg-title.jpg", look: "cine",
+    dossierNote: "Ночь на острове Хейло. Команды пишет Леджер.",
+    legendKicker: "Легенда", legendLead: "Имя, город и работа — из того, что ты скажешь вслух.",
+    legend3: "Смена", legendMore: []
+  }
 };
 
 PACKS.relay = {

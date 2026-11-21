@@ -135,7 +135,8 @@ const Gadgets = {
   html(ids) {
     return ids.map((id) => {
       const g = GADGETS[id], n = this.left(id);
-      return `<button class="gadget" data-gadget="${id}" ${n ? "" : "disabled"} title="${esc(g.how)}">${ICON[g.ico]}<b>${esc(g.name)}</b><em>${n}</em></button>`;
+      const how = id === "freeze" && typeof heatName === "function" ? heatName() + " минус 25" : g.how;
+      return `<button class="gadget" data-gadget="${id}" ${n ? "" : "disabled"} title="${esc(how)}">${ICON[g.ico]}<b>${esc(g.name)}</b><em>${n}</em></button>`;
     }).join("");
   }
 };

@@ -1,4 +1,9 @@
-// Общие части сезона «Онбординг»: легенда, засветка, разговорник, улики, досье,
+// Общие части сезона: легенда, след (или засветка), разговорник, улики, досье,
+
+function heatName() {
+  const m = typeof Pack !== "undefined" ? Pack.meta() : null;
+  return (m && m.heat) || "Засветка";
+}
 // карта офиса, карточки глав, итоги миссий и финал.
 
 const Leg = {
@@ -43,16 +48,16 @@ const Heat = {
     Store.save();
     UI.renderSus(true);
     if (n > 0) {
-      UI.toast(`<b>Засветка +${state.heat - before}</b>${reason ? " · " + esc(reason) : ""}`, "bad");
+      UI.toast(`<b>${heatName()} +${state.heat - before}</b>${reason ? " · " + esc(reason) : ""}`, "bad");
       Juice.miss();
       Juice.shake();
       Juice.flash("bad");
       Sound.sfx("wrong");
-      Juice.float(`засветка +${state.heat - before}`, $("#hud-sus"), "bad");
+      Juice.float(`${heatName().toLowerCase()} +${state.heat - before}`, $("#hud-sus"), "bad");
     } else if (state.heat < before) {
       Juice.flash("frost");
       Sound.sfx("freeze");
-      Juice.float(`засветка −${before - state.heat}`, $("#hud-sus"), "ok");
+      Juice.float(`${heatName().toLowerCase()} −${before - state.heat}`, $("#hud-sus"), "ok");
     }
   },
   over() { return (state.heat || 0) >= 100; }
@@ -152,7 +157,7 @@ const Mission = {
     const M = MISSIONS[m];
     const used = Object.keys(st.phrases).length;
     return [
-      { ok: (st.heatMax || 0) < 50, label: "Легенда цела", note: `засветка ${st.heatMax || 0} из 100` },
+      { ok: (st.heatMax || 0) < 50, label: heatName() === "След" ? "След тихий" : "Легенда цела", note: `${heatName().toLowerCase()} ${st.heatMax || 0} из 100` },
       { ok: !!M.goal.test(state, st), label: M.goal.label },
       { ok: used >= (M.phraseGoal || 2), label: `Фразы в деле: ${used} из ${M.phraseGoal || 2}`, note: "фразы из разговорника, сказанные вслух" }
     ];
@@ -229,8 +234,8 @@ const Kit = {
       el.className = "o-chapter";
       document.body.dataset.m = ch.n;
       el.innerHTML = `<div class="o-ch-in">
-        ${TOON() ? `<div class="o-ch-ico">${(MISSIONS[ch.n] && MISSIONS[ch.n].emo) || "🎯"}</div><p class="o-ch-n">Миссия ${ch.n} из 6</p>`
-          : `<p class="o-ch-n">${String(ch.n).padStart(2, "0")} / 06</p>`}
+        ${TOON() ? `<div class="o-ch-ico">${(MISSIONS[ch.n] && MISSIONS[ch.n].emo) || "🎯"}</div><p class="o-ch-n">Миссия ${ch.n} из ${Math.max(1, Object.keys(MISSIONS).length)}</p>`
+          : `<p class="o-ch-n">${String(ch.n).padStart(2, "0")} / ${String(Math.max(1, Object.keys(MISSIONS).length)).padStart(2, "0")}</p>`}
         <h1>${esc(ch.title)}</h1>
         <p class="o-ch-sub">${esc(ch.sub || "")}</p>
         <i class="o-ch-line"></i>
@@ -326,7 +331,7 @@ const Kit = {
       $("#scene").innerHTML = `
         <section class="o-debrief">
           <article class="o-db-card">
-            <div class="o-db-head"><i>${T ? MISSIONS[m].emo || "🎯" : ICON[MISSIONS[m].ico] || ICON.target}</i><div><p class="kicker">Миссия ${m} · итог</p><h1>${esc(val(sc.title, state))}</h1></div><span class="o-stamp">${won === 3 ? (T ? "Идеально" : "Чисто") : "Пройдено"}</span></div>
+            <div class="o-db-head"><i>${T ? MISSIONS[m].emo || "🎯" : ICON[MISSIONS[m].ico] || ICON.target}</i><div><p class="kicker">${esc(Pack.meta().unit || "Миссия")} ${m} · итог</p><h1>${esc(val(sc.title, state))}</h1></div><span class="o-stamp">${won === 3 ? (T ? "Идеально" : "Чисто") : "Пройдено"}</span></div>
             <div class="o-stars">${stars.map((s) => `<div class="o-star ${s.ok ? "on" : ""}"><i>${T ? "★" : ICON.starFill}</i><b>${esc(s.label)}</b>${s.note ? `<span>${esc(s.note)}</span>` : ""}</div>`).join("")}</div>
             <div class="o-xpline"><i>${T ? rank.ico : rank.mark}</i><div><b>${esc(rank.name)}</b><span class="o-xp-next">${Kit.nextText(rank)}</span><div class="xp-bar"><u style="width:${rank.pct}%"></u></div></div><em class="o-xp-n">+${xp0}</em></div>
             <div class="o-db-stickers"></div>
@@ -516,7 +521,7 @@ const Kit = {
     if (tab === "legend") {
       const c = Leg.city(), j = Leg.job(), rd = Leg.third();
       const rows = [["Имя", "My name is Alex Frost."], ["Откуда", `I'm from ${c.en}.`], ["Работа", j.say], [Pack.meta().legend3 || "Транспорт", rd.say], ...(Pack.meta().legendMore || [["В Лондоне", "I've been in London for two months."]])];
-      return `<p class="muted">Это нужно говорить одинаково всем. Каждое расхождение — засветка.</p>` +
+      return `<p class="muted">Это нужно говорить одинаково всем. Каждое расхождение — ${heatName().toLowerCase()}.</p>` +
         rows.map(([k, en]) => `<div class="o-ph-row"><button class="icon-btn sm" data-say="${esc(en)}">${ICON.play}</button><div><span>${esc(k)}</span><b class="english">${esc(en)}</b></div></div>`).join("");
     }
     return null;

@@ -1,0 +1,172 @@
+/* Первая ночь «Город слушается»: схема узла поверх фона, панель команды, сортировка. */
+
+.bg-box.bg-missing {
+  background:
+    radial-gradient(900px 480px at 28% 42%, rgba(90, 120, 190, 0.45), transparent 70%),
+    linear-gradient(180deg, #1a2748 0%, #12182c 55%, #0e1424 100%);
+}
+.bg-box.bg-missing[data-src*="title"] { background: radial-gradient(1000px 520px at 50% 60%, #2a4578, #10182e 72%); }
+.bg-box.bg-missing[data-src*="taxi"] { background: radial-gradient(800px 420px at 50% 78%, #314872, #10182c 68%); }
+.bg-box.bg-missing[data-src*="avenue"] { background: linear-gradient(180deg, #1c2c52, #24365f 40%, #141c32); }
+.bg-box.bg-missing[data-src*="depot"] { background: linear-gradient(180deg, #1a243c, #2a3348 50%, #161c2c); }
+.bg-box.bg-missing[data-src*="lobby"],
+.bg-box.bg-missing[data-src*="booth"] { background: linear-gradient(180deg, #243456, #1a2238 60%, #141a2a); }
+.bg-box.bg-missing[data-src*="roof"] { background: radial-gradient(1100px 500px at 40% 80%, #1e3358, #0e1830 70%); }
+
+.cy {
+  position: absolute; inset: 72px 16px 16px;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); gap: 14px;
+}
+.cy-stage {
+  position: relative; min-width: 0; min-height: 0; border-radius: 22px; overflow: hidden;
+  background: transparent; border: 0;
+}
+.cy.plain .cy-map, .cy.plain .cy-board { display: none; }
+.cy.diagram .cy-map {
+  position: absolute; left: 14px; right: 14px; bottom: 92px; height: 42%;
+  background: rgba(8, 14, 28, 0.62); border: 1px solid var(--line); border-radius: 16px;
+}
+.cy-map { width: 100%; height: 100%; display: block; }
+.cy-road { fill: rgba(255, 255, 255, 0.05); stroke: rgba(255, 255, 255, 0.14); }
+.cy-lane { fill: none; stroke: rgba(255, 255, 255, 0.28); stroke-width: 3; stroke-dasharray: 14 12; }
+.cy-zone {
+  position: absolute; z-index: 2; top: 12px; left: 12px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 12px; font-size: 13px; font-weight: 700;
+}
+.cy-zone i { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); }
+.cy-board {
+  position: absolute; z-index: 2; top: 12px; right: 12px; width: max-content; max-width: 70%;
+  display: flex; flex-direction: column; gap: 3px;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 14px;
+  padding: 10px 12px; font-size: 13px;
+}
+.cy-board[hidden] { display: none; }
+.cy-board i { display: flex; justify-content: space-between; gap: 16px; font-style: normal; white-space: nowrap; }
+.cy-board b { font-weight: 700; text-transform: lowercase; }
+.cy-board span { color: var(--muted); text-transform: lowercase; }
+.cy-board i[data-st="open"] span, .cy-board i[data-st="on"] span, .cy-board i[data-st="called"] span { color: var(--gold); }
+.cy-board i[data-st="off"] span, .cy-board i[data-st="stopped"] span, .cy-board i[data-st="closed"] span { color: var(--danger); }
+
+.cy-line {
+  position: absolute; z-index: 3; left: 12px; right: 12px; bottom: 12px;
+  display: flex; gap: 10px; align-items: flex-start;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 16px;
+  padding: 10px 12px; backdrop-filter: blur(14px);
+}
+.cy-line[hidden] { display: none; }
+.cy-line .ava { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+.cy-line > div { flex: 1; min-width: 0; }
+.cy-line > div > span { display: block; font-size: 12px; font-weight: 700; color: var(--acc-t); }
+.cy-line p { margin: 2px 0 0; font-size: 16px; line-height: 1.4; }
+.cy-line.ru p { font-size: 15px; color: var(--ink); }
+.cy-flash {
+  position: absolute; z-index: 4; inset: 0;
+  display: none; place-items: center; align-content: center; justify-items: center;
+  text-align: center; padding: 28px; background: rgba(8, 12, 28, 0.78);
+}
+.cy-flash:not([hidden]) { display: grid; }
+.cy-flash b { font-size: clamp(26px, 4vw, 42px); letter-spacing: 0.04em; }
+.cy-flash em { display: block; margin-top: 8px; font-style: normal; font-size: 18px; color: var(--gold); }
+.cy-flash.dark { background: #070b16; }
+.cy-flash.soft { background: rgba(18, 24, 48, 0.55); }
+.cy-flash.soft b { font-weight: 600; letter-spacing: 0; }
+
+.cy-side {
+  display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 20px;
+  overflow: hidden; backdrop-filter: blur(18px);
+}
+.cy-task { padding: 14px 16px 8px; }
+.cy-task span { display: block; font-size: 12px; font-weight: 700; color: var(--muted); }
+.cy-task b { display: block; margin-top: 3px; font-size: 18px; font-weight: 700; line-height: 1.3; }
+.cy-chat {
+  flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px;
+  padding: 4px 14px 10px;
+}
+.cy-chat:empty { display: none; }
+.cy-msg { display: flex; gap: 8px; align-items: flex-start; max-width: 100%; }
+.cy-msg .ava { width: 28px; height: 28px; border-radius: 9px; flex: none; }
+.cy-msg > div { min-width: 0; }
+.cy-msg span { display: block; font-size: 12px; font-weight: 700; color: var(--acc-t); margin-bottom: 2px; }
+.cy-msg p { margin: 0; background: #29335e; border-radius: 16px 16px 16px 6px; padding: 8px 12px; font-size: 15.5px; line-height: 1.45; }
+.cy-msg.me { justify-content: flex-end; }
+.cy-msg.me span { text-align: right; }
+.cy-msg.me p { background: linear-gradient(135deg, var(--acc), var(--acc-2)); border-radius: 16px 16px 6px 16px; }
+.cy-card { margin: 0 16px 8px; padding: 10px 12px; border-radius: 12px; background: var(--paper); color: var(--paper-ink); font-size: 16px; font-weight: 650; line-height: 1.4; }
+.cy-card[hidden] { display: none; }
+.cy-halo { margin: 0 16px 8px; padding: 10px 12px; border-radius: 14px; background: rgba(127, 140, 255, 0.12); border: 1px solid rgba(127, 140, 255, 0.28); }
+.cy-halo[hidden] { display: none; }
+.cy-halo span { font-size: 12px; font-weight: 700; color: var(--acc-t); }
+.cy-halo p { margin: 3px 0 0; font-size: 16px; line-height: 1.4; min-height: 1.4em; }
+.cy.halo-on .cy-halo { border-color: var(--gold); }
+.cy-ledger { list-style: none; margin: 0; padding: 4px 16px 8px; display: grid; gap: 4px; overflow: auto; max-height: 148px; }
+.cy-ledger:empty { display: none; }
+.cy-ledger li { font-size: 12.5px; color: var(--muted); }
+.cy-ledger b { color: var(--gold); font-weight: 700; }
+.cy-ledger u { color: var(--ok); text-decoration: none; }
+.cy-verbs { padding: 8px 16px; border-top: 1px solid var(--line); margin-top: auto; }
+.cy-verbs span { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.cy-verbs div { display: flex; flex-wrap: wrap; gap: 6px; }
+.cy-verbs i { font-style: normal; font-size: 13px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); }
+.cy-hint { margin: 0; padding: 10px 16px; background: rgba(127, 140, 255, 0.1); border-top: 1px solid var(--line); font-size: 14.5px; line-height: 1.45; }
+.cy-hint[hidden] { display: none; }
+.cy-hint b { color: var(--acc-t); }
+.cy-reply { padding: 8px 12px 12px; }
+.cy-reply .type-row input { flex: 1; min-width: 0; }
+
+.cy-obj { cursor: pointer; }
+.cy-body { fill: rgba(198, 214, 255, 0.9); }
+.cy-glass { fill: rgba(120, 180, 255, 0.55); }
+.cy-frame { fill: rgba(12, 18, 36, 0.35); stroke: rgba(255, 255, 255, 0.8); stroke-width: 3; }
+.cy-opening { fill: #070b14; }
+.cy-leaf { fill: rgba(232, 238, 255, 0.9); stroke: rgba(255, 255, 255, 0.75); stroke-width: 2; transition: transform 0.45s ease; }
+.cy-arm { fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 3; stroke-linecap: round; }
+.cy-arrow { fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.cy-lamp { fill: var(--acc-t); }
+.cy-brake { fill: transparent; }
+.cy-glow { fill: #2a3550; stroke: rgba(255, 255, 255, 0.7); stroke-width: 2; }
+.cy-rotor { fill: none; stroke: rgba(255, 255, 255, 0.7); stroke-width: 2; }
+.cy-lbl, .cy-num { fill: #fff; font-size: 15px; font-weight: 700; text-anchor: middle; font-family: var(--head); }
+.cy-obj.mine .cy-frame { stroke: var(--gold); }
+.cy-obj.st-moving .cy-move { animation: cy-drift 1.15s ease-in-out infinite; }
+.cy-obj.st-stopped .cy-brake { fill: var(--danger); }
+.cy-obj.st-stopped .cy-move { animation: none; }
+.cy-obj.st-open .cy-leaf { transform: translateX(28px) scaleX(0.18); transform-origin: left center; }
+.cy-obj.st-open .gl { transform: translateX(-28px); }
+.cy-obj.st-open .gr { transform: translateX(28px); }
+.cy-obj.k-bridge.st-open .gl { transform: rotate(-48deg); transform-origin: left center; }
+.cy-obj.k-bridge.st-open .gr { transform: rotate(48deg); transform-origin: right center; }
+.cy-obj.st-on .cy-glow, .cy-obj.st-called .cy-glow { fill: var(--gold); filter: drop-shadow(0 0 5px var(--gold)); }
+.cy-obj.tag-fire.st-on .cy-glow { fill: var(--danger); filter: drop-shadow(0 0 5px var(--danger)); }
+.cy-obj.st-called .cy-glow { animation: cy-blink 0.7s steps(2) infinite; }
+.cy-obj.st-off .cy-glow { fill: #121826; stroke: #3a4660; filter: none; }
+@keyframes cy-drift { 50% { transform: translateX(7px); } }
+@keyframes cy-blink { 50% { opacity: 0.35; } }
+
+.cy-sort {
+  position: absolute; inset: 0; display: grid; align-content: center; justify-items: center;
+  gap: 16px; padding: 88px 20px 28px; text-align: center;
+}
+.cy-sort h2 { margin: 0; font-size: clamp(22px, 4vw, 34px); max-width: 18em; }
+.cy-rule, .cy-sort .muted { margin: 0; color: var(--muted); max-width: 36em; }
+.cy-phrase { margin: 0; font-size: clamp(28px, 5vw, 44px); font-weight: 700; }
+.cy-time { width: min(420px, 90%); height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.cy-time i { display: block; height: 100%; width: 100%; background: var(--acc); }
+.cy-mark { margin: 0; font-weight: 700; color: var(--danger); }
+.cy-mark.ok { color: var(--ok); }
+.cy-opts { display: grid; gap: 8px; width: min(420px, 100%); }
+.cy-opts .btn { width: 100%; }
+.cy-report { align-content: end; padding-bottom: 20px; }
+.cy-report .cy-reply { width: min(520px, 100%); }
+
+@media (max-width: 760px) {
+  .cy { inset: 64px 8px 8px; grid-template-columns: 1fr; grid-template-rows: minmax(280px, 48vh) minmax(0, 1fr); }
+  .cy-stage { display: flex; flex-direction: column; }
+  .cy-zone, .cy-board { position: static; margin: 8px 8px 0; width: auto; max-width: none; }
+  .cy-map { flex: 1; height: auto; min-height: 150px; }
+  .cy-line { position: static; margin: 8px; }
+  .cy-side { border-radius: 16px; }
+  .cy-reply { position: sticky; bottom: 0; background: var(--glass); }
+}

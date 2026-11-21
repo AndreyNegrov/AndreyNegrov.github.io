@@ -57,6 +57,10 @@ const Conv = {
     ctx.forbid = (val(sc.forbid, state) || []).map(resolveFact);
     ui.onGadget = (id) => this.gadget(ctx, id);
     ui.gadgets(["whisper", "freeze"]);
+    if (sc.streets) {
+      state.flags.streets = sc.streets;
+      UI.goal("До вызова: " + sc.streets + " улицы");
+    }
     // Полоса прогресса: сколько вопросов разговора уже позади.
     const asks = (b) => !!(b.facts || b.anyReply || b.topics);
     const total = sc.beats.filter(asks).length;
@@ -87,7 +91,12 @@ const Conv = {
     if (ctx.tok.dead || !text) return;
     const { ui, lv } = ctx;
     const p = PEOPLE[who];
-    if (p.lang === "ru") { ui.notify(text); Sound.sfx("note"); await sleep(1400); return; }
+    if (p.lang === "ru") {
+      ui.npcLine(who, text, { chatOnly: true });
+      Sound.sfx("note");
+      await sleep(clamp(900 + text.length * 42, 1400, 4200));
+      return;
+    }
     ui.rest(who);
     ui.npcLine(who, text, { hidden: lv.subs !== "live" && !o.spell, aside: o.fx === "aside" });
     ctx.history.push({ who: p.name, text });
@@ -150,10 +159,14 @@ const Conv = {
       ctx.history.push({ who: "Player", text });
       Phrases.detect(text).forEach((id) => ui.phrase(id));
       if (isRussian(text)) {
-        Heat.add(6, "русский в офисе");
+        Heat.add(6, "по-русски");
         await this.say(ctx, who, "Sorry? In English, please.");
-        if (Heat.over()) return this.burn(ctx, who);
+        if (Heat.over() && sc.heatFail !== false) return this.burn(ctx, who);
         continue;
+      }
+      if (typeof b.trap === "function") {
+        const why = b.trap(text, state);
+        if (why) return { fail: why };
       }
       const rep = Repair.detect(text);
       if (rep && !facts.some((f) => !got.has(f.id) && matchFact(text, f))) { await this.repair(ctx, who, rep, b); continue; }
@@ -186,8 +199,15 @@ const Conv = {
         if (f.reply) lines.push(val(f.reply, state));
       }
       if (r.suspicion > 0) Heat.add(Math.min(r.suspicion, 12), "странный ответ");
+      if (typeof b.watch === "function") {
+        const w = b.watch(text, r, state);
+        if (w && w.fail) {
+          for (const l of lines) await this.say(ctx, who, l);
+          return { fail: w.fail };
+        }
+      }
       Store.save();
-      if (Heat.over()) { for (const l of lines) await this.say(ctx, who, l); return this.burn(ctx, who); }
+      if (Heat.over() && sc.heatFail !== false) { for (const l of lines) await this.say(ctx, who, l); return this.burn(ctx, who); }
       const missing = facts.filter((f) => !got.has(f.id));
       if (!missing.length) {
         const clean = tries === 1 && !r.leakHits.length;
@@ -261,9 +281,9 @@ const Conv = {
       ctx.history.push({ who: "Player", text });
       Phrases.detect(text).forEach((id) => ui.phrase(id));
       if (isRussian(text)) {
-        Heat.add(6, "русский в офисе");
+        Heat.add(6, "по-русски");
         await this.say(ctx, who, "Sorry? In English, please.");
-        if (Heat.over()) return this.burn(ctx, who);
+        if (Heat.over() && sc.heatFail !== false) return this.burn(ctx, who);
         continue;
       }
       const left = b.topics.filter((t) => !asked.has(t.id));
@@ -285,7 +305,7 @@ const Conv = {
         if (f.reply) lines.push(val(f.reply, state));
       }
       if (r.suspicion > 0) Heat.add(Math.min(r.suspicion, 12), "странный вопрос");
-      if (Heat.over()) { for (const l of lines) await this.say(ctx, who, l); return this.burn(ctx, who); }
+      if (Heat.over() && sc.heatFail !== false) { for (const l of lines) await this.say(ctx, who, l); return this.burn(ctx, who); }
       const hits = b.topics.filter((t) => r.facts.includes(t.id) && !asked.has(t.id));
       if (hits.length) {
         Juice.hit(ui.anchor(), { first: true, voice: ReplyBox.via === "voice", base: 8 });
@@ -332,7 +352,7 @@ const Conv = {
   gadget(ctx, id) {
     const { ui } = ctx;
     if (id === "freeze") {
-      if (!(state.heat > 0)) return UI.toast("Засветки нет — остужать нечего.", "info");
+      if (!(state.heat > 0)) return UI.toast(heatName() + " и так на нуле.", "info");
       if (!Gadgets.use("freeze")) return;
       Heat.add(-25);
     } else if (id === "whisper") {
@@ -519,8 +539,17 @@ const ConvUI = {
         card.dataset.mood = M[2];
         const tag = $(".pt-mood", card);
         if (tag) { tag.hidden = false; tag.textContent = PEOPLE[who].gender === "f" ? M[1] : M[0]; }
+        const p = PEOPLE[who];
+        const face = p && p.faces && (p.faces[mood] || p.img);
+        if (face) $$(`[data-who="${who}"] img`, root).forEach((img) => { img.src = face; });
         clearTimeout(moodT[who]);
-        moodT[who] = ms ? setTimeout(() => { moodT[who] = 0; if (destroyed) return; card.dataset.mood = restMood(); if (tag) tag.hidden = true; }, ms) : -1;
+        moodT[who] = ms ? setTimeout(() => {
+          moodT[who] = 0;
+          if (destroyed) return;
+          card.dataset.mood = restMood();
+          if (tag) tag.hidden = true;
+          if (p && p.img) $$(`[data-who="${who}"] img`, root).forEach((img) => { img.src = p.img; });
+        }, ms) : -1;
       },
       rest(who) { const card = $(`[data-who="${who}"]`, root); if (card && !destroyed && !moodT[who]) card.dataset.mood = restMood(); },
       react() { /* без эмодзи */ },
@@ -530,18 +559,20 @@ const ConvUI = {
         const cc = $(".o-cc", root);
         if (cc && !on) cc.hidden = true;
       },
-      npcLine(who, text, { hidden, aside } = {}) {
+      npcLine(who, text, { hidden, aside, chatOnly } = {}) {
         const p = PEOPLE[who];
+        const ru = p.lang === "ru";
         const el = document.createElement("div");
-        el.className = "msg npc" + (hidden ? " hidden-text" : "") + (aside ? " aside" : "");
+        el.className = "msg npc" + (hidden ? " hidden-text" : "") + (aside || ru ? " aside" : "");
         const tools = [];
-        if (!hidden) tools.push(`<button data-replay="${esc(text)}" data-who="${who}">Повторить медленно</button>`);
+        if (!hidden && !ru) tools.push(`<button data-replay="${esc(text)}" data-who="${who}">Повторить медленно</button>`);
         if (hidden && hints > 0) tools.push(`<button data-reveal>Текст · ${hints}</button>`);
-        el.innerHTML = `<div class="msg-who">${esc(p.name)}${aside ? " · в сторону" : ""}</div>
-          <div class="msg-txt">${enHTML(text)}</div><div class="msg-veil">• • •</div>
+        el.innerHTML = `<div class="msg-who">${esc(p.name)}${ru ? " · чат" : aside ? " · в сторону" : ""}</div>
+          <div class="msg-txt">${ru ? esc(text) : enHTML(text)}</div><div class="msg-veil">• • •</div>
           ${tools.length ? `<div class="msg-tools">${tools.join("")}</div>` : ""}`;
         log.appendChild(el);
         scroll();
+        if (chatOnly || ru) return;
         const cc = $(".o-cc", root);
         if (cc && lv.subs === "live") { cc.hidden = false; cc.innerHTML = `<b>${esc(p.name)}</b> ${enHTML(text)}`; }
         const bub = $(".o-bubble", root);

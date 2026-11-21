@@ -1,0 +1,29 @@
+{
+  "style": "tools/art/style-halo-night.txt",
+  "note": "Первая ночь. Техника как в пробе графического романа, ночная палитра.",
+  "files": [
+    {"file": "bg-taxi.jpg", "what": "Ночной проспект через стекло такси без руля", "scene": "h1-taxi", "seed": 46, "prompt": "tools/art/prompts/bg-taxi.txt"},
+    {"file": "bg-avenue.jpg", "what": "Проспект: машины стоят, дроны висят", "scene": "h1-avenue", "seed": 18, "prompt": "tools/art/prompts/bg-avenue.txt"},
+    {"file": "bg-arcade.jpg", "what": "Крытый пассаж и пустая лента света", "scene": "h1-arcade", "seed": 19, "prompt": "tools/art/prompts/bg-arcade.txt"},
+    {"file": "bg-depot.jpg", "what": "Ворота депо, киоск, шкафчики, тележки", "scene": "h1-depot", "seed": 20, "prompt": "tools/art/prompts/bg-depot.txt"},
+    {"file": "bg-cart.jpg", "what": "Ночная улица и открытая ремонтная тележка", "scene": "h1-cart", "seed": 33, "prompt": "tools/art/prompts/bg-cart.txt"},
+    {"file": "bg-lobby.jpg", "what": "Вестибюль: лифты, стеклянные двери, пустая панель", "scene": "h1-lobby", "seed": 34, "prompt": "tools/art/prompts/bg-lobby.txt"},
+    {"file": "bg-booth.jpg", "what": "Стеклянная будка, силуэт и пальма", "scene": "h1-booth", "seed": 45, "prompt": "tools/art/prompts/bg-booth.txt"},
+    {"file": "bg-roof.jpg", "what": "Крыша, маяк, остров, мост ещё лежит", "scene": "h1-roof", "seed": 15, "prompt": "tools/art/prompts/bg-roof.txt"},
+    {"file": "bg-roof-midnight.jpg", "what": "Та же крыша в полночь, мост поднят, окна горят", "scene": "h1-midnight", "seed": 15, "prompt": "tools/art/prompts/bg-roof-midnight.txt"},
+    {"file": "bg-title.jpg", "what": "Заставка: ночной Хейло с воды", "scene": "title", "seed": 12, "prompt": "tools/art/prompts/bg-title.txt"},
+    {"file": "p-dee-calm.jpg", "what": "Ди Парк, спокойная", "scene": "h1-cart", "seed": 11, "prompt": "tools/art/prompts/p-dee-calm.txt"},
+    {"file": "p-dee-friendly.jpg", "what": "Ди Парк, приветливая", "scene": "h1-cart", "seed": 11, "prompt": "tools/art/prompts/p-dee-friendly.txt"},
+    {"file": "p-dee-suspicious.jpg", "what": "Ди Парк, настороженная", "scene": "h1-cart", "seed": 11, "prompt": "tools/art/prompts/p-dee-suspicious.txt"},
+    {"file": "p-dee-worried.jpg", "what": "Ди Парк, встревоженная", "scene": "h1-roof", "seed": 11, "prompt": "tools/art/prompts/p-dee-worried.txt"},
+    {"file": "p-dee-hard.jpg", "what": "Ди Парк, жёсткая", "scene": "h1-midnight", "seed": 11, "prompt": "tools/art/prompts/p-dee-hard.txt"},
+    {"file": "p-voss-calm.jpg", "what": "Капитан Восс, спокойная", "scene": "h1-voss", "seed": 23, "prompt": "tools/art/prompts/p-voss-calm.txt"},
+    {"file": "p-voss-suspicious.jpg", "what": "Капитан Восс, настороженная", "scene": "h1-voss", "seed": 23, "prompt": "tools/art/prompts/p-voss-suspicious.txt"},
+    {"file": "p-voss-hard.jpg", "what": "Капитан Восс, жёсткая", "scene": "h1-voss", "seed": 23, "prompt": "tools/art/prompts/p-voss-hard.txt"},
+    {"file": "p-voss-friendly.jpg", "what": "Капитан Восс, почти улыбка", "scene": "h1-voss", "seed": 23, "prompt": "tools/art/prompts/p-voss-friendly.txt"},
+    {"file": "p-grey-calm.jpg", "what": "Патрульный серых, спокойный", "scene": "h1-voss", "seed": 31, "prompt": "tools/art/prompts/p-grey-calm.txt"},
+    {"file": "p-neighbor-calm.jpg", "what": "Пожилой житель, спокойный", "scene": "h1-lobby", "seed": 41, "prompt": "tools/art/prompts/p-neighbor-calm.txt"},
+    {"file": "p-neighbor-worried.jpg", "what": "Пожилой житель, встревоженный", "scene": "h1-lobby", "seed": 41, "prompt": "tools/art/prompts/p-neighbor-worried.txt"},
+    {"file": "p-worker-friendly.jpg", "what": "Рабочий депо, приветливый", "scene": "h1-depot", "seed": 53, "prompt": "tools/art/prompts/p-worker-friendly.txt"}
+  ]
+}
