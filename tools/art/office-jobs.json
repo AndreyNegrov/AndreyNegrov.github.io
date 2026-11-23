@@ -1,0 +1,18 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-bg-office-day.txt",
+    "w": 1280,
+    "h": 720,
+    "seed": 42,
+    "out": "art/office/bg-office-day.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-grace-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 107,
+    "out": "art/office/p-grace-calm.jpg"
+  }
+]

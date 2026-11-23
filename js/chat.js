@@ -141,6 +141,10 @@ const Chat = {
     while (!tok.dead) {
       const text = await raceDead(tok, C.reply.wait());
       if (tok.dead || text == null) { result = false; break; }
+      if (text === "__SKIP__") {
+        if (me.done) me.done(state, new Set(facts.map((f) => f.id)));
+        break;
+      }
       this.bubble(C, esc(text), "me");
       history.push({ who: "Player", text });
       Phrases.detect(text);

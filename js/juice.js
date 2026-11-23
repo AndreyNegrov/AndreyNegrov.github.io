@@ -334,11 +334,29 @@ const Juice = {
 // Два стиля: ночной (медленный, без ударных) и мультяшный для сезона «Онбординг» (шпионский грув с хэтом и бочкой).
 const Music = (() => {
   let timer = null, step = 0, nextT = 0, mode = null, out = null, style = "night";
-  const N = { A1: 55, C2: 65.4, D2: 73.4, E2: 82.4, F2: 87.3, G2: 98, A2: 110, C3: 130.8, D3: 146.8, E3: 164.8, F3: 174.6, G3: 196, A3: 220, B3: 246.9,
-    C4: 261.6, D4: 293.7, E4: 329.6, F4: 349.2, G4: 392, A4: 440, C5: 523.3, E5: 659.3 };
+  let trackBuf = null, trackSrc = null, trackGen = 0;
+  async function loadMenuTrack() {
+    if (trackBuf) return trackBuf;
+    const res = await fetch("audio/office/menu-theme.ogg");
+    if (!res.ok) throw new Error("menu-theme " + res.status);
+    trackBuf = await Sound.ctx.decodeAudioData(await res.arrayBuffer());
+    return trackBuf;
+  }
+  const N = {
+    A1: 55, B1: 61.7, C2: 65.4, D2: 73.4, Eb2: 77.8, E2: 82.4, F2: 87.3, G2: 98, Gs2: 103.8,
+    A2: 110, B2: 123.5, C3: 130.8, D3: 146.8, Eb3: 155.6, E3: 164.8, F3: 174.6, Fs3: 185, G3: 196, Gs3: 207.7,
+    A3: 220, B3: 246.9, C4: 261.6, D4: 293.7, Eb4: 311.1, E4: 329.6, F4: 349.2, Fs4: 370, G4: 392, Gs4: 415.3,
+    A4: 440, B4: 493.9, C5: 523.3, D5: 587.3, E5: 659.3
+  };
+  const CHORDS = {
+    Am9: ["A3", "C4", "E4", "G4", "B4"],
+    Fmaj7: ["F3", "A3", "C4", "E4"],
+    Dm9: ["D3", "F3", "A3", "C4", "E4"],
+    E7: ["E3", "Gs3", "B3", "D4"]
+  };
   const STYLES = {
     night: {
-      S: 60 / 92 / 2, fadeIn: 1.2, fadeOut: 0.2, attack: 0.02,
+      len: 32, S: 60 / 92 / 2, fadeIn: 1.2, fadeOut: 0.2, attack: 0.02,
       BASS: {
         calm: ["A2", 0, 0, "A2", 0, 0, "E3", 0, "F2", 0, 0, "F2", 0, 0, "C3", 0, "D2", 0, 0, "D2", 0, 0, "A2", 0, "E2", 0, 0, "E2", 0, 0, "E3", 0],
         tense: ["A2", 0, "A2", 0, "A2", 0, "C3", 0, "A2", 0, "A2", 0, "G2", 0, "E2", 0, "F2", 0, "F2", 0, "F2", 0, "A2", 0, "E2", 0, "E2", 0, "E2", 0, "D3", 0]
@@ -353,20 +371,59 @@ const Music = (() => {
       }
     },
     toon: {
-      S: 60 / 104 / 2, fadeIn: 0.6, fadeOut: 0.12, attack: 0.012,
+      // 64-шаговый (4 такта × 16-е) тёплый шпионский лаунж-грув: электропиано Rhodes, хроматический бас, вибрафон с эхом и свинговые ударные.
+      len: 64, S: 60 / 98 / 4, fadeIn: 0.9, fadeOut: 0.16, attack: 0.01,
       BASS: {
-        calm: ["A2", 0, "A2", "C3", 0, "E3", "D3", 0, "F2", 0, "F2", "A2", 0, "C3", "A2", 0, "D2", 0, "D2", "F2", 0, "A2", "F2", 0, "E2", 0, "E2", "G2", 0, "B3", "E3", 0],
-        tense: ["A2", "A2", 0, "A2", "C3", 0, "A2", "G2", "A2", "A2", 0, "A2", "D3", 0, "C3", "G2", "F2", "F2", 0, "F2", "A2", 0, "F2", "E2", "E2", "E2", 0, "E2", "G2", 0, "E3", "D3"]
+        calm: [
+          "A2", 0, 0, 0, 0, 0, "C3", 0, "D3", 0, "Eb3", 0, "E3", 0, "C3", 0,
+          "F2", 0, 0, 0, 0, 0, "A2", 0, "C3", 0, 0, "A2", "G2", 0, "E2", 0,
+          "D2", 0, 0, 0, 0, 0, "F2", 0, "A2", 0, 0, "F2", "G2", 0, "A2", 0,
+          "E2", 0, 0, 0, "Gs2", 0, "B2", 0, "E3", 0, "D3", 0, "C3", 0, "B2", 0
+        ],
+        tense: [
+          "A2", 0, "A2", 0, 0, 0, "C3", 0, "A2", 0, "Eb3", 0, "E3", 0, "C3", 0,
+          "A2", 0, "A2", 0, 0, 0, "D3", 0, "C3", 0, "A2", 0, "G2", 0, "E2", 0,
+          "F2", 0, "F2", 0, 0, 0, "A2", 0, "F2", 0, "C3", 0, "A2", 0, "F2", 0,
+          "E2", 0, "E2", 0, "Gs2", 0, "B2", 0, "E3", 0, "D3", 0, "B2", 0, "Gs2", 0
+        ]
+      },
+      PAD: {
+        calm: { 0: "Am9", 10: "Am9", 16: "Fmaj7", 26: "Fmaj7", 32: "Dm9", 42: "Dm9", 48: "E7", 58: "E7" },
+        tense: { 0: "Am9", 16: "Am9", 32: "Fmaj7", 48: "E7" }
       },
       LEAD: {
-        calm: [0, 0, "E4", 0, 0, "A4", 0, "G4", 0, 0, "C4", 0, 0, "F4", 0, "E4", 0, 0, "D4", 0, 0, "F4", 0, "A4", 0, 0, "E4", 0, "G4", 0, "E4", 0],
-        tense: ["A4", 0, 0, "C5", 0, 0, "A4", 0, 0, "E4", 0, 0, "G4", 0, 0, 0, "F4", 0, 0, "A4", 0, 0, "C5", 0, "E5", 0, 0, "B3", 0, "E4", 0, 0]
+        calm: [
+          0, 0, "E4", 0, 0, "G4", "A4", 0, 0, 0, "C5", 0, "B4", 0, "A4", 0,
+          0, 0, "A4", 0, 0, "G4", "E4", 0, 0, 0, "C4", 0, "E4", 0, 0, 0,
+          0, 0, "F4", 0, 0, "A4", "C5", 0, 0, 0, "D5", 0, "C5", 0, "A4", 0,
+          0, 0, "B4", 0, "Gs4", 0, "E4", 0, 0, 0, "B4", 0, "A4", 0, "Gs4", 0
+        ],
+        tense: [
+          "A4", 0, 0, 0, "C5", 0, 0, 0, "A4", 0, "Eb4", 0, "E4", 0, 0, 0,
+          0, 0, "G4", 0, 0, 0, "E4", 0, "A4", 0, 0, 0, "E4", 0, 0, 0,
+          "F4", 0, 0, 0, "A4", 0, 0, 0, "C5", 0, 0, 0, "A4", 0, 0, 0,
+          "E5", 0, 0, 0, "B4", 0, "Gs4", 0, "E4", 0, 0, 0, 0, 0, 0, 0
+        ]
       },
       note(i, b, l, t, S) {
-        if (b) tone(N[b], t, S * 1.5, "triangle", 0.26, 420, 0.012);
-        if (l) { tone(N[l], t, S * 2.4, "sine", 0.075, 0, 0.012); tone(N[l] * 2, t, S * 1.2, "sine", 0.02, 0, 0.012); }
-        if (i % 2 === 1) hat(t, mode === "tense" ? 0.07 : 0.045);
-        if (i % 8 === 0 || (mode === "tense" && i % 8 === 5)) kick(t);
+        // Лёгкий свинг на нечётных 16-х — мелодия звучит живее, не «роботом».
+        const st = t + (i % 2 === 1 ? S * 0.16 : 0);
+        if (b) {
+          tone(N[b], st, S * 3.1, "triangle", 0.3, 380, 0.012);
+          tone(N[b] * 0.5, st, S * 2.4, "sine", 0.16, 200, 0.015);
+        }
+        const ch = this.PAD[mode][i];
+        if (ch) rhodes(CHORDS[ch], st, S * (i % 16 === 0 ? 7.5 : 4.2), mode === "tense" ? 0.048 : 0.058);
+        if (l) {
+          vibe(N[l], st, S * 5.2, mode === "tense" ? 0.12 : 0.11);
+          // Тихое «эхо» через три 16-х для объёма.
+          vibe(N[l], st + S * 3, S * 3.6, 0.036);
+        }
+        // Свинговый щёточный хэт, мягкий римшот на 2 и 4 долю и тёплая бочка.
+        if (i % 2 === 0) hat(st, i % 4 === 2 ? 0.045 : 0.025);
+        if (mode === "tense" && i % 4 === 3) hat(st, 0.038);
+        if (i % 16 === 0 || i % 16 === 10 || (mode === "tense" && i % 16 === 6)) kick(st, mode === "tense" ? 0.42 : 0.34);
+        if (i % 8 === 4) rim(st, mode === "tense" ? 0.1 : 0.075);
       }
     }
   };
@@ -381,24 +438,46 @@ const Music = (() => {
     node.connect(g); g.connect(out);
     o.start(t); o.stop(t + dur + 0.05);
   }
+  function rhodes(notes, t, dur, vol) {
+    notes.forEach((n, idx) => {
+      const f = N[n];
+      if (!f) return;
+      const at = t + idx * 0.016;
+      tone(f, at, dur, "sine", vol, 1400, 0.018);
+      tone(f * 2, at, dur * 0.35, "triangle", vol * 0.22, 1800, 0.008);
+    });
+  }
+  function vibe(freq, t, dur, vol) {
+    tone(freq, t, dur, "sine", vol, 2600, 0.006);
+    tone(freq * 2, t, dur * 0.32, "sine", vol * 0.25, 3200, 0.004);
+    tone(freq * 3, t, dur * 0.14, "sine", vol * 0.08, 4000, 0.003);
+  }
   function hat(t, vol) {
-    const cx = Sound.ctx, len = Math.floor(cx.sampleRate * 0.05), buf = cx.createBuffer(1, len, cx.sampleRate), d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const cx = Sound.ctx, len = Math.floor(cx.sampleRate * 0.045), buf = cx.createBuffer(1, len, cx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
     const s = cx.createBufferSource(), f = cx.createBiquadFilter(), g = cx.createGain();
-    s.buffer = buf; f.type = "highpass"; f.frequency.value = 6500; g.gain.value = vol;
+    s.buffer = buf; f.type = "highpass"; f.frequency.value = 7200; g.gain.value = vol;
     s.connect(f); f.connect(g); g.connect(out); s.start(t);
   }
-  function kick(t) {
+  function rim(t, vol) {
+    const cx = Sound.ctx, len = Math.floor(cx.sampleRate * 0.03), buf = cx.createBuffer(1, len, cx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+    const s = cx.createBufferSource(), f = cx.createBiquadFilter(), g = cx.createGain();
+    s.buffer = buf; f.type = "bandpass"; f.frequency.value = 1850; f.Q.value = 2.4; g.gain.value = vol;
+    s.connect(f); f.connect(g); g.connect(out); s.start(t);
+    tone(420, t, 0.035, "triangle", vol * 0.45, 1600, 0.002);
+  }
+  function kick(t, vol = 0.4) {
     const cx = Sound.ctx, o = cx.createOscillator(), g = cx.createGain();
-    o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12);
-    g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
     o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.25);
   }
   function schedule() {
     const cx = Sound.ctx, st = STYLES[style];
     if (!cx || !mode) return;
     while (nextT < cx.currentTime + 0.25) {
-      const i = step % 32;
+      const i = step % (st.len || 32);
       st.note(i, st.BASS[mode][i], st.LEAD[mode][i], nextT, st.S);
       nextT += st.S;
       step += 1;
@@ -408,7 +487,7 @@ const Music = (() => {
     play(m = "calm") {
       if (!Sound.ensure()) return;
       const want = typeof TOON === "function" && TOON() ? "toon" : "night";
-      if (mode === m && style === want && timer) return;
+      if (mode === m && style === want && (timer || trackSrc)) return;
       this.stop();
       mode = m;
       style = want;
@@ -416,13 +495,34 @@ const Music = (() => {
       out.gain.value = 0;
       out.gain.linearRampToValueAtTime(1, Sound.ctx.currentTime + STYLES[style].fadeIn);
       out.connect(Sound.musicBus);
+      if (want === "toon" && m === "calm") {
+        const g = ++trackGen;
+        const targetOut = out;
+        loadMenuTrack().then((buf) => {
+          if (g !== trackGen || mode !== m || style !== want || out !== targetOut) return;
+          const src = Sound.ctx.createBufferSource();
+          src.buffer = buf;
+          src.loop = true;
+          src.connect(targetOut);
+          src.start();
+          trackSrc = src;
+        }).catch(() => {
+          if (g !== trackGen || mode !== m || style !== want || out !== targetOut) return;
+          step = 0;
+          nextT = Sound.ctx.currentTime + 0.08;
+          timer = setInterval(schedule, 90);
+        });
+        return;
+      }
       step = 0;
       nextT = Sound.ctx.currentTime + 0.08;
       timer = setInterval(schedule, 90);
     },
     stop() {
+      trackGen += 1;
       if (timer) clearInterval(timer);
       timer = null;
+      if (trackSrc) { const s = trackSrc; trackSrc = null; setTimeout(() => { try { s.stop(); } catch { /* уже остановлен */ } }, 350); }
       mode = null;
       if (out && Sound.ctx) {
         const o = out, k = STYLES[style].fadeOut;

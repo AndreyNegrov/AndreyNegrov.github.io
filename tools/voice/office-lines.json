@@ -1,0 +1,1302 @@
+[
+  {
+    "who": "priya",
+    "text": "I think... we'll be in touch. Bye."
+  },
+  {
+    "who": "grace",
+    "text": "See you on Monday! Ta-ra!"
+  },
+  {
+    "who": "priya",
+    "text": "Sorry... what?"
+  },
+  {
+    "who": "priya",
+    "text": "Wait — I thought you said Riga?"
+  },
+  {
+    "who": "priya",
+    "text": "Wait — I thought you said Tallinn?"
+  },
+  {
+    "who": "priya",
+    "text": "Wait — I thought you said Vilnius?"
+  },
+  {
+    "who": "priya",
+    "text": "Russia? Oh. I thought you were from Riga."
+  },
+  {
+    "who": "priya",
+    "text": "Russia? Oh. I thought you were from Tallinn."
+  },
+  {
+    "who": "priya",
+    "text": "Russia? Oh. I thought you were from Vilnius."
+  },
+  {
+    "who": "priya",
+    "text": "Hi! Can you hear me okay?"
+  },
+  {
+    "who": "priya",
+    "text": "Great!"
+  },
+  {
+    "who": "priya",
+    "text": "Hello? Can you hear me?"
+  },
+  {
+    "who": "priya",
+    "text": "I'm Priya. I lead People here at Murmur. And this is Grace, our office manager."
+  },
+  {
+    "who": "grace",
+    "text": "Hiya! Nice to meet you."
+  },
+  {
+    "who": "priya",
+    "text": "So, Alex. Tell us a little bit about yourself."
+  },
+  {
+    "who": "priya",
+    "text": "Riga! Lovely. I've never been."
+  },
+  {
+    "who": "priya",
+    "text": "Tallinn! Lovely. I've never been."
+  },
+  {
+    "who": "priya",
+    "text": "Vilnius! Lovely. I've never been."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry, what's your full name?"
+  },
+  {
+    "who": "priya",
+    "text": "And where are you from?"
+  },
+  {
+    "who": "priya",
+    "text": "And what did you do before?"
+  },
+  {
+    "who": "grace",
+    "text": "And how long have you been in London?"
+  },
+  {
+    "who": "grace",
+    "text": "Two months! So you still get lost on the Tube, I bet."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, how long?"
+  },
+  {
+    "who": "priya",
+    "text": "The job is office assistant. Phones, deliveries, meetings, a bit of everything. Why do you want to work at Murmur?"
+  },
+  {
+    "who": "priya",
+    "text": "Love that."
+  },
+  {
+    "who": "priya",
+    "text": "Ha! Our earbud will translate everything. Soon nobody will need to learn English!"
+  },
+  {
+    "who": "grace",
+    "text": "Okay, a practical one. A courier calls, but I'm in a meeting. What do you say to him?"
+  },
+  {
+    "who": "grace",
+    "text": "Perfect. That's literally the job."
+  },
+  {
+    "who": "grace",
+    "text": "Hmm. And then? What do you say to him?"
+  },
+  {
+    "who": "grace",
+    "text": "Oh, sorry, one second."
+  },
+  {
+    "who": "grace",
+    "text": "Yes, Friday's fine. Half six. Okay, bye."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry about that! Busy week."
+  },
+  {
+    "who": "priya",
+    "text": "Okay, the classic question. What's your biggest weakness?"
+  },
+  {
+    "who": "priya",
+    "text": "Ha. Honest. I like that."
+  },
+  {
+    "who": "priya",
+    "text": "Honestly? Your English is fine. Much better than my Latvian!"
+  },
+  {
+    "who": "priya",
+    "text": "Honestly? Your English is fine. Much better than my Estonian!"
+  },
+  {
+    "who": "priya",
+    "text": "Honestly? Your English is fine. Much better than my Lithuanian!"
+  },
+  {
+    "who": "grace",
+    "text": "Do you have any questions for us?"
+  },
+  {
+    "who": "grace",
+    "text": "Good question!"
+  },
+  {
+    "who": "grace",
+    "text": "Anything at all? Ask us something!"
+  },
+  {
+    "who": "grace",
+    "text": "There are eight of us. You'll meet Tom, our IT guy. He's grumpy with everyone, don't worry. And Max from sales. He never stops talking."
+  },
+  {
+    "who": "grace",
+    "text": "As soon as possible!"
+  },
+  {
+    "who": "priya",
+    "text": "Alex, we'd love to have you. Can you start on Monday?"
+  },
+  {
+    "who": "priya",
+    "text": "Brilliant! Welcome to Murmur, Alex."
+  },
+  {
+    "who": "guest",
+    "text": "What do you do here?"
+  },
+  {
+    "who": "guest",
+    "text": "Did you do anything fun last week?"
+  },
+  {
+    "who": "guest",
+    "text": "What did you do last Thursday?"
+  },
+  {
+    "who": "tom",
+    "text": "Sorry... what?"
+  },
+  {
+    "who": "tom",
+    "text": "Wait — I thought you said Riga?"
+  },
+  {
+    "who": "tom",
+    "text": "Wait — I thought you said Tallinn?"
+  },
+  {
+    "who": "tom",
+    "text": "Wait — I thought you said Vilnius?"
+  },
+  {
+    "who": "tom",
+    "text": "Russia? Oh. I thought you were from Riga."
+  },
+  {
+    "who": "tom",
+    "text": "Russia? Oh. I thought you were from Tallinn."
+  },
+  {
+    "who": "tom",
+    "text": "Russia? Oh. I thought you were from Vilnius."
+  },
+  {
+    "who": "tom",
+    "text": "You're the new one. Alex, right? Your laptop's on your desk. The password's on the sticky note."
+  },
+  {
+    "who": "tom",
+    "text": "Don't lose it. I'm not making another one."
+  },
+  {
+    "who": "tom",
+    "text": "Anything else? I'm a bit busy."
+  },
+  {
+    "who": "tom",
+    "text": "Right. Back to work. Shout if the Wi-Fi dies."
+  },
+  {
+    "who": "tom",
+    "text": "Is that a question?"
+  },
+  {
+    "who": "tom",
+    "text": "Sorry, I don't follow."
+  },
+  {
+    "who": "tom",
+    "text": "Hm. Next question."
+  },
+  {
+    "who": "tom",
+    "text": "Why are you asking that? Who are you, the police?"
+  },
+  {
+    "who": "tom",
+    "text": "I'm IT. Laptops, servers, the Wi-Fi. Everything people break."
+  },
+  {
+    "who": "tom",
+    "text": "Last Thursday? I was here till ten. Server update. Very exciting."
+  },
+  {
+    "who": "tom",
+    "text": "Weekend? Quiet. Slept. Why?"
+  },
+  {
+    "who": "tom",
+    "text": "Badges? I make them. Mine's number one, obviously. Grace keeps the spare ones in her drawer."
+  },
+  {
+    "who": "tom",
+    "text": "Four years. Longest four years of my life."
+  },
+  {
+    "who": "tom",
+    "text": "Fun? I fix computers. Then I go home and fix more computers."
+  },
+  {
+    "who": "tom",
+    "text": "You good with computers?"
+  },
+  {
+    "who": "tom",
+    "text": "Good. Then don't touch the server room."
+  },
+  {
+    "who": "max",
+    "text": "Sorry... what?"
+  },
+  {
+    "who": "max",
+    "text": "Wait — I thought you said Riga?"
+  },
+  {
+    "who": "max",
+    "text": "Wait — I thought you said Tallinn?"
+  },
+  {
+    "who": "max",
+    "text": "Wait — I thought you said Vilnius?"
+  },
+  {
+    "who": "max",
+    "text": "Russia? Oh. I thought you were from Riga."
+  },
+  {
+    "who": "max",
+    "text": "Russia? Oh. I thought you were from Tallinn."
+  },
+  {
+    "who": "max",
+    "text": "Russia? Oh. I thought you were from Vilnius."
+  },
+  {
+    "who": "max",
+    "text": "G'day! You must be Alex. I'm Max. How's the first day going?"
+  },
+  {
+    "who": "max",
+    "text": "Ha, good on ya."
+  },
+  {
+    "who": "max",
+    "text": "Me? Living the dream, mate."
+  },
+  {
+    "who": "max",
+    "text": "So where are you from, Alex? I can't place the accent."
+  },
+  {
+    "who": "max",
+    "text": "Riga! Never been. Is it cold?"
+  },
+  {
+    "who": "max",
+    "text": "Tallinn! Never been. Is it cold?"
+  },
+  {
+    "who": "max",
+    "text": "Vilnius! Never been. Is it cold?"
+  },
+  {
+    "who": "max",
+    "text": "Sorry, where?"
+  },
+  {
+    "who": "max",
+    "text": "Anyway, ask me anything. I love talking about myself."
+  },
+  {
+    "who": "max",
+    "text": "Ah, sorry, mate. Gotta take this."
+  },
+  {
+    "who": "max",
+    "text": "Ha! Love it. What else?"
+  },
+  {
+    "who": "max",
+    "text": "Sorry, mate, say again?"
+  },
+  {
+    "who": "max",
+    "text": "Not sure I follow, mate."
+  },
+  {
+    "who": "max",
+    "text": "Why are you asking that? Who are you, the police?"
+  },
+  {
+    "who": "max",
+    "text": "Sales! I sell earbuds that don't exist yet. Best job in the world."
+  },
+  {
+    "who": "max",
+    "text": "Last Thursday? Football. Big match. We lost. Don't ask."
+  },
+  {
+    "who": "max",
+    "text": "Weekend was great. Beach. Well, the Thames. Same thing."
+  },
+  {
+    "who": "max",
+    "text": "My badge? Number four, I think. Lucky number. Why?"
+  },
+  {
+    "who": "max",
+    "text": "Three years. Feels like ten."
+  },
+  {
+    "who": "max",
+    "text": "Perth, Australia. I came here for the weather. That's a joke."
+  },
+  {
+    "who": "max",
+    "text": "What about you? What do you do for fun?"
+  },
+  {
+    "who": "max",
+    "text": "Running? Mate. I run... to the pub. That's it."
+  },
+  {
+    "who": "max",
+    "text": "Cooking! Bring food on Friday and you'll be famous here."
+  },
+  {
+    "who": "max",
+    "text": "Chess? Big brain. Respect, mate."
+  },
+  {
+    "who": "max",
+    "text": "Come on, what do you like doing?"
+  },
+  {
+    "who": "grace",
+    "text": "Sorry... what?"
+  },
+  {
+    "who": "grace",
+    "text": "Wait — I thought you said Riga?"
+  },
+  {
+    "who": "grace",
+    "text": "Wait — I thought you said Tallinn?"
+  },
+  {
+    "who": "grace",
+    "text": "Wait — I thought you said Vilnius?"
+  },
+  {
+    "who": "grace",
+    "text": "Russia? Oh. I thought you were from Riga."
+  },
+  {
+    "who": "grace",
+    "text": "Russia? Oh. I thought you were from Tallinn."
+  },
+  {
+    "who": "grace",
+    "text": "Russia? Oh. I thought you were from Vilnius."
+  },
+  {
+    "who": "grace",
+    "text": "There you are! Settling in okay? Tea? Coffee?"
+  },
+  {
+    "who": "grace",
+    "text": "Coming right up."
+  },
+  {
+    "who": "grace",
+    "text": "So, tea or coffee, love?"
+  },
+  {
+    "who": "grace",
+    "text": "So you were a barista in a café before, weren't you?"
+  },
+  {
+    "who": "grace",
+    "text": "So you were a receptionist in a hotel before, weren't you?"
+  },
+  {
+    "who": "grace",
+    "text": "Oh, receptionist! Sorry, my memory. Too many new faces."
+  },
+  {
+    "who": "grace",
+    "text": "Oh, barista! Sorry, my memory. Too many new faces."
+  },
+  {
+    "who": "grace",
+    "text": "Oh, call centre! Sorry, my memory. Too many new faces."
+  },
+  {
+    "who": "grace",
+    "text": "Hm? So what did you do before?"
+  },
+  {
+    "who": "grace",
+    "text": "Hm. Funny. I'm sure you said receptionist in the interview."
+  },
+  {
+    "who": "grace",
+    "text": "Hm. Funny. I'm sure you said barista in the interview."
+  },
+  {
+    "who": "grace",
+    "text": "Hm. Funny. I'm sure you said call centre in the interview."
+  },
+  {
+    "who": "grace",
+    "text": "Anyway! Anything you need, just ask. I know everything here."
+  },
+  {
+    "who": "grace",
+    "text": "Oh! And on Friday I need your help with a courier. Old laptops going to recycling. Remind me, yeah?"
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, love, I didn't catch that."
+  },
+  {
+    "who": "grace",
+    "text": "Ooh, what do you mean?"
+  },
+  {
+    "who": "grace",
+    "text": "Hm?"
+  },
+  {
+    "who": "grace",
+    "text": "Why are you asking that? Who are you, the police?"
+  },
+  {
+    "who": "grace",
+    "text": "Me? I do everything. The office, deliveries, couriers, the lot. If it comes in a box, it's mine."
+  },
+  {
+    "who": "grace",
+    "text": "Last Thursday? Yoga, then home. Early night. My life is very exciting."
+  },
+  {
+    "who": "grace",
+    "text": "Lovely, thanks. I cleaned my flat. Very rock and roll."
+  },
+  {
+    "who": "grace",
+    "text": "Badges are Tom's thing. I just keep the spares in my drawer. Why?"
+  },
+  {
+    "who": "grace",
+    "text": "Eleven years! Before Murmur, this building was a carpet shop."
+  },
+  {
+    "who": "grace",
+    "text": "Yoga. And gossip. Mostly gossip."
+  },
+  {
+    "who": "grace",
+    "text": "You're a star."
+  },
+  {
+    "who": "max",
+    "text": "Morning, Alex! How are you?"
+  },
+  {
+    "who": "max",
+    "text": "Can't complain, mate."
+  },
+  {
+    "who": "max",
+    "text": "Did you have a good evening?"
+  },
+  {
+    "who": "max",
+    "text": "Freezing today, isn't it?"
+  },
+  {
+    "who": "max",
+    "text": "Welcome to London."
+  },
+  {
+    "who": "max",
+    "text": "Which floor? Five?"
+  },
+  {
+    "who": "max",
+    "text": "Ready for your first stand-up?"
+  },
+  {
+    "who": "max",
+    "text": "Ha! You'll be fine."
+  },
+  {
+    "who": "max",
+    "text": "Here we are. After you!"
+  },
+  {
+    "who": "max",
+    "text": "Gotta run. Bye!"
+  },
+  {
+    "who": "priya",
+    "text": "Morning, everyone! Quick stand-up. What you did yesterday, what you're doing today, any blockers. Tom, you first."
+  },
+  {
+    "who": "tom",
+    "text": "Yesterday I fixed the Wi-Fi. Again. Today I'm checking the server logs. Someone came in last Thursday night with a spare badge. I'll find out who."
+  },
+  {
+    "who": "priya",
+    "text": "Ooh, mysterious! Thanks, Tom. Max?"
+  },
+  {
+    "who": "max",
+    "text": "Yesterday, three calls with clients. Today I'm out from two till four. Dentist."
+  },
+  {
+    "who": "grace",
+    "text": "Today I'm booking a courier for Friday. The old laptops are going to recycling. Alex is helping me."
+  },
+  {
+    "who": "grace",
+    "text": "Oops! Wrong chat. Sorry, everyone!"
+  },
+  {
+    "who": "priya",
+    "text": "No worries! Alex, your first stand-up! What did you do yesterday?"
+  },
+  {
+    "who": "priya",
+    "text": "Nice."
+  },
+  {
+    "who": "priya",
+    "text": "And yesterday? What did you do?"
+  },
+  {
+    "who": "priya",
+    "text": "And today?"
+  },
+  {
+    "who": "priya",
+    "text": "Love it."
+  },
+  {
+    "who": "priya",
+    "text": "What's the plan for today?"
+  },
+  {
+    "who": "priya",
+    "text": "Any blockers?"
+  },
+  {
+    "who": "priya",
+    "text": "Perfect."
+  },
+  {
+    "who": "priya",
+    "text": "Great stand-up, everyone. Let's crush it today!"
+  },
+  {
+    "who": "tom",
+    "text": "Please never say that again."
+  },
+  {
+    "who": "tom",
+    "text": "Right. Thursday. Badge zero four. Out at eighteen ten."
+  },
+  {
+    "who": "tom",
+    "text": "Badge zero three. Out at half past five, p.m."
+  },
+  {
+    "who": "tom",
+    "text": "Badge zero one. That's me. Out at five past ten, p.m."
+  },
+  {
+    "who": "tom",
+    "text": "And here it is. Badge zero seven. In at twenty to ten, p.m."
+  },
+  {
+    "who": "max",
+    "text": "Hi! Yes, this is Max. Yeah, I can talk now."
+  },
+  {
+    "who": "max",
+    "text": "Three years at Murmur. In sales."
+  },
+  {
+    "who": "max",
+    "text": "Honestly? I want to leave. Things are weird here right now."
+  },
+  {
+    "who": "max",
+    "text": "Last Thursday? Yes, that was my second interview with you. Sorry I was late."
+  },
+  {
+    "who": "max",
+    "text": "Start in March? That's perfect."
+  },
+  {
+    "who": "max",
+    "text": "And please don't call my work phone. Okay. Thanks. Bye!"
+  },
+  {
+    "who": "max",
+    "text": "Can I help you, mate?"
+  },
+  {
+    "who": "max",
+    "text": "Oh. Right. No worries."
+  },
+  {
+    "who": "max",
+    "text": "...Okay. Weird."
+  },
+  {
+    "who": "grace",
+    "text": "Not now. I'm at work."
+  },
+  {
+    "who": "grace",
+    "text": "Yes. Friday. Half six, like we said."
+  },
+  {
+    "who": "grace",
+    "text": "The box will say recycling. Nobody looks inside recycling."
+  },
+  {
+    "who": "grace",
+    "text": "No. Cash. No cards, no banks."
+  },
+  {
+    "who": "grace",
+    "text": "There's a new assistant. Nervous. Harmless."
+  },
+  {
+    "who": "grace",
+    "text": "Okay. Friday. Bye."
+  },
+  {
+    "who": "grace",
+    "text": "Oh! Alex! You scared me. Do you need something?"
+  },
+  {
+    "who": "grace",
+    "text": "Right. Of course. Help yourself."
+  },
+  {
+    "who": "grace",
+    "text": "Hm. Okay."
+  },
+  {
+    "who": "grace",
+    "text": "It's on a yellow sticky note. Under the keyboard, I think."
+  },
+  {
+    "who": "grace",
+    "text": "Oh! Sorry. Then look behind the plant."
+  },
+  {
+    "who": "grace",
+    "text": "Hmm. Try the blue folder. It's next to the phone."
+  },
+  {
+    "who": "grace",
+    "text": "Lovely! Oh, and Alex — please don't open the bottom drawer. It's private."
+  },
+  {
+    "who": "grace",
+    "text": "Oh, you found it! You're a star. Thanks, Alex."
+  },
+  {
+    "who": "grace",
+    "text": "Alex? Still looking? Never mind, love. I'll find it later."
+  },
+  {
+    "who": "grace",
+    "text": "Alex? What are you doing in my drawer?"
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, I can't help you. Bye."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry... what?"
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, what? I just do the deliveries."
+  },
+  {
+    "who": "dev",
+    "text": "SwiftBox, Dev speaking. How can I help?"
+  },
+  {
+    "who": "dev",
+    "text": "Sure thing."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, what's it about?"
+  },
+  {
+    "who": "dev",
+    "text": "What's the booking number?"
+  },
+  {
+    "who": "dev",
+    "text": "SB-4471. Lovely."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, the booking number again?"
+  },
+  {
+    "who": "dev",
+    "text": "And the name on the booking?"
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, whose name?"
+  },
+  {
+    "who": "dev",
+    "text": "Can you spell the surname for me?"
+  },
+  {
+    "who": "dev",
+    "text": "Brilliant. Got it."
+  },
+  {
+    "who": "dev",
+    "text": "Never mind, I found it."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, letter by letter?"
+  },
+  {
+    "who": "dev",
+    "text": "So: Friday, six thirty p.m. Pickup from Murmur, 22 Hatton Street. Delivery to 14 Wharf Lane, flat 3. Is that right?"
+  },
+  {
+    "who": "dev",
+    "text": "Great."
+  },
+  {
+    "who": "dev",
+    "text": "Anything else I can help with?"
+  },
+  {
+    "who": "dev",
+    "text": "Sure, I can do that."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, is there something else?"
+  },
+  {
+    "who": "dev",
+    "text": "What's the new address?"
+  },
+  {
+    "who": "dev",
+    "text": "Nine Mill Road. M-I-L-L?"
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, which road?"
+  },
+  {
+    "who": "dev",
+    "text": "Okay. Hmm. For address changes the system needs the booking password. It's on the confirmation email."
+  },
+  {
+    "who": "dev",
+    "text": "Ah, first week? Been there. Okay, just this once."
+  },
+  {
+    "who": "dev",
+    "text": "I really need that password, sorry."
+  },
+  {
+    "who": "dev",
+    "text": "Done. Friday, six thirty, delivery to 9 Mill Road. Anything else?"
+  },
+  {
+    "who": "dev",
+    "text": "Okay, that's all confirmed. Anything else?"
+  },
+  {
+    "who": "dev",
+    "text": "Cheers! Bye now."
+  },
+  {
+    "who": "grace",
+    "text": "Oh! Alex. You're still here? I'm just off. I'm taking this box myself, actually. Can't trust couriers."
+  },
+  {
+    "who": "grace",
+    "text": "Right. Night, Alex! Have a good weekend."
+  },
+  {
+    "who": "grace",
+    "text": "Weekend? Yoga on Saturday. Then... maybe a little holiday. A long one."
+  },
+  {
+    "who": "grace",
+    "text": "Yoga keeps me calm. Not working tonight, ha."
+  },
+  {
+    "who": "grace",
+    "text": "Somewhere warm. Spain, maybe. Somewhere with no couriers."
+  },
+  {
+    "who": "grace",
+    "text": "Just old laptops. Boring. Don't touch it, it's heavy."
+  },
+  {
+    "who": "grace",
+    "text": "Why are you so interested in my box, Alex?"
+  },
+  {
+    "who": "grace",
+    "text": "Couriers are always late. That's why I'm taking it myself."
+  },
+  {
+    "who": "grace",
+    "text": "Tea? At this hour? ...Oh, go on then. A quick one."
+  },
+  {
+    "who": "grace",
+    "text": "I've got a cat. Biscuit. She hates everyone. Like Tom."
+  },
+  {
+    "who": "grace",
+    "text": "Just me and Biscuit. Simple life."
+  },
+  {
+    "who": "grace",
+    "text": "Tom's grumpy, Max talks too much, Priya says synergy. I'll miss them. I mean — have a good weekend, I mean."
+  },
+  {
+    "who": "grace",
+    "text": "Born here. Never left. Maybe it's time."
+  },
+  {
+    "who": "grace",
+    "text": "Eleven years here. A long time to be invisible."
+  },
+  {
+    "who": "grace",
+    "text": "Oh, stop it. This old thing?"
+  },
+  {
+    "who": "grace",
+    "text": "No! No. I've got it. Thank you, love."
+  },
+  {
+    "who": "grace",
+    "text": "You did fine this week. Better than fine, actually."
+  },
+  {
+    "who": "grace",
+    "text": "Mm. Right."
+  },
+  {
+    "who": "grace",
+    "text": "Ha, yes."
+  },
+  {
+    "who": "grace",
+    "text": "Oh, really?"
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, I'm a bit distracted tonight."
+  },
+  {
+    "who": "grace",
+    "text": "And you? Any plans for the weekend?"
+  },
+  {
+    "who": "grace",
+    "text": "So, how was your first week, Alex?"
+  },
+  {
+    "who": "grace",
+    "text": "Do you like London so far?"
+  },
+  {
+    "who": "grace",
+    "text": "Do you miss home?"
+  },
+  {
+    "who": "grace",
+    "text": "Anyway, I really should go."
+  },
+  {
+    "who": "grace",
+    "text": "Right... I'm off then."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, love, I'm in a hurry."
+  },
+  {
+    "who": "grace",
+    "text": "Is that the door?"
+  },
+  {
+    "who": "dev",
+    "text": "SwiftBox! Pickup for Hollis?"
+  },
+  {
+    "who": "grace",
+    "text": "...Oh. Right. Yes. Here it is."
+  },
+  {
+    "who": "guest",
+    "text": "Any plans for the weekend?"
+  },
+  {
+    "who": "guest",
+    "text": "Would you like a cup of tea?"
+  },
+  {
+    "who": "guest",
+    "text": "Do you have any pets?"
+  },
+  {
+    "who": "guest",
+    "text": "Do you like London?"
+  },
+  {
+    "who": "guest",
+    "text": "How long have you worked here?"
+  },
+  {
+    "who": "grace",
+    "text": "Goodnight, Alex."
+  },
+  {
+    "who": "grace",
+    "text": "...I need to sit down."
+  },
+  {
+    "who": "grace",
+    "text": "Well. That's that. Night, Alex. Have a good weekend."
+  },
+  {
+    "who": "grace",
+    "text": "I'm going home."
+  },
+  {
+    "who": "grace",
+    "text": "I don't know what you mean."
+  },
+  {
+    "who": "grace",
+    "text": "What are you talking about?"
+  },
+  {
+    "who": "grace",
+    "text": "That's ridiculous."
+  },
+  {
+    "who": "grace",
+    "text": "It's just a box, Alex."
+  },
+  {
+    "who": "grace",
+    "text": "Wharf Lane? That's... a recycling partner. A small one."
+  },
+  {
+    "who": "grace",
+    "text": "Anyone can take a spare badge! They're in my drawer— oh."
+  },
+  {
+    "who": "grace",
+    "text": "You were listening to my calls?"
+  },
+  {
+    "who": "grace",
+    "text": "It's laptops. Old laptops!"
+  },
+  {
+    "who": "grace",
+    "text": "...Who are you?"
+  },
+  {
+    "who": "grace",
+    "text": "The office assistant. Right. Harmless."
+  },
+  {
+    "who": "guest",
+    "text": "Sorry, could you repeat that?"
+  },
+  {
+    "who": "guest",
+    "text": "Sorry, I'm new here."
+  },
+  {
+    "who": "guest",
+    "text": "I'm from"
+  },
+  {
+    "who": "guest",
+    "text": "I worked as"
+  },
+  {
+    "who": "guest",
+    "text": "Nice to meet you."
+  },
+  {
+    "who": "guest",
+    "text": "Can I take a message?"
+  },
+  {
+    "who": "guest",
+    "text": "What does mean?"
+  },
+  {
+    "who": "guest",
+    "text": "How do you spell that?"
+  },
+  {
+    "who": "guest",
+    "text": "How about you?"
+  },
+  {
+    "who": "guest",
+    "text": "Yesterday I"
+  },
+  {
+    "who": "guest",
+    "text": "Today I'm going to"
+  },
+  {
+    "who": "guest",
+    "text": "No blockers."
+  },
+  {
+    "who": "guest",
+    "text": "I'm just getting some water."
+  },
+  {
+    "who": "guest",
+    "text": "I'm calling about"
+  },
+  {
+    "who": "guest",
+    "text": "Could you change the address?"
+  },
+  {
+    "who": "guest",
+    "text": "Yes, that's right."
+  },
+  {
+    "who": "guest",
+    "text": "Really? / Oh, nice!"
+  },
+  {
+    "who": "guest",
+    "text": "Just a moment, please."
+  },
+  {
+    "who": "guest",
+    "text": "People is the team for hiring and staff. Like HR."
+  },
+  {
+    "who": "guest",
+    "text": "The People Lead is the boss of HR: hiring, teams, people."
+  },
+  {
+    "who": "guest",
+    "text": "The office manager runs the office: deliveries, rooms, everything."
+  },
+  {
+    "who": "guest",
+    "text": "An office assistant helps with everything: phones, post, meetings."
+  },
+  {
+    "who": "guest",
+    "text": "The Tube is the London underground. The metro."
+  },
+  {
+    "who": "guest",
+    "text": "A courier brings and takes boxes and letters."
+  },
+  {
+    "who": "guest",
+    "text": "A weakness is something you are not good at."
+  },
+  {
+    "who": "guest",
+    "text": "Half six means six thirty. Half past six."
+  },
+  {
+    "who": "guest",
+    "text": "Ta-ra means goodbye. Very British."
+  },
+  {
+    "who": "guest",
+    "text": "Ta means thanks. Very British."
+  },
+  {
+    "who": "guest",
+    "text": "Settling in means getting used to a new place."
+  },
+  {
+    "who": "guest",
+    "text": "G'day means hello. It's Australian."
+  },
+  {
+    "who": "guest",
+    "text": "Mate means friend."
+  },
+  {
+    "who": "guest",
+    "text": "A badge is a small card. It opens the office door."
+  },
+  {
+    "who": "guest",
+    "text": "Spare means extra. Not used by anyone."
+  },
+  {
+    "who": "guest",
+    "text": "A sticky note is a small yellow paper."
+  },
+  {
+    "who": "guest",
+    "text": "A stand-up is a short team meeting in the morning."
+  },
+  {
+    "who": "guest",
+    "text": "Blockers are problems. Things that stop your work."
+  },
+  {
+    "who": "guest",
+    "text": "A blocker is a problem. Something that stops your work."
+  },
+  {
+    "who": "guest",
+    "text": "Logs are records. The computer writes down who came in and when."
+  },
+  {
+    "who": "guest",
+    "text": "A dentist is a doctor for your teeth."
+  },
+  {
+    "who": "guest",
+    "text": "Crush it means do a really good job. A silly office phrase."
+  },
+  {
+    "who": "guest",
+    "text": "Recycling is when old things go to be used again."
+  },
+  {
+    "who": "guest",
+    "text": "A pickup is when a courier comes and takes a box."
+  },
+  {
+    "who": "guest",
+    "text": "A booking is a reservation. Like a ticket."
+  },
+  {
+    "who": "guest",
+    "text": "Your surname is your family name. Like Frost."
+  },
+  {
+    "who": "guest",
+    "text": "The lot means everything."
+  },
+  {
+    "who": "guest",
+    "text": "Harmless means not dangerous."
+  },
+  {
+    "who": "guest",
+    "text": "A server is a big computer for the whole company."
+  },
+  {
+    "who": "guest",
+    "text": "I'm from Riga, in Latvia."
+  },
+  {
+    "who": "guest",
+    "text": "I'm from Tallinn, in Estonia."
+  },
+  {
+    "who": "guest",
+    "text": "I'm from Vilnius, in Lithuania."
+  },
+  {
+    "who": "guest",
+    "text": "I worked as a receptionist in a hotel."
+  },
+  {
+    "who": "guest",
+    "text": "I worked as a barista in a café."
+  },
+  {
+    "who": "guest",
+    "text": "I worked in a call centre."
+  },
+  {
+    "who": "guest",
+    "text": "I like running."
+  },
+  {
+    "who": "guest",
+    "text": "I like cooking."
+  },
+  {
+    "who": "guest",
+    "text": "I like chess."
+  }
+]

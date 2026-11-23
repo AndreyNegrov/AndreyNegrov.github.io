@@ -43,6 +43,25 @@ const Game = {
   clockText() { return $("#hud-time").textContent || ""; },
   inPlay() { return this.playing; },
   onLeave(fn) { this.cleanups.push(fn); },
+  skipScene(delta) {
+    if (!this.playing) return;
+    const fl = this.flow();
+    const next = clamp((state.step || 0) + delta, 0, fl.length - 1);
+    if (next === state.step && delta > 0) return this.title();
+    Voice.stop();
+    state.step = next;
+    Store.save();
+    this.run();
+  },
+  skipStep() {
+    if (!this.playing) return;
+    if (Voice.busy()) { Voice.stop(); return; }
+    if (ReplyBox.active && ReplyBox.active.isWaiting()) { ReplyBox.active.skip(); return; }
+    const btn = [...document.querySelectorAll("#scene .btn.primary:not(:disabled), #scene .o-ring-btn, #scene [data-act='go'], #scene [data-act='next']")]
+      .find((b) => (b.checkVisibility ? b.checkVisibility() : b.offsetParent !== null));
+    if (btn) { btn.click(); return; }
+    this.skipScene(1);
+  },
   leave() {
     if (this.tok) this.tok.dead = true;
     const fns = this.cleanups;
@@ -67,10 +86,13 @@ const Game = {
   title(pick) {
     this.leave();
     this.playing = false;
-    // Какой сезон показать: выбранный вкладкой, иначе последний сыгранный, иначе новый.
+    const sb = $("#skip-bar");
+    if (sb) sb.hidden = true;
+    // Какой сезон показать: выбранный вкладкой, иначе последний сыгранный, иначе «Онбординг».
     let last = null;
-    try { last = localStorage.getItem("iney-last-pack"); } catch { /* без хранилища показываем новый сезон */ }
-    const pid = PACKS[pick] ? pick : PACKS[last] ? last : "halo";
+    try { last = localStorage.getItem("iney-last-pack"); } catch { /* без хранилища показываем первый сезон */ }
+    const canOpen = (id) => !!(PACKS[id] && !PACKS[id].meta.soon);
+    const pid = canOpen(pick) ? pick : canOpen(last) ? last : "office";
     const pk = PACKS[pid], M = pk.meta;
     // У мультяшного сезона и титул свой, мультяшный (Toon.title в js/toon.js).
     const toon = M.theme === "toon";
@@ -79,7 +101,6 @@ const Game = {
     document.body.classList.add("s3");
     document.body.dataset.m = "";
     Sound.setAmbience(null);
-    this.titleMusic();
     Pack.use(pid);
     UI.setBg(M.bg, toon ? "day" : M.look);
     const saves = { 1: Store.peek("iney-v2"), 2: Store.peek("iney-s2d") };
@@ -108,16 +129,10 @@ const Game = {
     }).join("");
     const tabs = Pack.list().map((id) => {
       const m = PACKS[id].meta, played = has(m.season);
-      return `<button class="t-tab ${id === pid ? "on" : ""}" data-act="pack" data-pack="${id}"><b>${esc(m.tab)}</b><span>${m.isNew && !played ? "новый" : played ? "начат" : "не начат"}</span></button>`;
+      if (m.soon) return `<button class="t-tab locked" type="button" disabled title="Скоро появится"><b>${esc(m.tab)}</b><span>скоро</span></button>`;
+      return `<button class="t-tab ${id === pid ? "on" : ""}" data-act="pack" data-pack="${id}"><b>${esc(m.tab)}</b><span>${played ? "начат" : "доступен"}</span></button>`;
     }).join("");
-    const archive = `
-        <details class="o-archive">
-          <summary>Архив: первые сезоны</summary>
-          <div class="season-row">
-            ${card(1, "Сезон 1", "Квартира 4B", "Лев пропал. На складе напротив пишут одно, а грузят другое.", has(1))}
-            ${card(2, "Сезон 2", "Звонок", "Мира не вернулась к десяти. Её подруга звонит вам сама.", has(2))}
-          </div>
-        </details>`;
+    const archive = "";
     $("#scene").innerHTML = toon ? Toon.title({ pk, M, sv, hasCur, where, stars, trained, tabs, archive }) : `
       <section class="title hub o-title">
         <header class="t-top">
@@ -148,6 +163,7 @@ const Game = {
     // На узком экране вкладки прокручиваются: выбранная должна быть видна целиком.
     const tt = $(".t-tabs"), on = tt && $(".t-tab.on", tt);
     if (on) { const d = on.getBoundingClientRect().right - tt.getBoundingClientRect().right; if (d > 0) tt.scrollLeft += d + 6; }
+    this.titleMusic();
     $(".title").addEventListener("click", (e) => {
       const a = e.target.closest("[data-act]");
       if (!a) return;
@@ -274,6 +290,8 @@ const Game = {
     const tok = (this.tok = { dead: false });
     this.playing = true;
     this.paused = false;
+    const sb = $("#skip-bar");
+    if (sb) sb.hidden = false;
     Theme.set(state.season === 3 ? Pack.meta().theme || "night" : "night");
     UI.setBg(sc.bg, sc.look || "day");
     UI.hud(sc);
@@ -630,6 +648,18 @@ const REPLAY_NIGHT = {
 };
 
 Game.boot();
+
+const skipBar = $("#skip-bar");
+if (skipBar) {
+  skipBar.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-skip]");
+    if (!b) return;
+    const act = b.dataset.skip;
+    if (act === "prev") Game.skipScene(-1);
+    else if (act === "step") Game.skipStep();
+    else if (act === "next") Game.skipScene(1);
+  });
+}
 
 // Enter нажимает главную кнопку экрана, когда она одна: «Дальше», «Принять заказ», «Начать».
 window.addEventListener("keydown", (e) => {

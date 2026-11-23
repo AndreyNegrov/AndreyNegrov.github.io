@@ -23,7 +23,7 @@ const Rounds = {
           <section class="o-rounds">
             <div class="o-map-wrap"><div class="o-map">
               ${OfficeMap.svg()}
-              ${finds.map((f) => { const p = OfficeMap.pct(f.at); return `<button class="o-hot ${s.has(f.id) ? "seen" : ""}" data-find="${f.id}" style="left:${p.x}%;top:${p.y}%" title="${esc(f.title)}">${f.ico}</button>`; }).join("")}
+              ${finds.map((f) => { const p = OfficeMap.pct(f.at); return `<button class="o-hot ${s.has(f.id) ? "seen" : ""}" data-find="${f.id}" style="left:${p.x}%;top:${p.y}%" title="${esc(f.title)}">${f.ico}<span class="o-hot-lbl">${esc(f.title)}</span></button>`; }).join("")}
               ${sc.people.map((p) => OfficeMap.token(p.at, p.who, { label: PEOPLE[p.who].name, cls: d.has(p.who) ? "done" : "live", act: d.has(p.who) ? "" : "talk" })).join("")}
               <div class="o-tok me" style="left:${mePos.x}%;top:${mePos.y}%">${avatar("you", "o-tok-face")}<span class="o-tok-label">Вы</span></div>
             </div></div>
@@ -38,7 +38,7 @@ const Rounds = {
                   <div><b>${esc(PEOPLE[p.who].name)}</b><span>${esc(d.has(p.who) ? [x.role, x.thursday].filter(Boolean).join(" · ") || "поговорили" : p.lead)}</span></div>
                   <i>${d.has(p.who) ? "✓" : "→"}</i></button>`;
               }).join("")}</div>
-              ${finds.length ? `<div class="o-findbar"><span>Находки в офисе</span><div>${finds.map((f) => `<i class="${s.has(f.id) ? "on" : ""}">${f.ico}</i>`).join("")}</div><small>Розовые метки на карте: записки, экраны, объявления. За каждую — опыт.</small></div>` : ""}
+              ${finds.length ? `<div class="o-findbar"><div class="o-findbar-head"><span>Бонус · осмотр офиса</span><b>${s.size} из ${finds.length}</b></div><div class="o-findbar-list">${finds.map((f) => `<button type="button" class="o-find-btn ${s.has(f.id) ? "on" : ""}" data-find="${f.id}" title="${esc(f.title)}"><i>${f.ico}</i><span>${esc(f.title)}</span><em>${s.has(f.id) ? "✓" : "+XP"}</em></button>`).join("")}</div><small>Можно нажать здесь или на розовую метку на карте — внутри улики и бонусный опыт.</small></div>` : ""}
               <button class="btn primary wide" data-act="finish" ${all ? "" : "disabled"}>${all ? "Написать Сове" : "Сначала со всеми"}</button>
               <p class="muted small">Досье и легенда — в блокноте (N).</p>
             </aside>

@@ -31,7 +31,10 @@ const Toon = {
     const B = BADGES[id] || {}, t = TOON_BADGES[id] || [];
     return { ...B, emo: t[0] || "🏅", name: t[1] || B.name || id };
   },
-  owl(mood = "") { return Face.svg("owl", "", { mood }); },
+  owl(mood = "") {
+    const src = PEOPLE.sova && PEOPLE.sova.img;
+    return src ? `<img class="o-photo o-owl-img" src="${src}" alt="">` : Face.svg("owl", "", { mood });
+  },
 
   // ───── титул, когда выбрана вкладка мультяшного сезона: как в прежней версии, плюс вкладки сезонов ─────
   // d: { pk, M, sv, hasCur, where, stars, trained, tabs, archive } — всё посчитано в Game.title.
@@ -539,7 +542,13 @@ const LiftCab = {
         </div>
       </section>`;
     const root = $(".a-lift"), npc = $(".lift-npc", root), bub = $(".o-bubble", root), opts = $(".lift-opts", root);
-    const face = (mood) => { npc.innerHTML = Face.svg(PEOPLE[who].face, "", { bare: true, mood }); };
+    const face = (mood) => {
+      const p = PEOPLE[who] || {};
+      const src = (p.faces && (p.faces[mood] || p.faces.calm)) || p.img;
+      npc.innerHTML = src
+        ? `<img class="o-photo" src="${src}" alt="">`
+        : Face.svg(p.face, "", { bare: true, mood });
+    };
     face("");
     let awkward = 0, right = 0, voiceHits = 0, floor = 0;
     const drawAwk = () => { $(".lift-awk", root).innerHTML = items.map((_, i) => `<i class="${i < awkward ? "on" : ""}">😬</i>`).join(""); };

@@ -1,0 +1,34 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-bg-title.txt",
+    "w": 1280,
+    "h": 720,
+    "seed": 71,
+    "out": "art/office/bg-title.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-bg-home-dawn.txt",
+    "w": 1280,
+    "h": 720,
+    "seed": 82,
+    "out": "art/office/bg-home-dawn.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-bg-office-dusk.txt",
+    "w": 1280,
+    "h": 720,
+    "seed": 93,
+    "out": "art/office/bg-office-dusk.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-bg-office-night.txt",
+    "w": 1280,
+    "h": 720,
+    "seed": 104,
+    "out": "art/office/bg-office-night.jpg"
+  }
+]

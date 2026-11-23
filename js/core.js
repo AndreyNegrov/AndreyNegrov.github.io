@@ -255,7 +255,7 @@ function enHTML(text, { gaps = false } = {}) {
 
 function avatar(who, cls = "") {
   const p = PEOPLE[who] || PEOPLE.guest;
-  if (p.face && typeof Face !== "undefined") return `<span class="ava ava-face ${cls}">${Face.svg(p.face)}</span>`;
+  if (!p.img && p.face && typeof Face !== "undefined") return `<span class="ava ava-face ${cls}">${Face.svg(p.face)}</span>`;
   return p.img
     ? `<img class="ava ${cls}" src="${p.img}" alt="">`
     : `<div class="ava ava-letter ${cls}">${esc(p.initial || p.name[0])}</div>`;
@@ -643,15 +643,19 @@ function ReplyBox(host, opts = {}) {
   form.addEventListener("submit", (e) => { e.preventDefault(); submit(input.value, "text"); });
   setEnabled(false);
   PTT.bind(handler);
-  return {
+  const api = {
     wait() {
       setEnabled(true);
+      ReplyBox.active = api;
       // Кто в прошлый раз печатал — сразу получает курсор в поле; кто говорил — пробел остаётся рацией.
       if (ReplyBox.via === "text" && !matchMedia("(pointer: coarse)").matches) input.focus({ preventScroll: true });
       return new Promise((r) => { resolver = r; });
     },
+    isWaiting: () => !!(enabled && resolver),
+    skip() { submit("__SKIP__", "skip"); },
     disable() { setEnabled(false); },
     cancel() {
+      if (ReplyBox.active === api) ReplyBox.active = null;
       if (!resolver) return;
       const r = resolver;
       resolver = null;
@@ -659,6 +663,7 @@ function ReplyBox(host, opts = {}) {
       r(null);
     },
     setLabel(next) { label = next; if (!live) micB.textContent = next; },
-    destroy() { PTT.unbind(handler); Mic.abort(); }
+    destroy() { if (ReplyBox.active === api) ReplyBox.active = null; PTT.unbind(handler); Mic.abort(); }
   };
+  return api;
 }

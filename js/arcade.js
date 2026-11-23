@@ -120,7 +120,7 @@ const Decode = {
       card.innerHTML = T ? `
         <header class="a-top"><span class="a-kicker">Шифровка ${idx + 1} из ${total}</span><div class="a-hearts"></div></header>
         <div class="a-timer"><i></i></div>
-        <div class="a-prompt"><div class="a-ava">${Face.svg("owl")}</div><p><small>Собери по-английски</small>«${esc(it.ru)}»</p></div>
+        <div class="a-prompt"><div class="a-ava">${Toon.owl()}</div><p><small>Собери по-английски</small>«${esc(it.ru)}»</p></div>
         <div class="a-line"></div>
         <div class="a-tiles">${tiles.map((t, k) => `<button class="a-tile" data-k="${k}">${esc(t.w)}</button>`).join("")}</div>
         <footer class="a-foot"><button class="btn ghost small" data-act="hear">🔊 Послушать</button><span class="muted small">Ошибка стоит сердечко. Три ошибки — покажу ответ.</span></footer>` : `

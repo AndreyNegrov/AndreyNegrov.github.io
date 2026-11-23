@@ -41,13 +41,13 @@ const Pack = {
   },
   meta(id = this.cur) { return (PACKS[id] || PACKS.relay).meta; },
   bySeason(n) { return Object.values(PACKS).find((p) => p.meta.season === n) || null; },
-  list: () => ["halo", "moon", "relay", "office"]
+  list: () => ["office", "halo", "moon", "relay"]
 };
 
 PACKS.halo = {
   ...HALO,
   meta: {
-    id: "halo", season: 6, key: "iney-halo", tab: "Город слушается", isNew: true, theme: "toon",
+    id: "halo", season: 6, key: "iney-halo", tab: "Город слушается", isNew: true, soon: true, theme: "toon",
     heat: "След", failKicker: "Не вышло",
     kicker: "Шесть ночей", title: "Город слушается", unit: "Ночь", cta: "Сесть в такси",
     lead: "2031 год, остров Хейло. Здесь нет руля и выключателей: город слушается голоса. Ты приехал на ночную смену.",
@@ -61,7 +61,7 @@ PACKS.halo = {
 PACKS.relay = {
   ...Pack.snap(),
   meta: {
-    id: "relay", season: 3, key: "iney-relay", tab: "Последняя миля",
+    id: "relay", season: 3, key: "iney-relay", tab: "Последняя миля", soon: true,
     kicker: "Сезон · шесть ночей", title: "Последняя миля", unit: "Ночь", cta: "Выйти на линию",
     lead: "Ночной Лондон. Приложение доставки Relay возит не только еду. Трое курьеров уже исчезли. Ты — четвёртый.",
     bg: "art/lobby.jpg", look: "cine",
@@ -73,7 +73,7 @@ PACKS.relay = {
 PACKS.moon = {
   ...MOON,
   meta: {
-    id: "moon", season: 4, key: "iney-moon", tab: "Дождь на Луне", isNew: true,
+    id: "moon", season: 4, key: "iney-moon", tab: "Дождь на Луне", isNew: true, soon: true,
     kicker: "Новый сезон · шесть смен", title: "Дождь на Луне", unit: "Смена", cta: "Лететь",
     lead: "Лунный город Порт Шеклтон. Контора Keepsake покупает у людей воспоминания. Кто-то скупил девять воспоминаний об одной и той же ночи.",
     bg: "set:dome", look: "cine",
@@ -91,7 +91,7 @@ PACKS.office = {
     id: "office", season: 5, key: "iney-s3", tab: "Онбординг", isNew: true, theme: "toon",
     kicker: "Сезон · 6 миссий", title: "Онбординг", unit: "Миссия", cta: "Начать сезон",
     lead: "Тебя взяли офис-ассистентом в лондонский стартап. Внутри — крот, сделка в пятницу. Переводчика нет: твой английский и есть твоя легенда.",
-    bg: "svg:city-night", look: "cine",
+    bg: "art/office/bg-title.jpg", look: "cine",
     dossierNote: "Подозреваемые: у кого был пропуск №07 в прошлый четверг в 21:40.",
     legendKicker: "Легенда · рабочая виза UK",
     legendLead: "Frost — это «иней». Сова считает, что это смешно. В Лондоне — два месяца: two months.",
@@ -103,4 +103,4 @@ PACKS.office = {
   }
 };
 
-Pack.use("relay");
+Pack.use("office");

@@ -1,0 +1,122 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-grace-happy.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 107,
+    "out": "art/office/p-grace-happy.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-grace-sus.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 107,
+    "out": "art/office/p-grace-sus.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-grace-worried.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 107,
+    "out": "art/office/p-grace-worried.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-priya-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 204,
+    "out": "art/office/p-priya-calm.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-priya-happy.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 204,
+    "out": "art/office/p-priya-happy.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-priya-sus.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 204,
+    "out": "art/office/p-priya-sus.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-tom-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 311,
+    "out": "art/office/p-tom-calm.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-tom-happy.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 311,
+    "out": "art/office/p-tom-happy.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-tom-sus.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 311,
+    "out": "art/office/p-tom-sus.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-max-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 418,
+    "out": "art/office/p-max-calm.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-max-happy.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 418,
+    "out": "art/office/p-max-happy.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-max-sus.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 418,
+    "out": "art/office/p-max-sus.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-dev-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 525,
+    "out": "art/office/p-dev-calm.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-dev-happy.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 525,
+    "out": "art/office/p-dev-happy.jpg"
+  },
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-sova-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 632,
+    "out": "art/office/p-sova-calm.jpg"
+  }
+]

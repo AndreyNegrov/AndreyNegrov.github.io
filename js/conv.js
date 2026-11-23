@@ -154,6 +154,10 @@ const Conv = {
     while (!tok.dead) {
       const text = await raceDead(tok, ui.reply.wait());
       if (tok.dead || text == null) return null;
+      if (text === "__SKIP__") {
+        if (b.done) b.done(state, new Set(facts.map((f) => f.id)));
+        return null;
+      }
       ui.revealAll();
       ui.playerLine(text);
       ctx.history.push({ who: "Player", text });
@@ -276,6 +280,10 @@ const Conv = {
       if (turns >= (b.maxTurns || 9) && !more) { await this.say(ctx, who, b.busy || "Anyway, I need to get back to work."); break; }
       const text = await raceDead(tok, ui.reply.wait());
       if (tok.dead || text == null) return null;
+      if (text === "__SKIP__") {
+        required.forEach((t) => { if (t.dossier) Dossier.set(...t.dossier); if (t.clue) Clues.add(t.clue); });
+        return null;
+      }
       ui.revealAll();
       ui.playerLine(text);
       ctx.history.push({ who: "Player", text });
@@ -652,7 +660,7 @@ const ConvUI = {
       notify(text) {
         const n = $(".o-notify", root);
         n.hidden = false;
-        n.innerHTML = `<div class="o-notify-ava">${toon ? Face.svg("owl") : avatar("sova", "sm")}</div><div><b>Сова</b><p>${esc(text)}</p></div>`;
+        n.innerHTML = `<div class="o-notify-ava">${toon ? Toon.owl() : avatar("sova", "sm")}</div><div><b>Сова</b><p>${esc(text)}</p></div>`;
         n.classList.remove("in");
         void n.offsetWidth;
         n.classList.add("in");

@@ -860,3 +860,24 @@ body:has(#notebook:not([hidden])) .phone-hang { right: min(460px, calc(100vw - 1
   #caption { width: min(92vw, 640px); top: 64px; }
   #toasts { right: 10px; left: 10px; top: 64px; }
 }
+
+/* Незаметная панель перемотки сцен и шагов (левый нижний угол) */
+#skip-bar {
+  position: fixed; left: 12px; bottom: 10px; z-index: 60;
+  display: inline-flex; gap: 2px; padding: 3px;
+  border-radius: 999px;
+  background: rgba(12, 16, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  opacity: 0.22;
+  transition: opacity 0.2s ease;
+}
+#skip-bar[hidden] { display: none; }
+#skip-bar:hover { opacity: 0.95; }
+#skip-bar button {
+  background: transparent; border: 0; color: rgba(255, 255, 255, 0.88);
+  width: 26px; height: 24px; border-radius: 999px; cursor: pointer;
+  font-size: 13px; line-height: 1; display: grid; place-items: center;
+  transition: background 0.15s;
+}
+#skip-bar button:hover { background: rgba(255, 255, 255, 0.16); }

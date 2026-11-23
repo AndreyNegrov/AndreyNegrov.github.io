@@ -218,6 +218,39 @@ const Voice = (() => {
   let lastCancel = 0;
   let cloudBroken = false;
   const cache = new Map();
+  let localManifest = null;
+  let localLoading = null;
+
+  function loadLocalManifest() {
+    if (localManifest) return Promise.resolve(localManifest);
+    if (localLoading) return localLoading;
+    localLoading = fetch("audio/office/manifest.json")
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => ({}))
+      .then((m) => { localManifest = m || {}; return localManifest; });
+    return localLoading;
+  }
+  // Загружаем карту озвучки заранее, чтобы первая реплика звучала без задержки.
+  loadLocalManifest();
+  const normKey = (t) => String(t || "").replace(/\s+/g, " ").trim().toLowerCase();
+  function localUrl(who, text) {
+    if (!localManifest) return null;
+    const isOffice = typeof Pack !== "undefined" && Pack.cur === "office";
+    if (!isOffice && !["priya", "grace", "tom", "max", "dev"].includes(who)) return null;
+    const nk = normKey(text);
+    return localManifest[(who || "guest") + "|" + nk] || localManifest["*|" + nk] || null;
+  }
+  async function localBuffer(url) {
+    if (cache.has(url)) return cache.get(url);
+    const p = (async () => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("audio " + res.status);
+      return Sound.ctx.decodeAudioData(await res.arrayBuffer());
+    })();
+    cache.set(url, p);
+    p.catch(() => cache.delete(url));
+    return p;
+  }
 
   function load() { voices = synth ? synth.getVoices() : []; }
   if (synth) { load(); synth.onvoiceschanged = load; }
@@ -316,6 +349,66 @@ const Voice = (() => {
     ws.curve = curve;
     return ws;
   }
+  function applyFx(node, fx) {
+    if (fx === "wall") node = Sound.chain(node, Sound.filter("lowpass", 520), Sound.gain(1.4));
+    if (fx === "radio") node = Sound.chain(node, Sound.filter("highpass", 450), Sound.filter("lowpass", 2600), radioShaper(), Sound.gain(0.8));
+    if (fx === "phone") node = Sound.chain(node, Sound.filter("highpass", 320), Sound.filter("lowpass", 3200));
+    if (fx === "dock") node = Sound.chain(node, Sound.filter("lowpass", 2200), Sound.gain(0.75));
+    if (fx === "table") node = Sound.chain(node, Sound.filter("lowpass", 900), Sound.gain(0.55));
+    if (fx === "aside") node = Sound.chain(node, Sound.filter("lowpass", 1800), Sound.gain(0.5));
+    return node;
+  }
+  function localSay(url, text, o) {
+    let resolve;
+    const done = new Promise((r) => { resolve = r; });
+    let el = null, stopped = false, fallback = null;
+    const finish = (ok) => { resolve(ok); };
+    try {
+      Sound.ensure();
+      el = new Audio(url);
+      el.crossOrigin = "anonymous";
+      el.preservesPitch = true;
+      el.mozPreservesPitch = true;
+      el.webkitPreservesPitch = true;
+      el.playbackRate = clamp(o.playRate || 1, 0.72, 1.3);
+      if (Sound.ctx) {
+        const src = Sound.ctx.createMediaElementSource(el);
+        const node = applyFx(src, o.fx);
+        Sound.chain(node, Sound.gain(o.volume ?? 1), Sound.voiceBus);
+      } else {
+        el.volume = clamp((o.volume ?? 1) * (FX_VOL[o.fx] || 1) * Settings.get().voiceVol, 0, 1);
+      }
+      el.onended = () => finish(!stopped);
+      el.onerror = () => {
+        if (stopped) return finish(false);
+        fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
+        fallback.done.then((ok) => finish(ok));
+      };
+      el.play().catch(() => {
+        if (stopped) return finish(false);
+        fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
+        fallback.done.then((ok) => finish(ok));
+      });
+    } catch {
+      fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
+      fallback.done.then((ok) => finish(ok));
+    }
+    return {
+      done,
+      stop() {
+        if (stopped) return;
+        stopped = true;
+        if (el) { try { el.pause(); el.src = ""; } catch { /* ignore */ } }
+        if (fallback) fallback.stop();
+        resolve(false);
+      },
+      progress() {
+        if (fallback) return fallback.progress();
+        if (!el || !el.duration || !isFinite(el.duration)) return 0;
+        return clamp(el.currentTime / el.duration, 0, 1);
+      }
+    };
+  }
   function cloudSay(text, o) {
     let resolve;
     const done = new Promise((r) => { resolve = r; });
@@ -336,14 +429,7 @@ const Voice = (() => {
         const ctx = Sound.ctx;
         src = ctx.createBufferSource();
         src.buffer = buf;
-        let node = src;
-        const fx = o.fx;
-        if (fx === "wall") node = Sound.chain(node, Sound.filter("lowpass", 520), Sound.gain(1.4));
-        if (fx === "radio") node = Sound.chain(node, Sound.filter("highpass", 450), Sound.filter("lowpass", 2600), radioShaper(), Sound.gain(0.8));
-        if (fx === "phone") node = Sound.chain(node, Sound.filter("highpass", 320), Sound.filter("lowpass", 3200));
-        if (fx === "dock") node = Sound.chain(node, Sound.filter("lowpass", 2200), Sound.gain(0.75));
-        if (fx === "table") node = Sound.chain(node, Sound.filter("lowpass", 900), Sound.gain(0.55));
-        if (fx === "aside") node = Sound.chain(node, Sound.filter("lowpass", 1800), Sound.gain(0.5));
+        const node = applyFx(src, o.fx);
         Sound.chain(node, Sound.gain(o.volume ?? 1), Sound.voiceBus);
         src.onended = () => finish(!stopped);
         startAt = ctx.currentTime;
@@ -385,16 +471,21 @@ const Voice = (() => {
     const lang = opts.lang || (person && person.lang) || "en";
     const s = Settings.get();
     const fx = opts.fx || "clean";
+    const playRate = (opts.rate || 1) * (lang === "ru" ? 1 : level().rate) * s.speed;
     const o = {
       lang, fx, g: pv.g, pitch: pv.pitch, cloud: pv.cloud, style: pv.style, prefer: pv.prefer,
       seed: hash(opts.who || pv.cloud || "guest"),
-      rate: (opts.rate || 1) * (pv.rate || 1) * (lang === "ru" ? 1 : level().rate) * s.speed,
+      rate: playRate * (pv.rate || 1),
+      playRate,
       volume: opts.volume ?? 1
     };
     stop();
     Sound.ensure();
-    const cloud = s.cloudVoices && s.provider === "openai" && s.apiKey && !cloudBroken;
-    const raw = cloud ? cloudSay(text, o) : browserSay(text, { ...o, volume: o.volume * (FX_VOL[fx] || 1) * s.voiceVol });
+    const local = lang === "en" ? localUrl(opts.who, text) : null;
+    const cloud = !local && s.cloudVoices && s.provider === "openai" && s.apiKey && !cloudBroken;
+    const raw = local
+      ? localSay(local, text, o)
+      : cloud ? cloudSay(text, o) : browserSay(text, { ...o, volume: o.volume * (FX_VOL[fx] || 1) * s.voiceVol });
     let settled = false;
     const done = new Promise((resolve) => {
       const cap = setTimeout(() => {

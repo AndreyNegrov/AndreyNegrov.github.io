@@ -1,0 +1,10 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-map-office.txt",
+    "w": 1280,
+    "h": 800,
+    "seed": 303,
+    "out": "art/office/map-office.jpg"
+  }
+]

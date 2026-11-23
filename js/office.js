@@ -4,21 +4,26 @@
 
 const OFFICE = (() => {
   const people = {
-    sova: { name: "Сова", role: "куратор", lang: "ru", gender: "f", face: "owl",
+    sova: { name: "Сова", role: "куратор", lang: "ru", gender: "f", face: "owl", img: "art/office/p-sova-calm.jpg",
       voice: { g: "f", pitch: 1, rate: 1.05, prefer: ["Svetlana", "Dariya", "Irina", "ru-RU"], cloud: "sage", style: "Dry, ironic female handler. Speaks Russian." } },
-    priya: { name: "Priya", role: "People Lead, Murmur", gender: "f",
+    priya: { name: "Priya", role: "People Lead, Murmur", gender: "f", img: "art/office/p-priya-calm.jpg",
+      faces: { calm: "art/office/p-priya-calm.jpg", happy: "art/office/p-priya-happy.jpg", wow: "art/office/p-priya-happy.jpg", sus: "art/office/p-priya-sus.jpg", hm: "art/office/p-priya-sus.jpg", angry: "art/office/p-priya-sus.jpg", sad: "art/office/p-priya-sus.jpg" },
       face: { skin: "#a8714f", hair: "#1b1210", style: "long", wear: "blazer", top: "#d94f7c", earrings: "#fff1b8", bg: "#ffd23f", brows: "up" },
       voice: { g: "f", pitch: 1.04, rate: 1.02, prefer: ["Neerja", "en-IN", "Libby", "Aria", "Jenny", "Samantha"], cloud: "shimmer", style: "Energetic HR lead, friendly, a bit corporate." } },
-    grace: { name: "Grace", role: "офис-менеджер, Murmur", gender: "f",
+    grace: { name: "Grace", role: "офис-менеджер, Murmur", gender: "f", img: "art/office/p-grace-calm.jpg",
+      faces: { calm: "art/office/p-grace-calm.jpg", happy: "art/office/p-grace-happy.jpg", wow: "art/office/p-grace-happy.jpg", sus: "art/office/p-grace-sus.jpg", hm: "art/office/p-grace-sus.jpg", angry: "art/office/p-grace-worried.jpg", sad: "art/office/p-grace-worried.jpg", worried: "art/office/p-grace-worried.jpg" },
       face: { skin: "#f0c8a6", hair: "#c7a77a", style: "bob", wear: "cardigan", top: "#4d7aa8", glasses: "#6b4a2b", bg: "#7ee6c4", lips: "#b5655a" },
       voice: { g: "f", pitch: 1, rate: 1, prefer: ["Sonia", "Hazel", "UK English Female", "Maisie", "Susan", "en-GB"], cloud: "coral", style: "Warm, chatty British office manager in her fifties." } },
-    tom: { name: "Tom", role: "IT, Murmur", gender: "m",
+    tom: { name: "Tom", role: "IT, Murmur", gender: "m", img: "art/office/p-tom-calm.jpg",
+      faces: { calm: "art/office/p-tom-calm.jpg", happy: "art/office/p-tom-happy.jpg", wow: "art/office/p-tom-happy.jpg", sus: "art/office/p-tom-sus.jpg", hm: "art/office/p-tom-sus.jpg", angry: "art/office/p-tom-sus.jpg", sad: "art/office/p-tom-calm.jpg" },
       face: { skin: "#ecc4a2", hair: "#9a4a22", style: "messy", wear: "hoodie", top: "#4a4f9e", beard: "#9a4a22", bg: "#9db8ff", brows: "grumpy", mood: "flat" },
       voice: { g: "m", pitch: 0.95, rate: 1, prefer: ["Connor", "en-IE", "Ryan", "George", "UK English Male"], cloud: "onyx", style: "Grumpy Irish IT guy, dry humour." } },
-    max: { name: "Max", role: "продажи, Murmur", gender: "m",
+    max: { name: "Max", role: "продажи, Murmur", gender: "m", img: "art/office/p-max-calm.jpg",
+      faces: { calm: "art/office/p-max-calm.jpg", happy: "art/office/p-max-happy.jpg", wow: "art/office/p-max-happy.jpg", sus: "art/office/p-max-sus.jpg", hm: "art/office/p-max-sus.jpg", angry: "art/office/p-max-sus.jpg", sad: "art/office/p-max-sus.jpg" },
       face: { skin: "#c99068", hair: "#2a1a10", style: "quiff", wear: "shirt", top: "#eef1f4", beard: "#2a1a10", stubble: true, bg: "#ff9f6b" },
       voice: { g: "m", pitch: 1.03, rate: 1.06, prefer: ["William", "en-AU", "Guy", "Christopher", "David"], cloud: "echo", style: "Charming Australian salesman, fast and friendly." } },
-    dev: { name: "Dev", role: "диспетчер SwiftBox", gender: "m",
+    dev: { name: "Dev", role: "диспетчер SwiftBox", gender: "m", img: "art/office/p-dev-calm.jpg",
+      faces: { calm: "art/office/p-dev-calm.jpg", happy: "art/office/p-dev-happy.jpg", wow: "art/office/p-dev-happy.jpg", sus: "art/office/p-dev-calm.jpg", hm: "art/office/p-dev-calm.jpg" },
       face: { skin: "#8f5d3d", hair: "#121212", style: "buzz", wear: "vest", top: "#f3a712", beard: "#121212", stubble: true, bg: "#7fd8e8", headset: true },
       voice: { g: "m", pitch: 1, rate: 1.05, prefer: ["Prabhat", "Thomas", "Ryan", "UK English Male", "en-GB"], cloud: "ash", style: "Busy London courier dispatcher on the phone." } },
     you: { name: "Вы", role: "Alex Frost", face: "self", voice: { g: "m" } }
@@ -237,7 +242,7 @@ const OFFICE = (() => {
     // ═════════ МИССИЯ 1 · СОБЕСЕДОВАНИЕ ═════════
     "o1-open": {
       type: "chat", mission: 1, missionStart: true, chapter: { n: 1, title: "Собеседование", sub: "Среда, 9:50 · Лондон" },
-      time: "09:50", place: "Сообщения", bg: "svg:home-dawn", look: "day", app: "sova",
+      time: "09:50", place: "Сообщения", bg: "art/office/bg-home-dawn.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: "Иней, доброе утро. Лондон, стартап Murmur. Делают наушник-переводчик: вставил в ухо — и понимаешь любой язык." },
         { from: "sova", text: "Кто-то внутри продаёт прототип. Сделка — в эту пятницу. Найди: кто, где и когда." },
@@ -246,10 +251,10 @@ const OFFICE = (() => {
       end: "Открыть легенду"
     },
 
-    "o1-legend": { type: "legend", mission: 1, time: "09:53", place: "Легенда", bg: "svg:home-dawn", look: "day" },
+    "o1-legend": { type: "legend", mission: 1, time: "09:53", place: "Легенда", bg: "art/office/bg-home-dawn.jpg", look: "day" },
 
     "o1-check": {
-      type: "chat", mission: 1, time: "09:57", place: "Сообщения", bg: "svg:home-dawn", look: "day", app: "sova",
+      type: "chat", mission: 1, time: "09:57", place: "Сообщения", bg: "art/office/bg-home-dawn.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: (s) => `${Leg.city(s).ru}, ${Leg.job(s).ru}, ${Leg.hobby(s).ru}. Запомнила. Проверять будут.` },
         { from: "sova", text: "Проверка связи. Нажми «Говорить» (или держи пробел) и скажи по-английски: Hi, I'm Alex. Можно и написать." },
@@ -268,7 +273,7 @@ const OFFICE = (() => {
     },
 
     "o1-interview": {
-      type: "conv", ui: "video", mission: 1, time: "10:00", place: "Видеозвонок", bg: "svg:home-dawn", look: "day",
+      type: "conv", ui: "video", mission: 1, time: "10:00", place: "Видеозвонок", bg: "art/office/bg-home-dawn.jpg", look: "day",
       title: "Murmur · Interview", cast: ["priya", "grace"], npc: "priya", meter: "Собеседование",
       goal: "Получи работу. Отвечай по легенде.",
       situation: "A video job interview at Murmur for an office assistant role. The candidate is Alex Frost, new in London, with simple English.",
@@ -334,7 +339,7 @@ const OFFICE = (() => {
     },
 
     "o1-debrief": {
-      type: "debrief", mission: 1, time: "10:20", place: "Итог", bg: "svg:home-dawn", look: "day",
+      type: "debrief", mission: 1, time: "10:20", place: "Итог", bg: "art/office/bg-home-dawn.jpg", look: "day",
       title: "Тебя взяли",
       sova: (s) => s.clues.halfsix
         ? "Неплохо. А теперь главное: посреди собеседования Грейс ответила на звонок. «Friday's fine. Half six». Half six — это 18:30. Пятница. Держи в голове."
@@ -344,7 +349,7 @@ const OFFICE = (() => {
     // ═════════ МИССИЯ 2 · ПЕРВЫЙ ДЕНЬ ═════════
     "o2-brief": {
       type: "chat", mission: 2, missionStart: true, chapter: { n: 2, title: "Первый день", sub: "Понедельник, 9:10 · офис Murmur" },
-      time: "09:10", place: "Сообщения", bg: "svg:office-day", look: "day", app: "sova",
+      time: "09:10", place: "Сообщения", bg: "art/office/bg-office-day.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: "Первый день. В прошлый четверг в 21:40 кто-то скопировал файлы прототипа. В логах двери — пропуск №07. Чей — неизвестно." },
         { from: "sova", text: "Кандидаты: Том (IT), Макс (продажи), Грейс (офис). Узнай у каждого, чем занимается и что делал в прошлый четверг." },
@@ -354,7 +359,7 @@ const OFFICE = (() => {
     },
 
     "o2-decode": {
-      type: "decode", mission: 2, time: "09:20", place: "Шифровка", bg: "svg:office-day", look: "day",
+      type: "decode", mission: 2, time: "09:20", place: "Шифровка", bg: "art/office/bg-office-day.jpg", look: "day",
       kicker: "Шифровка от Совы", title: "Три вопроса на сегодня", badge: "decoder",
       keys: ["Нажимай слова по порядку", "Лишние слова — ловушки", "🔊 — послушать фразу целиком"],
       goal: "Собери вопросы, которыми будешь работать в офисе.",
@@ -368,7 +373,7 @@ const OFFICE = (() => {
     },
 
     "o2-floor": {
-      type: "rounds", mission: 2, time: "09:30", place: "Офис Murmur", bg: "svg:office-day", look: "day",
+      type: "rounds", mission: 2, time: "09:30", place: "Офис Murmur", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Первый день",
       goal: "Поговори с Томом, Максом и Грейс: чем занимаются и что делали в прошлый четверг.",
       finds: [
@@ -487,7 +492,7 @@ const OFFICE = (() => {
     },
 
     "o2-report": {
-      type: "chat", mission: 2, time: "17:45", place: "Сообщения", bg: "svg:office-dusk", look: "day", app: "sova",
+      type: "chat", mission: 2, time: "17:45", place: "Сообщения", bg: "art/office/bg-office-dusk.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: "Ну что? По-английски и коротко: что каждый делал в прошлый четверг вечером?" },
         { from: "sova", text: "Да, мне — тоже по-английски. Экран твоего телефона видит весь опен-спейс." },
@@ -509,7 +514,7 @@ const OFFICE = (() => {
     },
 
     "o2-debrief": {
-      type: "debrief", mission: 2, time: "18:00", place: "Итог", bg: "svg:office-dusk", look: "day",
+      type: "debrief", mission: 2, time: "18:00", place: "Итог", bg: "art/office/bg-office-dusk.jpg", look: "day",
       title: "Свой человек",
       sova: (s) => {
         const n = SUSPECTS.filter((w) => s.dossier[w] && s.dossier[w].thursday).length;
@@ -520,7 +525,7 @@ const OFFICE = (() => {
     // ═════════ МИССИЯ 3 · СТЕНДАП ═════════
     "o3-lift": {
       type: "elevator", mission: 3, missionStart: true, chapter: { n: 3, title: "Стендап", sub: "Вторник, 9:22 · лифт, потом созвон" },
-      time: "09:22", place: "Лифт", bg: "svg:office-day", look: "day", who: "max",
+      time: "09:22", place: "Лифт", bg: "art/office/bg-office-day.jpg", look: "day", who: "max",
       kicker: "Лифт", title: "Шесть этажей с Максом",
       goal: "Small talk в лифте: отвечай быстро и по-человечески.",
       intro: "Утро, лифт, Макс. Он болтает — ты отвечаешь. Выбери естественный ответ, пока лифт едет до следующего этажа.",
@@ -538,7 +543,7 @@ const OFFICE = (() => {
 
     "o3-standup": {
       type: "conv", ui: "video", mission: 3, chapter: null,
-      time: "09:30", place: "Созвон команды", bg: "svg:office-day", look: "day",
+      time: "09:30", place: "Созвон команды", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Murmur · Daily stand-up", cast: ["priya", "tom", "max", "grace"], npc: "priya", meter: "Стендап",
       goal: "Послушай всех. Потом расскажи: что делал(а) вчера и что делаешь сегодня.",
       situation: "Murmur's daily stand-up video call. Everyone says what they did yesterday, what they will do today, and any blockers (problems).",
@@ -573,7 +578,7 @@ const OFFICE = (() => {
     },
 
     "o3-logs": {
-      type: "crack", mission: 3, time: "09:42", place: "Перехват", bg: "svg:office-day", look: "day", who: "tom",
+      type: "crack", mission: 3, time: "09:42", place: "Перехват", bg: "art/office/bg-office-day.jpg", look: "day", who: "tom",
       kicker: "Перехват", title: "Журнал двери", label: "Запись", badge: "cracker",
       keys: ["Слушай и набирай цифры", "▶ — ещё раз, 🐢 — медленно", "Клавиатура тоже работает"],
       goal: "Том читает журнал двери вслух. Запиши номера пропусков и время.",
@@ -589,7 +594,7 @@ const OFFICE = (() => {
     },
 
     "o3-report": {
-      type: "chat", mission: 3, time: "09:50", place: "Сообщения", bg: "svg:office-day", look: "day", app: "sova",
+      type: "chat", mission: 3, time: "09:50", place: "Сообщения", bg: "art/office/bg-office-day.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: "Грейс что-то удалила из общего чата. Что там было? По-английски: когда и куда." },
         { me: { report: true, maxTries: 4,
@@ -609,7 +614,7 @@ const OFFICE = (() => {
     },
 
     "o3-debrief": {
-      type: "debrief", mission: 3, time: "10:00", place: "Итог", bg: "svg:office-day", look: "day",
+      type: "debrief", mission: 3, time: "10:00", place: "Итог", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Первый стендап",
       sova: (s) => s.flags.flashRead ? "Шесть секунд на чтение — и ты успел(а). Пятница, 18:30, Wharf Lane." : "Сообщение ушло. Ничего: адрес я достала. Но читать надо быстрее."
     },
@@ -617,7 +622,7 @@ const OFFICE = (() => {
     // ═════════ МИССИЯ 4 · СТЕКЛЯННАЯ БУДКА ═════════
     "o4-brief": {
       type: "chat", mission: 4, missionStart: true, chapter: { n: 4, title: "Стеклянная будка", sub: "Вторник, 13:55 · опен-спейс" },
-      time: "13:55", place: "Сообщения", bg: "svg:office-day", look: "day", app: "sova",
+      time: "13:55", place: "Сообщения", bg: "art/office/bg-office-day.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: "Макс ни к какому стоматологу не ушёл. Он идёт в стеклянную будку для звонков." },
         { from: "sova", text: "Подходи ближе — будет слышно лучше. Но чем ближе, тем быстрее тебя заметят. Глаз сверху покажет, насколько ты на виду." },
@@ -629,7 +634,7 @@ const OFFICE = (() => {
     },
 
     "o4-booth": {
-      type: "eaves", mission: 4, time: "13:58", place: "Опен-спейс", bg: "svg:office-day", look: "day",
+      type: "eaves", mission: 4, time: "13:58", place: "Опен-спейс", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Звонок Макса", target: "max", targetAt: "booth",
       goal: "Подслушай звонок Макса в будке. Ближе — слышнее, но заметнее.",
       intro: "Макс закрылся в стеклянной будке. Ты — за своим столом. Нажимай на точки на карте, чтобы подойти ближе.",
@@ -653,7 +658,7 @@ const OFFICE = (() => {
     },
 
     "o4-kitchen": {
-      type: "eaves", mission: 4, time: "16:40", place: "Кухня", bg: "svg:office-day", look: "day",
+      type: "eaves", mission: 4, time: "16:40", place: "Кухня", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Кухня, 16:40", target: "grace", targetAt: "kitchen",
       goal: "Грейс говорит по телефону на кухне. Тише, чем обычно.",
       intro: "Грейс ушла на кухню и говорит в телефон вполголоса. У кофемашины на тебя смотрят меньше: повод очевиден.",
@@ -677,7 +682,7 @@ const OFFICE = (() => {
     },
 
     "o4-report": {
-      type: "chat", mission: 4, time: "17:10", place: "Сообщения", bg: "svg:office-dusk", look: "day", app: "sova",
+      type: "chat", mission: 4, time: "17:10", place: "Сообщения", bg: "art/office/bg-office-dusk.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: "Докладывай. По-английски: что с Максом и что говорила Грейс?" },
         { me: { report: true, maxTries: 5,
@@ -697,7 +702,7 @@ const OFFICE = (() => {
     },
 
     "o4-debrief": {
-      type: "debrief", mission: 4, time: "17:15", place: "Итог", bg: "svg:office-dusk", look: "day",
+      type: "debrief", mission: 4, time: "17:15", place: "Итог", bg: "art/office/bg-office-dusk.jpg", look: "day",
       title: "Тонкие стены",
       sova: (s) => s.clues.recycling && s.clues.cash ? "Чисто. Два разговора, ни одного провала. Теперь мы знаем, что в пятницу поедет в коробке." : "Кое-что ушло мимо. Но главное мы знаем: пятница, Грейс, коробка."
     },
@@ -705,7 +710,7 @@ const OFFICE = (() => {
     // ═════════ МИССИЯ 5 · КУРЬЕР ═════════
     "o5-brief": {
       type: "chat", mission: 5, missionStart: true, chapter: { n: 5, title: "Курьер", sub: "Среда, 11:00 · телефон" },
-      time: "11:00", place: "Сообщения", bg: "svg:office-day", look: "day", app: "loop",
+      time: "11:00", place: "Сообщения", bg: "art/office/bg-office-day.jpg", look: "day", app: "loop",
       steps: [
         { from: "grace", text: "Alex, can you call SwiftBox and confirm Friday's pickup? I'm in meetings all day 🙈" },
         { from: "grace", text: "The booking number is on a sticky note on my desk. Somewhere. Ta!" },
@@ -720,7 +725,7 @@ const OFFICE = (() => {
     },
 
     "o5-desk": {
-      type: "deskSearch", mission: 5, time: "11:02", place: "Стол Грейс", bg: "svg:office-day", look: "day", who: "grace",
+      type: "deskSearch", mission: 5, time: "11:02", place: "Стол Грейс", bg: "art/office/bg-office-day.jpg", look: "day", who: "grace",
       kicker: "Ресепшн, пока никого", title: "Стол Грейс",
       goal: "Найди стикер с номером заказа. Грейс пишет, где искать.",
       intro: "Грейс на встрече и шлёт голосовые: где лежит стикер. Сама она не помнит. У тебя чуть больше минуты, пока она не вернулась.",
@@ -744,7 +749,7 @@ const OFFICE = (() => {
     },
 
     "o5-call": {
-      type: "conv", ui: "phone", mission: 5, time: "11:05", place: "Звонок в SwiftBox", bg: "svg:office-day", look: "day",
+      type: "conv", ui: "phone", mission: 5, time: "11:05", place: "Звонок в SwiftBox", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "SwiftBox", npc: "dev", sub: "SwiftBox Couriers", meter: "Звонок",
       goal: "Подтверди заказ SB-4471, потом смени адрес доставки на 9 Mill Road.",
       situation: "Alex phones the SwiftBox courier company about Grace's Friday pickup, booking SB-4471, and tries to change the delivery address.",
@@ -799,7 +804,7 @@ const OFFICE = (() => {
     },
 
     "o5-debrief": {
-      type: "debrief", mission: 5, time: "11:15", place: "Итог", bg: "svg:office-day", look: "day",
+      type: "debrief", mission: 5, time: "11:15", place: "Итог", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Звонок в SwiftBox",
       sova: (s) => s.flags.addressChanged ? "Ха. «I'm new here» — и диспетчер сам сменил адрес. В пятницу коробка поедет к нам." : "Адрес сменить не вышло. Ничего: в пятницу будем ждать курьера на Wharf Lane."
     },
@@ -807,7 +812,7 @@ const OFFICE = (() => {
     // ═════════ МИССИЯ 6 · ПЯТНИЦА ═════════
     "o6-brief": {
       type: "chat", mission: 6, missionStart: true, chapter: { n: 6, title: "Пятница, 18:15", sub: "Офис почти пуст" },
-      time: "18:12", place: "Сообщения", bg: "svg:office-night", look: "day", app: "sova",
+      time: "18:12", place: "Сообщения", bg: "art/office/bg-office-night.jpg", look: "day", app: "sova",
       steps: [
         { from: "sova", text: (s) => s.flags.addressChanged ? "Курьер SwiftBox будет в 18:30. Коробка уедет на Mill Road, прямо к нам." : "Курьер будет в 18:30. Мы ждём его на Wharf Lane." },
         { from: "sova", text: "Проблема: Грейс нервничает. Хочет унести коробку сама, прямо сейчас. Если уйдёт с ней — всё." },
@@ -820,7 +825,7 @@ const OFFICE = (() => {
     },
 
     "o6-board": {
-      type: "caseboard", mission: 6, time: "18:13", place: "Доска улик", bg: "svg:office-night", look: "day",
+      type: "caseboard", mission: 6, time: "18:13", place: "Доска улик", bg: "art/office/bg-office-night.jpg", look: "day",
       kicker: "Пять минут до выхода", title: "Доска улик", boardTitle: "Who used badge №07?", stamp: "MOLE",
       nudge: "Не сходится. У кого был доступ к запасным пропускам?", keys: ["Карточка — факт по-английски", "Нажми на того, о ком она", "В конце назови крота"],
       goal: "Разложи факты по подозреваемым и назови крота.",
@@ -843,7 +848,7 @@ const OFFICE = (() => {
     },
 
     "o6-stall": {
-      type: "stall", mission: 6, time: "18:15", place: "Ресепшн", bg: "svg:office-night", look: "day", npc: "grace",
+      type: "stall", mission: 6, time: "18:15", place: "Ресепшн", bg: "art/office/bg-office-night.jpg", look: "day", npc: "grace",
       goal: "Задержи Грейс до 18:30. Говори с ней — о чём угодно, кроме дела.",
       situation: "Friday evening, empty office. Grace has a taped box labelled RECYCLING and wants to leave with it now. Alex keeps her talking until the courier arrives at 18:30.",
       persona: "Grace, nervous tonight and wants to leave with her box, but too polite to walk away from a colleague. She answers small talk briefly and warmly. She gets alarmed if anyone mentions the prototype, Wharf Lane, cash or police.",
@@ -881,7 +886,7 @@ const OFFICE = (() => {
     },
 
     "o6-accuse": {
-      type: "conv", ui: "face", mission: 6, time: "18:31", place: "Ресепшн", bg: "svg:office-night", look: "day",
+      type: "conv", ui: "face", mission: 6, time: "18:31", place: "Ресепшн", bg: "art/office/bg-office-night.jpg", look: "day",
       npc: "grace", when: (s) => s.flags.stalled,
       goal: "Коробка уехала. Скажи Грейс, что ты знаешь.",
       situation: "The courier has just taken Grace's box. Alex now tells Grace what they know: the address, the spare badge, the phone call, the box.",
@@ -915,7 +920,7 @@ const OFFICE = (() => {
     },
 
     "o6-end": {
-      type: "finale", mission: 6, time: "18:40", place: "Финал", bg: "svg:office-night", look: "day",
+      type: "finale", mission: 6, time: "18:40", place: "Финал", bg: "art/office/bg-office-night.jpg", look: "day",
       kicker: "Пятница, 18:40",
       judge: (s) => {
         if (!s.flags.stalled) return "gone";

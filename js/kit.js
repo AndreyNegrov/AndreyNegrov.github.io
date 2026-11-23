@@ -173,13 +173,31 @@ const OfficeMap = {
     kitchen: [842, 516], coffee: [918, 438], door: [160, 586],
     fridge: [736, 426], board: [330, 318], doorpad: [318, 556]
   },
+  // Координаты под иллюстрированную изометрическую карту art/office/map-office.jpg
+  OFFICE_POS: {
+    it: [175, 215], desks: [365, 315], reception: [235, 495], yourdesk: [515, 435],
+    booth: [640, 125], cooler: [678, 155], printer: [520, 220], meeting: [690, 300],
+    kitchen: [835, 460], coffee: [745, 490], door: [340, 75],
+    fridge: [825, 415], board: [270, 265], doorpad: [385, 95]
+  },
+  isArt(plan) { return !plan && typeof Pack !== "undefined" && Pack.cur === "office"; },
   pct(id, plan) {
-    const pos = plan && typeof PLANS !== "undefined" && PLANS[plan] ? PLANS[plan].pos : this.POS;
-    const p = pos[id];
+    const pos = plan && typeof PLANS !== "undefined" && PLANS[plan]
+      ? PLANS[plan].pos
+      : this.isArt(plan) ? this.OFFICE_POS : this.POS;
+    const p = pos[id] || this.POS[id];
     return { x: (p[0] / this.W) * 100, y: (p[1] / this.H) * 100 };
   },
   svg(plan) {
     if (plan && typeof PLANS !== "undefined" && PLANS[plan]) return PLANS[plan].svg();
+    if (this.isArt(plan)) {
+      const tag = (x, y, txt) => `<span class="o-map-tag" style="left:${x}%;top:${y}%">${txt}</span>`;
+      return `<div class="o-map-art" aria-hidden="true">
+        <img class="o-map-img" src="art/office/map-office.jpg" alt="">
+        ${tag(14, 15, "IT")}${tag(64, 6, "Phone booth")}${tag(69, 36, "Meeting room")}
+        ${tag(85, 62, "Kitchen")}${tag(19, 91, "Reception")}${tag(46, 56, "Open space")}
+      </div>`;
+    }
     const desk = (x, y) => `<rect x="${x}" y="${y}" width="104" height="46" rx="6" class="m-desk"/><rect x="${x + 38}" y="${y + 6}" width="28" height="4" rx="2" class="m-screen"/>`;
     const chair = (x, y) => `<circle cx="${x}" cy="${y}" r="9" class="m-chair"/>`;
     return `<svg class="o-map-svg" viewBox="0 0 1000 620" aria-hidden="true">
