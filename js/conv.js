@@ -133,7 +133,10 @@ const Conv = {
     const b = this.resolveBeat(raw);
     if (b.notify) { ui.notify(val(b.notify, state)); Sound.sfx("note"); await sleep(1600); }
     if (b.flash) await this.flash(ctx, b.flash);
-    for (const l of b.lines || []) await this.say(ctx, l.who, val(l.text, state), l);
+    for (const l of b.lines || []) {
+      await this.say(ctx, l.who, val(l.text, state), l);
+      if (!ctx.tok.dead) await raceDead(ctx.tok, sleep(340));
+    }
     if (b.say) await this.say(ctx, b.who || sc.npc, b.say);
     if (b.topics) return this.topics(ctx, b);
     if (!b.facts.length) return null;

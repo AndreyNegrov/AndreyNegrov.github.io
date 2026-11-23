@@ -785,22 +785,21 @@ body[data-pack="office"] .o-tok.live::after {
   .o-side .reply input { font-size: 16px; min-height: 42px; }
 
   /* Иллюстрированная карта офиса */
-  .o-rounds, .o-eaves { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .o-panel { flex: 1 0 auto; overflow-y: visible; }
+  .o-rounds, .o-eaves { overflow-y: auto; -webkit-overflow-scrolling: touch; gap: 12px; }
+  .o-panel { flex: 1 0 auto; overflow-y: visible; gap: 12px; padding: 14px 12px; }
+  .o-people { gap: 8px; }
+  .o-person { padding: 10px 12px; gap: 10px; }
   .o-map-art { border-radius: 16px; border-width: 2px; }
-  .o-map-tag { font-size: 8.5px; padding: 2px 6px; }
-  .o-map-tip {
-    top: 8px; font-size: 11px; padding: 5px 10px;
-    white-space: normal; text-align: center; max-width: calc(100% - 16px); line-height: 1.3;
-  }
-  .o-tok { width: 11.5%; }
+  .o-map-tag, .o-map-tip, .o-hot-lbl { display: none; }
+  .o-tok { width: 10%; border-width: 2px; }
+  .o-tok-label { font-size: 9px; padding: 1px 5px; }
   body[data-pack="office"] .o-tok.live::after {
-    width: 20px; height: 20px; font-size: 10px; right: -5px; top: -6px; border-width: 1.5px;
+    width: 17px; height: 17px; font-size: 9px; right: -4px; top: -5px; border-width: 1.5px;
   }
-  .o-hot { width: 8.5%; border-width: 2px; font-size: 13px; }
-  .o-hot-lbl { display: none; }
-  .o-findbar-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-  .o-find-btn { padding: 7px 8px; font-size: 12px; min-height: 38px; }
+  .o-hot { width: 6.8%; border-width: 2px; font-size: 11px; }
+  .o-findbar { padding: 12px; gap: 8px; }
+  .o-findbar-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .o-find-btn { padding: 8px 9px; font-size: 12px; min-height: 40px; }
   .o-find-btn em { font-size: 10px; padding: 2px 5px; }
 
   /* Стол Грейс и мини-игры */
@@ -809,6 +808,18 @@ body[data-pack="office"] .o-tok.live::after {
   .a-search .s-log { max-height: 24dvh; }
   .o-find-card { padding: 16px; border-radius: 20px; }
   .o-find-opts button { min-height: 44px; font-size: 14px; }
+
+  /* Итоги миссии, легенда и модалки: ровные кнопки на всю ширину */
+  .o-db-card .row, .o-leg-card .row, .story-card .row, .modal-card .row {
+    flex-direction: column; align-items: stretch; gap: 10px;
+  }
+  .o-db-card .row .btn, .o-leg-card .row .btn, .story-card .row .btn, .modal-card .row .btn {
+    width: 100%; min-height: 48px; justify-content: center; text-align: center;
+  }
+  .o-xpline { padding: 10px 12px; gap: 10px; }
+  .o-xpline > i { width: 42px; height: 42px; font-size: 24px; border-radius: 12px; }
+  .o-xpline b { font-size: 15px; }
+  .o-xpline em { font-size: 20px; }
 }
 @media (max-width: 420px) {
   .o-findbar-list { grid-template-columns: 1fr; }

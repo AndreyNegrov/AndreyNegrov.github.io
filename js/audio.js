@@ -361,10 +361,17 @@ const Voice = (() => {
   function localSay(url, text, o) {
     let resolve;
     const done = new Promise((r) => { resolve = r; });
-    let el = null, stopped = false, fallback = null;
-    const finish = (ok) => { resolve(ok); };
+    let el = null, stopped = false, ended = false, fallback = null;
+    const finish = (ok) => { if (ended) return; ended = true; resolve(ok); };
+    const runFallback = () => {
+      if (stopped || ended || fallback) return;
+      if (el) { el.onended = el.onerror = null; try { el.pause(); el.removeAttribute("src"); } catch { /* ignore */ } el = null; }
+      fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
+      fallback.done.then((ok) => finish(ok));
+    };
     try {
       Sound.ensure();
+      if (Sound.ctx && Sound.ctx.state === "suspended") Sound.ctx.resume().catch(() => {});
       el = new Audio(url);
       el.crossOrigin = "anonymous";
       el.preservesPitch = true;
@@ -379,28 +386,23 @@ const Voice = (() => {
         el.volume = clamp((o.volume ?? 1) * (FX_VOL[o.fx] || 1) * Settings.get().voiceVol, 0, 1);
       }
       el.onended = () => finish(!stopped);
-      el.onerror = () => {
-        if (stopped) return finish(false);
-        fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
-        fallback.done.then((ok) => finish(ok));
-      };
-      el.play().catch(() => {
-        if (stopped) return finish(false);
-        fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
-        fallback.done.then((ok) => finish(ok));
-      });
+      el.onerror = runFallback;
+      el.play().catch(runFallback);
     } catch {
-      fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
-      fallback.done.then((ok) => finish(ok));
+      runFallback();
     }
     return {
       done,
       stop() {
         if (stopped) return;
         stopped = true;
-        if (el) { try { el.pause(); el.src = ""; } catch { /* ignore */ } }
+        if (el) {
+          el.onended = el.onerror = null;
+          try { el.pause(); el.removeAttribute("src"); el.load(); } catch { /* ignore */ }
+          el = null;
+        }
         if (fallback) fallback.stop();
-        resolve(false);
+        finish(false);
       },
       progress() {
         if (fallback) return fallback.progress();
