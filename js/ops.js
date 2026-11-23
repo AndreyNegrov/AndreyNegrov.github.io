@@ -11,7 +11,72 @@ const Rounds = {
       const seen = () => new Set(state.flags[fkey] || []);
       const finds = sc.finds || [];
       let busy = false;
+      let zone = "open";
+      let lockZoneUntil = 0;
+      let cam = null;
       let mePos = OfficeMap.pct("yourdesk");
+      const ZONES = [
+        { id: "it", ico: "💻", name: "IT", cx: 0.26, cy: 0.28, people: ["tom"], finds: ["board", "door"] },
+        { id: "open", ico: "🖥️", name: "Опен", cx: 0.43, cy: 0.52, people: ["max"], finds: ["printer"] },
+        { id: "rec", ico: "🛎️", name: "Ресепшн", cx: 0.24, cy: 0.78, people: ["grace"], finds: [] },
+        { id: "kit", ico: "☕", name: "Кухня", cx: 0.82, cy: 0.74, people: [], finds: ["coffee", "fridge"] }
+      ];
+      const zoneState = (z, d, s) => {
+        const pLeft = z.people.filter((w) => sc.people.some((p) => p.who === w) && !d.has(w)).length;
+        const fLeft = z.finds.filter((id) => finds.some((f) => f.id === id) && !s.has(id)).length;
+        if (pLeft) return "talk";
+        if (fLeft) return "clue";
+        return "done";
+      };
+      const panTo = (cx, cy, smooth = true) => {
+        const st = $(".o-map-stage");
+        if (!st || window.innerWidth > 760) return;
+        const left = clamp(cx * st.scrollWidth - st.clientWidth / 2, 0, Math.max(0, st.scrollWidth - st.clientWidth));
+        const top = clamp(cy * st.scrollHeight - st.clientHeight / 2, 0, Math.max(0, st.scrollHeight - st.clientHeight));
+        cam = { left, top };
+        st.scrollTo({ left, top, behavior: smooth ? "smooth" : "auto" });
+      };
+      const bindPan = () => {
+        const st = $(".o-map-stage");
+        if (!st) return;
+        if (window.innerWidth <= 760) {
+          if (cam) { st.scrollLeft = cam.left; st.scrollTop = cam.top; }
+          else { const z = ZONES.find((x) => x.id === zone) || ZONES[1]; panTo(z.cx, z.cy, false); }
+        }
+        let drag = null;
+        st.addEventListener("pointerdown", (e) => {
+          if (window.innerWidth > 760 || e.pointerType === "touch" || e.target.closest("button")) return;
+          drag = { x: e.clientX, y: e.clientY, sl: st.scrollLeft, st: st.scrollTop };
+          st.setPointerCapture(e.pointerId);
+        });
+        st.addEventListener("pointermove", (e) => {
+          if (!drag) return;
+          st.scrollLeft = drag.sl - (e.clientX - drag.x);
+          st.scrollTop = drag.st - (e.clientY - drag.y);
+        });
+        const stopDrag = () => { drag = null; };
+        st.addEventListener("pointerup", stopDrag);
+        st.addEventListener("pointercancel", stopDrag);
+        st.addEventListener("scroll", () => {
+          if (window.innerWidth > 760) return;
+          cam = { left: st.scrollLeft, top: st.scrollTop };
+          const tip = $(".o-m-hint");
+          if (tip) tip.classList.add("gone");
+          if (Date.now() < lockZoneUntil) return;
+          const mx = (st.scrollLeft + st.clientWidth / 2) / Math.max(1, st.scrollWidth);
+          const my = (st.scrollTop + st.clientHeight / 2) / Math.max(1, st.scrollHeight);
+          const canY = st.scrollHeight > st.clientHeight + 8;
+          let best = zone, bd = 99;
+          for (const z of ZONES) {
+            const dist = canY ? Math.hypot(z.cx - mx, z.cy - my) : Math.abs(z.cx - mx);
+            if (dist < bd) { bd = dist; best = z.id; }
+          }
+          if (best !== zone) {
+            zone = best;
+            $$(".o-m-zone").forEach((b) => b.classList.toggle("on", b.dataset.zone === zone));
+          }
+        }, { passive: true });
+      };
       const draw = () => {
         if (tok.dead) return;
         UI.setBg(sc.bg, sc.look || "blur");
@@ -21,17 +86,41 @@ const Rounds = {
         const dos = state.dossier || {};
         $("#scene").innerHTML = `
           <section class="o-rounds">
-            <div class="o-map-wrap"><div class="o-map">
-              ${OfficeMap.svg()}
-              ${(!d.size && !s.size) ? `<div class="o-map-tip">👆 Нажми на персонажа, чтобы поговорить, или на бирюзовую метку — найти улику</div>` : ""}
-              ${finds.map((f) => { const p = OfficeMap.pct(f.at); return `<button class="o-hot ${s.has(f.id) ? "seen" : ""}" data-find="${f.id}" style="left:${p.x}%;top:${p.y}%" title="${esc(f.title)}">${f.ico}<span class="o-hot-lbl">${esc(f.title)}</span></button>`; }).join("")}
-              ${sc.people.map((p) => OfficeMap.token(p.at, p.who, { label: PEOPLE[p.who].name, cls: d.has(p.who) ? "done" : "live", act: d.has(p.who) ? "" : "talk" })).join("")}
-              <div class="o-tok me" style="left:${mePos.x}%;top:${mePos.y}%">${avatar("you", "o-tok-face")}<span class="o-tok-label">Вы</span></div>
-            </div></div>
+            <div class="o-map-wrap">
+              <div class="o-m-hud">
+                <div class="o-m-title">
+                  <b>${esc(sc.title)}</b>
+                  <span>${all ? "Все опрошены — пора написать Сове" : esc(val(sc.goal, state))}</span>
+                </div>
+                <div class="o-m-pills">
+                  <span class="o-m-pill ${all ? "done" : ""}">👥 ${d.size}/${sc.people.length}</span>
+                  ${finds.length ? `<span class="o-m-pill clue ${s.size === finds.length ? "done" : ""}">🔍 ${s.size}/${finds.length}</span>` : ""}
+                </div>
+              </div>
+              <div class="o-map-stage"><div class="o-map">
+                ${OfficeMap.svg()}
+                ${(!d.size && !s.size) ? `<div class="o-map-tip">👆 Нажми на персонажа, чтобы поговорить, или на бирюзовую метку — найти улику</div>` : ""}
+                ${finds.map((f) => { const p = OfficeMap.pct(f.at); return `<button class="o-hot ${s.has(f.id) ? "seen" : ""}" data-find="${f.id}" style="left:${p.x}%;top:${p.y}%" title="${esc(f.title)}">${f.ico}<span class="o-hot-lbl">${esc(f.title)}</span></button>`; }).join("")}
+                ${sc.people.map((p) => OfficeMap.token(p.at, p.who, { label: PEOPLE[p.who].name, cls: d.has(p.who) ? "done" : "live", act: d.has(p.who) ? "" : "talk" })).join("")}
+                <div class="o-tok me" style="left:${mePos.x}%;top:${mePos.y}%">${avatar("you", "o-tok-face")}<span class="o-tok-label">Вы</span></div>
+              </div></div>
+              ${(!d.size && !s.size) ? `<div class="o-m-hint">👆 Листай офис пальцем или прыгай по зонам</div>` : ""}
+              ${all ? `<div class="o-m-cta"><button class="btn primary wide" data-act="finish">Написать Сове →</button></div>` : ""}
+              <nav class="o-m-dock" aria-label="Зоны офиса">
+                ${ZONES.map((z) => {
+                  const st = zoneState(z, d, s);
+                  return `<button type="button" class="o-m-zone ${zone === z.id ? "on" : ""} st-${st}" data-zone="${z.id}">
+                    <i>${z.ico}</i><span>${z.name}</span><em aria-hidden="true"></em>
+                  </button>`;
+                }).join("")}
+              </nav>
+            </div>
             <aside class="o-panel">
-              <p class="kicker">Опен-спейс · ${d.size} из ${sc.people.length}</p>
-              <h2>${esc(sc.title)}</h2>
-              <p class="muted">${esc(val(sc.goal, state))}</p>
+              <div class="o-m-head">
+                <p class="kicker">Опен-спейс · ${d.size} из ${sc.people.length}</p>
+                <h2>${esc(sc.title)}</h2>
+                <p class="muted">${esc(val(sc.goal, state))}</p>
+              </div>
               <div class="o-people">${sc.people.map((p) => {
                 const x = dos[p.who] || {};
                 return `<button class="o-person ${d.has(p.who) ? "done" : ""}" data-act="talk" data-who="${p.who}" ${d.has(p.who) ? "disabled" : ""}>
@@ -44,15 +133,17 @@ const Rounds = {
               <p class="muted small">Досье и легенда — в блокноте (N).</p>
             </aside>
           </section>`;
+        bindPan();
       };
       // Фишка игрока идёт к цели, и только потом открывается разговор или находка.
       const walk = async (at, dx = 7, dy = 5) => {
         const p = OfficeMap.pct(at);
         mePos = { x: clamp(p.x + dx, 5, 95), y: clamp(p.y + dy, 8, 94) };
+        panTo(p.x / 100, p.y / 100, true);
         const me = $(".o-tok.me");
         if (me) { me.style.left = mePos.x + "%"; me.style.top = mePos.y + "%"; }
         Sound.sfx("tick");
-        await sleep(740);
+        await sleep(window.innerWidth <= 760 ? 520 : 740);
       };
       const openFind = (f) => new Promise((res) => {
         const opts = shuffle(f.opts.map((t, i) => ({ t, ok: i === 0 })));
@@ -77,6 +168,20 @@ const Rounds = {
       });
       const onClick = async (e) => {
         if (busy || tok.dead) return;
+        const zb = e.target.closest("[data-zone]");
+        if (zb) {
+          const z = ZONES.find((x) => x.id === zb.dataset.zone);
+          if (z) {
+            zone = z.id;
+            lockZoneUntil = Date.now() + 750;
+            $$(".o-m-zone").forEach((b) => b.classList.toggle("on", b.dataset.zone === zone));
+            const tip = $(".o-m-hint");
+            if (tip) tip.classList.add("gone");
+            Sound.sfx("click");
+            panTo(z.cx, z.cy, true);
+          }
+          return;
+        }
         const hot = e.target.closest("[data-find]");
         if (hot) {
           const f = finds.find((x) => x.id === hot.dataset.find);
@@ -319,8 +424,8 @@ const Eaves = {
       stopBabble = Sound.babble(words.length * 0.33 + 0.4, { level: 0.07, cutoff: 700 });
       setTimeout(() => { finished = true; }, words.length * 330 + 400);
     } else {
-      const spoken = words.filter((_, i) => keep[i]).join(" ");
-      h = Voice.say(spoken || "...", { who, fx: dist === "near" ? "clean" : "dock" });
+      const fx = dist === "near" ? "clean" : dist === "mid" ? "dock" : "wall";
+      h = Voice.say(line.text, { who, fx });
       h.done.then(() => { finished = true; });
     }
     while (!finished) {

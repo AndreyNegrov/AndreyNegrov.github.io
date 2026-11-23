@@ -73,6 +73,7 @@ const Conv = {
       if (r && r.fail) return r;
       if (tok.dead) return null;
       if (asks(raw)) ui.meter(++passed, total, sc.meter);
+      await raceDead(tok, sleep(650));
     }
     if (sc.end) await this.say(ctx, sc.end.who || sc.npc, val(sc.end.say, state));
     if (sc.effect) sc.effect(state);
@@ -106,6 +107,7 @@ const Conv = {
     const spoken = o.spell ? text.replace(/-/g, ". ") : text;
     await raceDead(ctx.tok, Voice.sayAsync(spoken, { who, rate: o.slow ? 0.78 : o.spell ? 0.8 : 1, fx: o.fx || (ctx.sc.ui === "phone" ? "phone" : "clean") }));
     ui.speaking(who, false);
+    if (!ctx.tok.dead) await raceDead(ctx.tok, sleep(220));
     if (o.note) Notes.add({ kind: "heard", src: "talk", scene: ctx.sc.id, who, time: ctx.sc.time || "", text: `${text}`, hidden: lv.subs === "live" ? false : lv.subs === "after" ? "after" : "always" });
     if (o.clue) Clues.add(o.clue);
   },
@@ -135,7 +137,7 @@ const Conv = {
     if (b.flash) await this.flash(ctx, b.flash);
     for (const l of b.lines || []) {
       await this.say(ctx, l.who, val(l.text, state), l);
-      if (!ctx.tok.dead) await raceDead(ctx.tok, sleep(340));
+      if (!ctx.tok.dead) await raceDead(ctx.tok, sleep(420));
     }
     if (b.say) await this.say(ctx, b.who || sc.npc, b.say);
     if (b.topics) return this.topics(ctx, b);

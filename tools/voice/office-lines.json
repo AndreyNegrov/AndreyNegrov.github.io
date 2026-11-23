@@ -1,6 +1,222 @@
 [
   {
     "who": "priya",
+    "text": "Hi! Can you hear me okay?"
+  },
+  {
+    "who": "priya",
+    "text": "Great!"
+  },
+  {
+    "who": "guest",
+    "text": "Yes, I can hear you. Hi!"
+  },
+  {
+    "who": "priya",
+    "text": "Hello? Can you hear me?"
+  },
+  {
+    "who": "priya",
+    "text": "I'm Priya. I lead People here at Murmur. And this is Grace, our office manager."
+  },
+  {
+    "who": "grace",
+    "text": "Hiya! Nice to meet you."
+  },
+  {
+    "who": "guest",
+    "text": "Nice to meet you too."
+  },
+  {
+    "who": "priya",
+    "text": "So, Alex. Tell us a little bit about yourself."
+  },
+  {
+    "who": "priya",
+    "text": "Riga! Lovely. I've never been."
+  },
+  {
+    "who": "priya",
+    "text": "Tallinn! Lovely. I've never been."
+  },
+  {
+    "who": "priya",
+    "text": "Vilnius! Lovely. I've never been."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Riga, in Latvia. I worked as a receptionist in a hotel."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Riga, in Latvia. I worked as a barista in a café."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Riga, in Latvia. I worked in a call centre."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Tallinn, in Estonia. I worked as a receptionist in a hotel."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Tallinn, in Estonia. I worked as a barista in a café."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Tallinn, in Estonia. I worked in a call centre."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Vilnius, in Lithuania. I worked as a receptionist in a hotel."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Vilnius, in Lithuania. I worked as a barista in a café."
+  },
+  {
+    "who": "guest",
+    "text": "I'm Alex Frost. I'm from Vilnius, in Lithuania. I worked in a call centre."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry, what's your full name?"
+  },
+  {
+    "who": "priya",
+    "text": "And where are you from?"
+  },
+  {
+    "who": "priya",
+    "text": "And what did you do before?"
+  },
+  {
+    "who": "grace",
+    "text": "And how long have you been in San Francisco?"
+  },
+  {
+    "who": "grace",
+    "text": "Two months! So you still get lost on Caltrain, I bet."
+  },
+  {
+    "who": "guest",
+    "text": "I've been here for two months."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, how long?"
+  },
+  {
+    "who": "priya",
+    "text": "The job is office assistant. Phones, deliveries, meetings, a bit of everything. Why do you want to work at Murmur?"
+  },
+  {
+    "who": "priya",
+    "text": "Love that."
+  },
+  {
+    "who": "guest",
+    "text": "I like your product, and I want to learn new things."
+  },
+  {
+    "who": "priya",
+    "text": "Ha! Our earbud will translate everything. Soon nobody will need to learn English!"
+  },
+  {
+    "who": "grace",
+    "text": "Okay, a practical one. A courier calls, but I'm in a meeting. What do you say to him?"
+  },
+  {
+    "who": "grace",
+    "text": "Perfect. That's literally the job."
+  },
+  {
+    "who": "guest",
+    "text": "Sorry, she's in a meeting. Can I take a message?"
+  },
+  {
+    "who": "grace",
+    "text": "Hmm. And then? What do you say to him?"
+  },
+  {
+    "who": "grace",
+    "text": "Oh, sorry, one second."
+  },
+  {
+    "who": "grace",
+    "text": "Yes, Friday's fine. Half six. Okay, bye."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry about that! Busy week."
+  },
+  {
+    "who": "priya",
+    "text": "Okay, the classic question. What's your biggest weakness?"
+  },
+  {
+    "who": "priya",
+    "text": "Ha. Honest. I like that."
+  },
+  {
+    "who": "guest",
+    "text": "My English is not perfect, but I learn fast."
+  },
+  {
+    "who": "priya",
+    "text": "Honestly? Your English is fine. Much better than my Latvian!"
+  },
+  {
+    "who": "priya",
+    "text": "Honestly? Your English is fine. Much better than my Estonian!"
+  },
+  {
+    "who": "priya",
+    "text": "Honestly? Your English is fine. Much better than my Lithuanian!"
+  },
+  {
+    "who": "grace",
+    "text": "Do you have any questions for us?"
+  },
+  {
+    "who": "grace",
+    "text": "Good question!"
+  },
+  {
+    "who": "guest",
+    "text": "How many people work here?"
+  },
+  {
+    "who": "grace",
+    "text": "Anything at all? Ask us something!"
+  },
+  {
+    "who": "grace",
+    "text": "There are eight of us. You'll meet Tom, our IT guy. He's grumpy with everyone, don't worry. And Max from sales. He never stops talking."
+  },
+  {
+    "who": "grace",
+    "text": "As soon as possible!"
+  },
+  {
+    "who": "priya",
+    "text": "Alex, we'd love to have you. Can you start on Monday?"
+  },
+  {
+    "who": "priya",
+    "text": "Brilliant! Welcome to Murmur, Alex."
+  },
+  {
+    "who": "guest",
+    "text": "Yes, of course! Thank you!"
+  },
+  {
+    "who": "priya",
+    "text": "I think... we'll be in touch. Bye."
+  },
+  {
+    "who": "grace",
     "text": "I think... we'll be in touch. Bye."
   },
   {
@@ -36,148 +252,32 @@
     "text": "Russia? Oh. I thought you were from Vilnius."
   },
   {
-    "who": "priya",
-    "text": "Hi! Can you hear me okay?"
-  },
-  {
-    "who": "priya",
-    "text": "Great!"
-  },
-  {
-    "who": "priya",
-    "text": "Hello? Can you hear me?"
-  },
-  {
-    "who": "priya",
-    "text": "I'm Priya. I lead People here at Murmur. And this is Grace, our office manager."
+    "who": "grace",
+    "text": "Sorry... what?"
   },
   {
     "who": "grace",
-    "text": "Hiya! Nice to meet you."
-  },
-  {
-    "who": "priya",
-    "text": "So, Alex. Tell us a little bit about yourself."
-  },
-  {
-    "who": "priya",
-    "text": "Riga! Lovely. I've never been."
-  },
-  {
-    "who": "priya",
-    "text": "Tallinn! Lovely. I've never been."
-  },
-  {
-    "who": "priya",
-    "text": "Vilnius! Lovely. I've never been."
-  },
-  {
-    "who": "priya",
-    "text": "Sorry, what's your full name?"
-  },
-  {
-    "who": "priya",
-    "text": "And where are you from?"
-  },
-  {
-    "who": "priya",
-    "text": "And what did you do before?"
+    "text": "Wait — I thought you said Riga?"
   },
   {
     "who": "grace",
-    "text": "And how long have you been in San Francisco?"
+    "text": "Wait — I thought you said Tallinn?"
   },
   {
     "who": "grace",
-    "text": "Two months! So you still get lost on Caltrain, I bet."
+    "text": "Wait — I thought you said Vilnius?"
   },
   {
     "who": "grace",
-    "text": "Sorry, how long?"
-  },
-  {
-    "who": "priya",
-    "text": "The job is office assistant. Phones, deliveries, meetings, a bit of everything. Why do you want to work at Murmur?"
-  },
-  {
-    "who": "priya",
-    "text": "Love that."
-  },
-  {
-    "who": "priya",
-    "text": "Ha! Our earbud will translate everything. Soon nobody will need to learn English!"
+    "text": "Russia? Oh. I thought you were from Riga."
   },
   {
     "who": "grace",
-    "text": "Okay, a practical one. A courier calls, but I'm in a meeting. What do you say to him?"
+    "text": "Russia? Oh. I thought you were from Tallinn."
   },
   {
     "who": "grace",
-    "text": "Perfect. That's literally the job."
-  },
-  {
-    "who": "grace",
-    "text": "Hmm. And then? What do you say to him?"
-  },
-  {
-    "who": "grace",
-    "text": "Oh, sorry, one second."
-  },
-  {
-    "who": "grace",
-    "text": "Yes, Friday's fine. Half six. Okay, bye."
-  },
-  {
-    "who": "priya",
-    "text": "Sorry about that! Busy week."
-  },
-  {
-    "who": "priya",
-    "text": "Okay, the classic question. What's your biggest weakness?"
-  },
-  {
-    "who": "priya",
-    "text": "Ha. Honest. I like that."
-  },
-  {
-    "who": "priya",
-    "text": "Honestly? Your English is fine. Much better than my Latvian!"
-  },
-  {
-    "who": "priya",
-    "text": "Honestly? Your English is fine. Much better than my Estonian!"
-  },
-  {
-    "who": "priya",
-    "text": "Honestly? Your English is fine. Much better than my Lithuanian!"
-  },
-  {
-    "who": "grace",
-    "text": "Do you have any questions for us?"
-  },
-  {
-    "who": "grace",
-    "text": "Good question!"
-  },
-  {
-    "who": "grace",
-    "text": "Anything at all? Ask us something!"
-  },
-  {
-    "who": "grace",
-    "text": "There are eight of us. You'll meet Tom, our IT guy. He's grumpy with everyone, don't worry. And Max from sales. He never stops talking."
-  },
-  {
-    "who": "grace",
-    "text": "As soon as possible!"
-  },
-  {
-    "who": "priya",
-    "text": "Alex, we'd love to have you. Can you start on Monday?"
-  },
-  {
-    "who": "priya",
-    "text": "Brilliant! Welcome to Murmur, Alex."
+    "text": "Russia? Oh. I thought you were from Vilnius."
   },
   {
     "who": "guest",
@@ -193,39 +293,15 @@
   },
   {
     "who": "tom",
-    "text": "Sorry... what?"
-  },
-  {
-    "who": "tom",
-    "text": "Wait — I thought you said Riga?"
-  },
-  {
-    "who": "tom",
-    "text": "Wait — I thought you said Tallinn?"
-  },
-  {
-    "who": "tom",
-    "text": "Wait — I thought you said Vilnius?"
-  },
-  {
-    "who": "tom",
-    "text": "Russia? Oh. I thought you were from Riga."
-  },
-  {
-    "who": "tom",
-    "text": "Russia? Oh. I thought you were from Tallinn."
-  },
-  {
-    "who": "tom",
-    "text": "Russia? Oh. I thought you were from Vilnius."
-  },
-  {
-    "who": "tom",
     "text": "You're the new one. Alex, right? Your laptop's on your desk. The password's on the sticky note."
   },
   {
     "who": "tom",
     "text": "Don't lose it. I'm not making another one."
+  },
+  {
+    "who": "guest",
+    "text": "Yes, hi! Thanks, Tom."
   },
   {
     "who": "tom",
@@ -234,6 +310,10 @@
   {
     "who": "tom",
     "text": "Right. Back to work. Shout if the Wi-Fi dies."
+  },
+  {
+    "who": "guest",
+    "text": "What do you do here? And did you do anything fun last week?"
   },
   {
     "who": "tom",
@@ -284,31 +364,35 @@
     "text": "Good. Then don't touch the server room."
   },
   {
-    "who": "max",
+    "who": "guest",
+    "text": "Not really. I'm better with people."
+  },
+  {
+    "who": "tom",
     "text": "Sorry... what?"
   },
   {
-    "who": "max",
+    "who": "tom",
     "text": "Wait — I thought you said Riga?"
   },
   {
-    "who": "max",
+    "who": "tom",
     "text": "Wait — I thought you said Tallinn?"
   },
   {
-    "who": "max",
+    "who": "tom",
     "text": "Wait — I thought you said Vilnius?"
   },
   {
-    "who": "max",
+    "who": "tom",
     "text": "Russia? Oh. I thought you were from Riga."
   },
   {
-    "who": "max",
+    "who": "tom",
     "text": "Russia? Oh. I thought you were from Tallinn."
   },
   {
-    "who": "max",
+    "who": "tom",
     "text": "Russia? Oh. I thought you were from Vilnius."
   },
   {
@@ -318,6 +402,10 @@
   {
     "who": "max",
     "text": "Ha, good on ya."
+  },
+  {
+    "who": "guest",
+    "text": "It's good, thanks. A bit busy. How about you?"
   },
   {
     "who": "max",
@@ -344,6 +432,18 @@
     "text": "Vilnius! Never been. Is it cold?"
   },
   {
+    "who": "guest",
+    "text": "I'm from Riga, in Latvia."
+  },
+  {
+    "who": "guest",
+    "text": "I'm from Tallinn, in Estonia."
+  },
+  {
+    "who": "guest",
+    "text": "I'm from Vilnius, in Lithuania."
+  },
+  {
     "who": "max",
     "text": "Sorry, where?"
   },
@@ -354,6 +454,10 @@
   {
     "who": "max",
     "text": "Ah, sorry, mate. Gotta take this."
+  },
+  {
+    "who": "guest",
+    "text": "What do you do here? What did you do last Thursday?"
   },
   {
     "who": "max",
@@ -412,35 +516,47 @@
     "text": "Chess? Big brain. Respect, mate."
   },
   {
+    "who": "guest",
+    "text": "I like running."
+  },
+  {
+    "who": "guest",
+    "text": "I like cooking."
+  },
+  {
+    "who": "guest",
+    "text": "I like chess."
+  },
+  {
     "who": "max",
     "text": "Come on, what do you like doing?"
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Sorry... what?"
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Wait — I thought you said Riga?"
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Wait — I thought you said Tallinn?"
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Wait — I thought you said Vilnius?"
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Russia? Oh. I thought you were from Riga."
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Russia? Oh. I thought you were from Tallinn."
   },
   {
-    "who": "grace",
+    "who": "max",
     "text": "Russia? Oh. I thought you were from Vilnius."
   },
   {
@@ -450,6 +566,10 @@
   {
     "who": "grace",
     "text": "Coming right up."
+  },
+  {
+    "who": "guest",
+    "text": "Yes, thanks! A coffee, please."
   },
   {
     "who": "grace",
@@ -476,6 +596,18 @@
     "text": "Oh, call centre! Sorry, my memory. Too many new faces."
   },
   {
+    "who": "guest",
+    "text": "No, actually. I worked as a receptionist in a hotel."
+  },
+  {
+    "who": "guest",
+    "text": "No, actually. I worked as a barista in a café."
+  },
+  {
+    "who": "guest",
+    "text": "No, actually. I worked in a call centre."
+  },
+  {
     "who": "grace",
     "text": "Hm? So what did you do before?"
   },
@@ -498,6 +630,10 @@
   {
     "who": "grace",
     "text": "Oh! And on Friday I need your help with a courier. Old laptops going to recycling. Remind me, yeah?"
+  },
+  {
+    "who": "guest",
+    "text": "What do you do here? And what did you do last Thursday?"
   },
   {
     "who": "grace",
@@ -544,6 +680,10 @@
     "text": "You're a star."
   },
   {
+    "who": "guest",
+    "text": "Sure, no problem."
+  },
+  {
     "who": "max",
     "text": "Morning, Alex! How are you?"
   },
@@ -580,10 +720,6 @@
     "text": "Here we are. After you!"
   },
   {
-    "who": "max",
-    "text": "Gotta run. Bye!"
-  },
-  {
     "who": "priya",
     "text": "Morning, everyone! Quick stand-up. What you did yesterday, what you're doing today, any blockers. Tom, you first."
   },
@@ -616,6 +752,10 @@
     "text": "Nice."
   },
   {
+    "who": "guest",
+    "text": "Yesterday I met the team and got my laptop."
+  },
+  {
     "who": "priya",
     "text": "And yesterday? What did you do?"
   },
@@ -626,6 +766,10 @@
   {
     "who": "priya",
     "text": "Love it."
+  },
+  {
+    "who": "guest",
+    "text": "Today I'm helping Grace with the courier."
   },
   {
     "who": "priya",
@@ -640,12 +784,20 @@
     "text": "Perfect."
   },
   {
+    "who": "guest",
+    "text": "No blockers."
+  },
+  {
     "who": "priya",
     "text": "Great stand-up, everyone. Let's crush it today!"
   },
   {
     "who": "tom",
     "text": "Please never say that again."
+  },
+  {
+    "who": "max",
+    "text": "Gotta run. Bye!"
   },
   {
     "who": "tom",
@@ -765,23 +917,15 @@
   },
   {
     "who": "dev",
-    "text": "Sorry, I can't help you. Bye."
-  },
-  {
-    "who": "dev",
-    "text": "Sorry... what?"
-  },
-  {
-    "who": "dev",
-    "text": "Sorry, what? I just do the deliveries."
-  },
-  {
-    "who": "dev",
     "text": "SwiftBox, Dev speaking. How can I help?"
   },
   {
     "who": "dev",
     "text": "Sure thing."
+  },
+  {
+    "who": "guest",
+    "text": "Hi, I'm calling about a pickup on Friday."
   },
   {
     "who": "dev",
@@ -796,12 +940,20 @@
     "text": "SB-4471. Lovely."
   },
   {
+    "who": "guest",
+    "text": "It's SB-4471."
+  },
+  {
     "who": "dev",
     "text": "Sorry, the booking number again?"
   },
   {
     "who": "dev",
     "text": "And the name on the booking?"
+  },
+  {
+    "who": "guest",
+    "text": "Grace Hollis."
   },
   {
     "who": "dev",
@@ -820,6 +972,10 @@
     "text": "Never mind, I found it."
   },
   {
+    "who": "guest",
+    "text": "H-O-L-L-I-S."
+  },
+  {
     "who": "dev",
     "text": "Sorry, letter by letter?"
   },
@@ -832,12 +988,20 @@
     "text": "Great."
   },
   {
+    "who": "guest",
+    "text": "Yes, that's right."
+  },
+  {
     "who": "dev",
     "text": "Anything else I can help with?"
   },
   {
     "who": "dev",
     "text": "Sure, I can do that."
+  },
+  {
+    "who": "guest",
+    "text": "Yes. Could you change the delivery address, please?"
   },
   {
     "who": "dev",
@@ -852,6 +1016,10 @@
     "text": "Nine Pine Street. P-I-N-E?"
   },
   {
+    "who": "guest",
+    "text": "Nine Pine Street."
+  },
+  {
     "who": "dev",
     "text": "Sorry, which street?"
   },
@@ -862,6 +1030,10 @@
   {
     "who": "dev",
     "text": "Ah, first week? Been there. Okay, just this once."
+  },
+  {
+    "who": "guest",
+    "text": "Sorry, I'm new here, and Grace is in meetings all day. Could you help me, please?"
   },
   {
     "who": "dev",
@@ -878,6 +1050,22 @@
   {
     "who": "dev",
     "text": "Thanks! Bye now."
+  },
+  {
+    "who": "guest",
+    "text": "No, that's all. Thank you! Bye."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, I can't help you. Bye."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry... what?"
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, what? I just do the deliveries."
   },
   {
     "who": "grace",
@@ -1025,19 +1213,15 @@
   },
   {
     "who": "grace",
-    "text": "Goodnight, Alex."
-  },
-  {
-    "who": "grace",
-    "text": "...I need to sit down."
-  },
-  {
-    "who": "grace",
     "text": "Well. That's that. Night, Alex. Have a good weekend."
   },
   {
     "who": "grace",
     "text": "I'm going home."
+  },
+  {
+    "who": "guest",
+    "text": "The box is not going to recycling. It's going to Bay Street. You used the spare badge on Thursday. And I heard your call: cash only."
   },
   {
     "who": "grace",
@@ -1076,8 +1260,20 @@
     "text": "...Who are you?"
   },
   {
+    "who": "guest",
+    "text": "I'm Alex. The new office assistant."
+  },
+  {
     "who": "grace",
     "text": "The office assistant. Right. Harmless."
+  },
+  {
+    "who": "grace",
+    "text": "Goodnight, Alex."
+  },
+  {
+    "who": "grace",
+    "text": "...I need to sit down."
   },
   {
     "who": "guest",
@@ -1125,10 +1321,6 @@
   },
   {
     "who": "guest",
-    "text": "No blockers."
-  },
-  {
-    "who": "guest",
     "text": "I'm just getting some water."
   },
   {
@@ -1138,10 +1330,6 @@
   {
     "who": "guest",
     "text": "Could you change the address?"
-  },
-  {
-    "who": "guest",
-    "text": "Yes, that's right."
   },
   {
     "who": "guest",
@@ -1265,18 +1453,6 @@
   },
   {
     "who": "guest",
-    "text": "I'm from Riga, in Latvia."
-  },
-  {
-    "who": "guest",
-    "text": "I'm from Tallinn, in Estonia."
-  },
-  {
-    "who": "guest",
-    "text": "I'm from Vilnius, in Lithuania."
-  },
-  {
-    "who": "guest",
     "text": "I worked as a receptionist in a hotel."
   },
   {
@@ -1289,15 +1465,63 @@
   },
   {
     "who": "guest",
-    "text": "I like running."
+    "text": "a lamp"
   },
   {
     "who": "guest",
-    "text": "I like cooking."
+    "text": "a photo"
   },
   {
     "who": "guest",
-    "text": "I like chess."
+    "text": "a monitor"
+  },
+  {
+    "who": "guest",
+    "text": "a calendar"
+  },
+  {
+    "who": "guest",
+    "text": "a plant"
+  },
+  {
+    "who": "guest",
+    "text": "a phone"
+  },
+  {
+    "who": "guest",
+    "text": "a blue folder"
+  },
+  {
+    "who": "guest",
+    "text": "a keyboard"
+  },
+  {
+    "who": "guest",
+    "text": "a mouse"
+  },
+  {
+    "who": "guest",
+    "text": "a mug"
+  },
+  {
+    "who": "guest",
+    "text": "a stapler"
+  },
+  {
+    "who": "guest",
+    "text": "a tin of biscuits"
+  },
+  {
+    "who": "guest",
+    "text": "a bin"
+  },
+  {
+    "who": "guest",
+    "text": "the top drawer"
+  },
+  {
+    "who": "guest",
+    "text": "the bottom drawer"
   },
   {
     "who": "priya",

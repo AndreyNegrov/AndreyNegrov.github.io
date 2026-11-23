@@ -57,32 +57,39 @@ const add = (who, val) => {
   if (!map.has(key)) map.set(key, { who, text });
 };
 
-const walkBeat = (b, defWho) => {
+const walkBeat = (b, defWho, speakers) => {
   if (!b) return;
   const who = b.who || defWho;
+  if (speakers) speakers.add(who);
   add(who, b.say);
-  if (Array.isArray(b.lines)) b.lines.forEach((l) => add(l.who || who, l.text));
+  if (Array.isArray(b.lines)) b.lines.forEach((l) => { const lw = l.who || who; if (speakers) speakers.add(lw); add(lw, l.text); });
   add(who, b.ok);
   add(who, b.giveUp);
   add(who, b.close);
+  add(who, b.more);
+  add(who, b.busy);
+  if (b.model) add("guest", b.model);
   if (b.ask) Object.values(b.ask).forEach((v) => add(who, v));
   if (b.replies) Object.values(b.replies).forEach((v) => add(who, v));
   if (Array.isArray(b.fallbacks)) b.fallbacks.forEach((v) => add(who, v));
   if (Array.isArray(b.bonus)) b.bonus.forEach((x) => add(who, x.reply));
   if (Array.isArray(b.forbid)) b.forbid.forEach((x) => add(who, x.reply));
   if (Array.isArray(b.topics)) b.topics.forEach((t) => add(who, t.answer));
-  if (b.interject) walkBeat(b.interject, who);
+  if (b.interject) walkBeat(b.interject, who, speakers);
 };
 
 const walkConv = (c) => {
   const defWho = c.npc || c.who || "guest";
-  add(defWho, c.failSay);
+  const speakers = new Set([defWho]);
+  if (Array.isArray(c.beats)) c.beats.forEach((b) => walkBeat(b, defWho, speakers));
+  for (const sp of speakers) add(sp, c.failSay);
   if (c.end && c.end.say) add(c.end.who || defWho, c.end.say);
   if (c.forbid) {
     const fl = typeof c.forbid === "function" ? c.forbid() : c.forbid;
-    if (Array.isArray(fl)) fl.forEach((f) => add(defWho, f.reply));
+    if (Array.isArray(fl)) {
+      for (const sp of speakers) fl.forEach((f) => add(sp, f.reply));
+    }
   }
-  if (Array.isArray(c.beats)) c.beats.forEach((b) => walkBeat(b, defWho));
 };
 
 for (const sc of Object.values(SCENES)) {
@@ -130,6 +137,14 @@ for (const grp of Object.values(OFFICE.LEGEND)) {
     if (v.reply) add("max", v.reply);
   }
 }
+
+// Предметы на столе Грейс (js/toon.js DESK_WORDS)
+const DESK_ITEMS = [
+  "a lamp", "a photo", "a monitor", "a calendar", "a plant", "a phone",
+  "a blue folder", "a keyboard", "a mouse", "a mug", "a stapler",
+  "a tin of biscuits", "a bin", "the top drawer", "the bottom drawer"
+];
+for (const w of DESK_ITEMS) add("guest", w);
 
 // Общие системные переспросы из conv.js — озвучиваем голосом каждого персонажа, чтобы не откатывались на браузер.
 const COMMON = [

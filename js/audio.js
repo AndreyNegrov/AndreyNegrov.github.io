@@ -365,41 +365,72 @@ const Voice = (() => {
   function localSay(url, text, o) {
     let resolve;
     const done = new Promise((r) => { resolve = r; });
-    let el = null, stopped = false, ended = false, fallback = null;
+    let el = null, srcNode = null, startAt = 0, dur = 0, stopped = false, ended = false, fallback = null;
     const finish = (ok) => { if (ended) return; ended = true; resolve(ok); };
     const runFallback = () => {
       if (stopped || ended || fallback) return;
       if (el) { el.onended = el.onerror = null; try { el.pause(); el.removeAttribute("src"); } catch { /* ignore */ } el = null; }
+      if (srcNode) { srcNode.onended = null; try { srcNode.stop(); } catch { /* ignore */ } srcNode = null; }
       fallback = browserSay(text, { ...o, volume: (o.volume ?? 1) * (FX_VOL[o.fx] || 1) });
       fallback.done.then((ok) => finish(ok));
     };
-    try {
-      Sound.ensure();
-      if (Sound.ctx && Sound.ctx.state === "suspended") Sound.ctx.resume().catch(() => {});
-      el = new Audio(url);
-      el.crossOrigin = "anonymous";
-      el.preservesPitch = true;
-      el.mozPreservesPitch = true;
-      el.webkitPreservesPitch = true;
-      el.playbackRate = clamp(o.playRate || 1, 0.72, 1.3);
-      if (Sound.ctx) {
-        const src = Sound.ctx.createMediaElementSource(el);
-        const node = applyFx(src, o.fx);
-        Sound.chain(node, Sound.gain(o.volume ?? 1), Sound.voiceBus);
-      } else {
-        el.volume = clamp((o.volume ?? 1) * (FX_VOL[o.fx] || 1) * Settings.get().voiceVol, 0, 1);
+    const rate = clamp(o.playRate || 1, 0.72, 1.3);
+    const useBuffer = Math.abs(rate - 1) <= 0.05;
+    Sound.ensure();
+    if (Sound.ctx && Sound.ctx.state === "suspended") Sound.ctx.resume().catch(() => {});
+
+    if (useBuffer && Sound.ctx) {
+      // Web Audio AudioBuffer: идеально точный onended, никогда не перебивается и не блокируется автоплеем после await.
+      (async () => {
+        try {
+          const buf = await localBuffer(url);
+          if (stopped || ended) return finish(false);
+          const ctx = Sound.ctx;
+          srcNode = ctx.createBufferSource();
+          srcNode.buffer = buf;
+          srcNode.playbackRate.value = rate;
+          const node = applyFx(srcNode, o.fx);
+          Sound.chain(node, Sound.gain(o.volume ?? 1), Sound.voiceBus);
+          srcNode.onended = () => finish(!stopped);
+          startAt = ctx.currentTime;
+          dur = buf.duration / rate;
+          srcNode.start();
+        } catch {
+          runFallback();
+        }
+      })();
+    } else {
+      try {
+        el = new Audio(url);
+        el.crossOrigin = "anonymous";
+        el.preservesPitch = true;
+        el.mozPreservesPitch = true;
+        el.webkitPreservesPitch = true;
+        el.playbackRate = rate;
+        if (Sound.ctx) {
+          const src = Sound.ctx.createMediaElementSource(el);
+          const node = applyFx(src, o.fx);
+          Sound.chain(node, Sound.gain(o.volume ?? 1), Sound.voiceBus);
+        } else {
+          el.volume = clamp((o.volume ?? 1) * (FX_VOL[o.fx] || 1) * Settings.get().voiceVol, 0, 1);
+        }
+        el.onended = () => finish(!stopped);
+        el.onerror = runFallback;
+        el.play().catch(runFallback);
+      } catch {
+        runFallback();
       }
-      el.onended = () => finish(!stopped);
-      el.onerror = runFallback;
-      el.play().catch(runFallback);
-    } catch {
-      runFallback();
     }
     return {
       done,
       stop() {
         if (stopped) return;
         stopped = true;
+        if (srcNode) {
+          srcNode.onended = null;
+          try { srcNode.stop(); } catch { /* ignore */ }
+          srcNode = null;
+        }
         if (el) {
           el.onended = el.onerror = null;
           try { el.pause(); el.removeAttribute("src"); el.load(); } catch { /* ignore */ }
@@ -410,6 +441,7 @@ const Voice = (() => {
       },
       progress() {
         if (fallback) return fallback.progress();
+        if (srcNode && Sound.ctx && dur > 0) return clamp((Sound.ctx.currentTime - startAt) / dur, 0, 1);
         if (!el || !el.duration || !isFinite(el.duration)) return 0;
         return clamp(el.currentTime / el.duration, 0, 1);
       }
