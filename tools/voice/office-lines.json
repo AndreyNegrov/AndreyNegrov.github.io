@@ -5,7 +5,7 @@
   },
   {
     "who": "grace",
-    "text": "See you on Monday! Ta-ra!"
+    "text": "See you on Monday! See ya!"
   },
   {
     "who": "priya",
@@ -85,11 +85,11 @@
   },
   {
     "who": "grace",
-    "text": "And how long have you been in London?"
+    "text": "And how long have you been in San Francisco?"
   },
   {
     "who": "grace",
-    "text": "Two months! So you still get lost on the Tube, I bet."
+    "text": "Two months! So you still get lost on Caltrain, I bet."
   },
   {
     "who": "grace",
@@ -381,7 +381,7 @@
   },
   {
     "who": "max",
-    "text": "Weekend was great. Beach. Well, the Thames. Same thing."
+    "text": "Weekend was great. Beach. Well, the Bay. Same thing."
   },
   {
     "who": "max",
@@ -401,7 +401,7 @@
   },
   {
     "who": "max",
-    "text": "Running? Mate. I run... to the pub. That's it."
+    "text": "Running? Mate. I run... to the bar. That's it."
   },
   {
     "who": "max",
@@ -525,7 +525,7 @@
   },
   {
     "who": "grace",
-    "text": "Lovely, thanks. I cleaned my flat. Very rock and roll."
+    "text": "Lovely, thanks. I cleaned my apartment. Very rock and roll."
   },
   {
     "who": "grace",
@@ -557,11 +557,11 @@
   },
   {
     "who": "max",
-    "text": "Freezing today, isn't it?"
+    "text": "Foggy today, isn't it?"
   },
   {
     "who": "max",
-    "text": "Welcome to London."
+    "text": "Welcome to San Francisco."
   },
   {
     "who": "max",
@@ -825,7 +825,7 @@
   },
   {
     "who": "dev",
-    "text": "So: Friday, six thirty p.m. Pickup from Murmur, 22 Hatton Street. Delivery to 14 Wharf Lane, flat 3. Is that right?"
+    "text": "So: Friday, six thirty p.m. Pickup from Murmur, 22 Mission Street. Delivery to 14 Bay Street, apartment 3. Is that right?"
   },
   {
     "who": "dev",
@@ -849,11 +849,11 @@
   },
   {
     "who": "dev",
-    "text": "Nine Mill Road. M-I-L-L?"
+    "text": "Nine Pine Street. P-I-N-E?"
   },
   {
     "who": "dev",
-    "text": "Sorry, which road?"
+    "text": "Sorry, which street?"
   },
   {
     "who": "dev",
@@ -869,7 +869,7 @@
   },
   {
     "who": "dev",
-    "text": "Done. Friday, six thirty, delivery to 9 Mill Road. Anything else?"
+    "text": "Done. Friday, six thirty, delivery to 9 Pine Street. Anything else?"
   },
   {
     "who": "dev",
@@ -877,11 +877,11 @@
   },
   {
     "who": "dev",
-    "text": "Cheers! Bye now."
+    "text": "Thanks! Bye now."
   },
   {
     "who": "grace",
-    "text": "Oh! Alex. You're still here? I'm just off. I'm taking this box myself, actually. Can't trust couriers."
+    "text": "Oh! Alex. You're still here? I'm just heading out. I'm taking this box myself, actually. Can't trust couriers."
   },
   {
     "who": "grace",
@@ -889,7 +889,7 @@
   },
   {
     "who": "grace",
-    "text": "Weekend? Yoga on Saturday. Then... maybe a little holiday. A long one."
+    "text": "Weekend? Yoga on Saturday. Then... maybe a little vacation. A long one."
   },
   {
     "who": "grace",
@@ -897,7 +897,7 @@
   },
   {
     "who": "grace",
-    "text": "Somewhere warm. Spain, maybe. Somewhere with no couriers."
+    "text": "Somewhere warm. Mexico, maybe. Somewhere with no couriers."
   },
   {
     "who": "grace",
@@ -913,7 +913,7 @@
   },
   {
     "who": "grace",
-    "text": "Tea? At this hour? ...Oh, go on then. A quick one."
+    "text": "Coffee? At this hour? ...Oh, go on then. A quick one."
   },
   {
     "who": "grace",
@@ -929,7 +929,7 @@
   },
   {
     "who": "grace",
-    "text": "Born here. Never left. Maybe it's time."
+    "text": "Born here in California. Never left. Maybe it's time."
   },
   {
     "who": "grace",
@@ -941,7 +941,7 @@
   },
   {
     "who": "grace",
-    "text": "No! No. I've got it. Thank you, love."
+    "text": "No! No. I've got it. Thank you, Alex."
   },
   {
     "who": "grace",
@@ -973,7 +973,7 @@
   },
   {
     "who": "grace",
-    "text": "Do you like London so far?"
+    "text": "Do you like San Francisco so far?"
   },
   {
     "who": "grace",
@@ -1009,7 +1009,7 @@
   },
   {
     "who": "guest",
-    "text": "Would you like a cup of tea?"
+    "text": "Would you like a cup of coffee?"
   },
   {
     "who": "guest",
@@ -1017,7 +1017,7 @@
   },
   {
     "who": "guest",
-    "text": "Do you like London?"
+    "text": "Do you like San Francisco?"
   },
   {
     "who": "guest",
@@ -1057,7 +1057,7 @@
   },
   {
     "who": "grace",
-    "text": "Wharf Lane? That's... a recycling partner. A small one."
+    "text": "Bay Street? That's... a recycling partner. A small one."
   },
   {
     "who": "grace",
@@ -1169,7 +1169,7 @@
   },
   {
     "who": "guest",
-    "text": "The Tube is the London underground. The metro."
+    "text": "Caltrain is the commuter train in Silicon Valley, between San Francisco and San Jose."
   },
   {
     "who": "guest",
@@ -1185,11 +1185,7 @@
   },
   {
     "who": "guest",
-    "text": "Ta-ra means goodbye. Very British."
-  },
-  {
-    "who": "guest",
-    "text": "Ta means thanks. Very British."
+    "text": "See ya means see you later. Casual goodbye."
   },
   {
     "who": "guest",

@@ -1,4 +1,4 @@
-// Сезон «Онбординг». Лондон, стартап Murmur, крот внутри, сделка в пятницу. Мультяшный: рисованные лица и фоны, свои цвета (js/toon.js).
+// Сезон «Онбординг». Кремниевая долина (Сан-Франциско), стартап Murmur, крот внутри, сделка в пятницу. Мультяшный: рисованные лица и фоны, свои цвета (js/toon.js).
 // Здесь только содержание. Движок общий с другими сезонами (js/packs.js); люди и словарь сезона подключаются, только пока он открыт.
 // Вся английская речь — короткая, уровень A2. Русский — только у Совы и в подсказках.
 
@@ -13,7 +13,7 @@ const OFFICE = (() => {
     grace: { name: "Grace", role: "офис-менеджер, Murmur", gender: "f", img: "art/office/p-grace-calm.jpg",
       faces: { calm: "art/office/p-grace-calm.jpg", happy: "art/office/p-grace-happy.jpg", wow: "art/office/p-grace-happy.jpg", sus: "art/office/p-grace-sus.jpg", hm: "art/office/p-grace-sus.jpg", angry: "art/office/p-grace-worried.jpg", sad: "art/office/p-grace-worried.jpg", worried: "art/office/p-grace-worried.jpg" },
       face: { skin: "#f0c8a6", hair: "#c7a77a", style: "bob", wear: "cardigan", top: "#4d7aa8", glasses: "#6b4a2b", bg: "#7ee6c4", lips: "#b5655a" },
-      voice: { g: "f", pitch: 1, rate: 1, prefer: ["Sonia", "Hazel", "UK English Female", "Maisie", "Susan", "en-GB"], cloud: "coral", style: "Warm, chatty British office manager in her fifties." } },
+      voice: { g: "f", pitch: 1, rate: 1, prefer: ["Sonia", "Hazel", "UK English Female", "Maisie", "Susan", "en-GB"], cloud: "coral", style: "Warm, chatty California office manager in her fifties." } },
     tom: { name: "Tom", role: "IT, Murmur", gender: "m", img: "art/office/p-tom-calm.jpg",
       faces: { calm: "art/office/p-tom-calm.jpg", happy: "art/office/p-tom-happy.jpg", wow: "art/office/p-tom-happy.jpg", sus: "art/office/p-tom-sus.jpg", hm: "art/office/p-tom-sus.jpg", angry: "art/office/p-tom-sus.jpg", sad: "art/office/p-tom-calm.jpg" },
       face: { skin: "#ecc4a2", hair: "#9a4a22", style: "messy", wear: "hoodie", top: "#4a4f9e", beard: "#9a4a22", bg: "#9db8ff", brows: "grumpy", mood: "flat" },
@@ -25,7 +25,7 @@ const OFFICE = (() => {
     dev: { name: "Dev", role: "диспетчер SwiftBox", gender: "m", img: "art/office/p-dev-calm.jpg",
       faces: { calm: "art/office/p-dev-calm.jpg", happy: "art/office/p-dev-happy.jpg", wow: "art/office/p-dev-happy.jpg", sus: "art/office/p-dev-calm.jpg", hm: "art/office/p-dev-calm.jpg" },
       face: { skin: "#8f5d3d", hair: "#121212", style: "buzz", wear: "vest", top: "#f3a712", beard: "#121212", stubble: true, bg: "#7fd8e8", headset: true },
-      voice: { g: "m", pitch: 1, rate: 1.05, prefer: ["Prabhat", "Thomas", "Ryan", "UK English Male", "en-GB"], cloud: "ash", style: "Busy London courier dispatcher on the phone." } },
+      voice: { g: "m", pitch: 1, rate: 1.05, prefer: ["Prabhat", "Thomas", "Ryan", "UK English Male", "en-GB"], cloud: "ash", style: "Busy San Francisco courier dispatcher on the phone." } },
     you: { name: "Вы", role: "Alex Frost", face: "self", img: "art/office/p-you-calm.jpg", voice: { g: "m" } }
   };
 
@@ -33,14 +33,14 @@ const OFFICE = (() => {
     murmur: "Мёрмур (компания); бормотание", hiya: "привет", "nice to meet you": "приятно познакомиться",
     "can you hear me": "вы меня слышите?", okay: "нормально, хорошо", lead: "руководить", people: "люди; отдел кадров",
     "office manager": "офис-менеджер", "tell us": "расскажите нам", "a little bit": "немного", yourself: "себя, о себе",
-    lovely: "чудесно", "never been": "никогда не была", "how long": "как долго", london: "Лондон",
-    "get lost": "заблудиться", tube: "метро в Лондоне", "i bet": "спорим, наверняка", job: "работа",
+    lovely: "чудесно", "never been": "никогда не была", "how long": "как долго", "san francisco": "Сан-Франциско",
+    "get lost": "заблудиться", caltrain: "пригородный поезд в Кремниевой долине", "i bet": "спорим, наверняка", job: "работа",
     "office assistant": "офис-ассистент", deliveries: "доставки", meetings: "встречи", "a bit of everything": "всего понемногу",
     "why do you want": "почему вы хотите", practical: "практический", courier: "курьер", "in a meeting": "на встрече",
     literally: "буквально", "one second": "секунду", "friday's fine": "пятница подходит", "half six": "половина седьмого (18:30)",
     "busy week": "напряжённая неделя", classic: "классический", "biggest weakness": "главная слабость", weakness: "слабость",
     honest: "честный", "any questions": "есть вопросы?", "we'd love to have you": "мы будем рады вас взять", "start on monday": "начать в понедельник",
-    brilliant: "отлично", "ta-ra": "пока (брит.)", ta: "спасибо (брит.)", "the new one": "новенький", laptop: "ноутбук",
+    brilliant: "отлично", "see ya": "пока (разг.)", "the new one": "новенький", laptop: "ноутбук",
     password: "пароль", "sticky note": "стикер", "don't lose it": "не потеряй", "anything else": "что-нибудь ещё?",
     servers: "сервера", server: "сервер", "wi-fi": "вай-фай", "everything people break": "всё, что люди ломают",
     "till ten": "до десяти", update: "обновление", exciting: "увлекательный", badges: "пропуска", badge: "пропуск",
@@ -83,7 +83,7 @@ const OFFICE = (() => {
       calls: { emo: "🎧", ru: "оператор колл-центра", en: "a call centre operator", short: "call centre", say: "I worked in a call centre.", any: ["call cent*", "call center", "callcent*", "operator", "support"] }
     },
     hobby: {
-      running: { emo: "🏃", ru: "бег", short: "running", say: "I like running.", any: ["run", "running", "jog*", "marathon*"], reply: "Running? Mate. I run... to the pub. That's it." },
+      running: { emo: "🏃", ru: "бег", short: "running", say: "I like running.", any: ["run", "running", "jog*", "marathon*"], reply: "Running? Mate. I run... to the bar. That's it." },
       cooking: { emo: "🍳", ru: "готовить", short: "cooking", say: "I like cooking.", any: ["cook*", "food", "kitchen", "bake", "baking"], reply: "Cooking! Bring food on Friday and you'll be famous here." },
       chess: { emo: "♟️", ru: "шахматы", short: "chess", say: "I like chess.", any: ["chess"], reply: "Chess? Big brain. Respect, mate." }
     }
@@ -120,12 +120,11 @@ const OFFICE = (() => {
     "people lead": "The People Lead is the boss of HR: hiring, teams, people.",
     "office manager": "The office manager runs the office: deliveries, rooms, everything.",
     "office assistant": "An office assistant helps with everything: phones, post, meetings.",
-    tube: "The Tube is the London underground. The metro.",
+    caltrain: "Caltrain is the commuter train in Silicon Valley, between San Francisco and San Jose.",
     courier: "A courier brings and takes boxes and letters.",
     weakness: "A weakness is something you are not good at.",
     "half six": "Half six means six thirty. Half past six.",
-    "ta-ra": "Ta-ra means goodbye. Very British.",
-    ta: "Ta means thanks. Very British.",
+    "see ya": "See ya means see you later. Casual goodbye.",
     "settling in": "Settling in means getting used to a new place.",
     "g'day": "G'day means hello. It's Australian.",
     gday: "G'day means hello. It's Australian.",
@@ -162,20 +161,20 @@ const OFFICE = (() => {
     maxBooth: { ru: "Макс уходит звонить в стеклянную будку и закрывает дверь." },
     tomHunt: { ru: "Том ищет в логах, кто в четверг ночью зашёл по запасному пропуску." },
     maxDentist: { ru: "Макс говорит, что с двух до четырёх он у стоматолога." },
-    flash: { ru: "Удалённое сообщение Грейс: SwiftBox, пятница 18:30, 14 Wharf Lane, Flat 3." },
+    flash: { ru: "Удалённое сообщение Грейс: SwiftBox, пятница 18:30, 14 Bay Street, Apt 3." },
     maxLeave: { ru: "Макс хочет уйти из Murmur." },
     maxInterview: { ru: "В прошлый четверг Макс был на собеседовании в другой компании. Про футбол он соврал." },
-    halfsix2: { ru: "Грейс по телефону: «Пятница. Half six, как договорились»." },
+    halfsix2: { ru: "Грейс по телефону: «Пятница. Six thirty, как договорились»." },
     recycling: { ru: "Грейс: «На коробке будет написано recycling. В утиль никто не заглядывает»." },
     cash: { ru: "Грейс: оплата наличными. Без карт и банков." },
-    wharf: { ru: "Диспетчер SwiftBox: доставка на 14 Wharf Lane, flat 3. Это жилая квартира, не пункт переработки." },
-    rerouted: { ru: "Адрес доставки изменён: коробка поедет на 9 Mill Road, к Сове." },
+    wharf: { ru: "Диспетчер SwiftBox: доставка на 14 Bay Street, Apt 3. Это жилая квартира, не пункт переработки." },
+    rerouted: { ru: "Адрес доставки изменён: коробка поедет на 9 Pine Street, к Сове." },
     doorScreen: { ru: "Экран у двери: последний вход — пропуск №07, четверг, 21:40. Статус: запасной." },
     invoice: { ru: "Счёт SwiftBox в принтере: заказчик — G. Hollis. Оплата наличными." },
-    fridayPub: { ru: "В пятницу в 18:00 весь офис идёт в паб. Все, кроме Грейс: она «занята»." },
+    fridayPub: { ru: "В пятницу в 18:00 весь офис идёт в бар. Все, кроме Грейс: она «занята»." },
     doorLog: { ru: "Журнал двери за четверг: №04 вышел в 18:10, №03 — в 17:30, №01 (Том) — в 22:05. №07 вошёл в 21:40." },
     spare07: { ru: "Нижний ящик Грейс: лоток запасных пропусков. Ячейка №07 пустая." },
-    oneWay: { ru: "Там же — билет в Испанию в один конец, на утро субботы. На имя G. Hollis." }
+    oneWay: { ru: "Там же — билет в Мексику в один конец, на утро субботы. На имя G. Hollis." }
   };
   const SUSPECTS = ["tom", "max", "grace"];
   const DOSSIER_FIELDS = [
@@ -195,11 +194,11 @@ const OFFICE = (() => {
 
   // Как персонажи думают — для языковой модели, если она подключена.
   const CAST = {
-    priya: "Priya, People Lead (HR) at Murmur, a small London startup that makes translator earbuds. Energetic and kind, loves phrases like 'love that' and 'amazing'. Uses simple, clear English.",
-    grace: "Grace Hollis, Murmur's office manager for eleven years. Warm, chatty, very British ('lovely', 'ta'). Secretly she is selling the earbud prototype on Friday. She never admits it and quietly tests newcomers.",
-    tom: "Tom, Murmur's IT guy. Irish, grumpy, sarcastic, very short sentences, but honest and kind underneath.",
-    max: "Max, Murmur's sales lead. Australian, charming, talks a lot, says 'mate'. Secretly looking for a new job and hides it.",
-    dev: "Dev, a dispatcher at SwiftBox couriers. Busy, quick, friendly London phone manner."
+    priya: "Priya, People Lead (HR) at Murmur, a small Silicon Valley startup in San Francisco that makes translator earbuds. Energetic and kind, loves phrases like 'love that' and 'amazing'. Uses simple, clear English.",
+    grace: "Grace Hollis, Murmur's office manager for eleven years in San Francisco. Warm, chatty, friendly ('lovely', 'thanks'). Secretly she is selling the earbud prototype on Friday. She never admits it and quietly tests newcomers.",
+    tom: "Tom, Murmur's IT guy. Grumpy, sarcastic, very short sentences, but honest and kind underneath.",
+    max: "Max, Murmur's sales lead. Australian living in San Francisco, charming, talks a lot, says 'mate'. Secretly looking for a new job and hides it.",
+    dev: "Dev, a dispatcher at SwiftBox couriers in San Francisco. Busy, quick, friendly phone manner."
   };
 
   const S3_COVER = { id: "cover", label: "выдать себя", ai: "mentions spying, intelligence, a handler, Sova, the Bureau, police, an agent or a secret mission",
@@ -241,10 +240,10 @@ const OFFICE = (() => {
   const S = {
     // ═════════ МИССИЯ 1 · СОБЕСЕДОВАНИЕ ═════════
     "o1-open": {
-      type: "chat", mission: 1, missionStart: true, chapter: { n: 1, title: "Собеседование", sub: "Среда, 9:50 · Лондон" },
+      type: "chat", mission: 1, missionStart: true, chapter: { n: 1, title: "Собеседование", sub: "Среда, 9:50 · Сан-Франциско" },
       time: "09:50", place: "Сообщения", bg: "art/office/bg-home-dawn.jpg", look: "day", app: "sova",
       steps: [
-        { from: "sova", text: "Иней, доброе утро. Лондон, стартап Murmur. Делают наушник-переводчик: вставил в ухо — и понимаешь любой язык." },
+        { from: "sova", text: "Иней, доброе утро. Кремниевая долина, Сан-Франциско, стартап Murmur. Делают наушник-переводчик: вставил в ухо — и понимаешь любой язык." },
         { from: "sova", text: "Кто-то внутри продаёт прототип. Сделка — в эту пятницу. Найди: кто, где и когда." },
         { from: "sova", text: "Ирония: переводчика у тебя нет. Только твой английский. В 10:00 — собеседование на офис-ассистента. Сначала легенда." }
       ],
@@ -262,7 +261,7 @@ const OFFICE = (() => {
           facts: [{ id: "hi", label: "представиться", ai: "greets and/or says their name is Alex", any: ["alex", "hi", "hello", "hey", "frost", "im", "i am"] }],
           ask: { hi: "Не слышу. По-английски: Hi, I'm Alex." },
           ok: (s) => `Слышу. Акцент есть, но для ${Leg.city(s).gen} нормально.` } },
-        { from: "sova", text: "Три правила. Первое: ни слова по-русски. Даже «блин». Русский в лондонском офисе — это засветка." },
+        { from: "sova", text: "Три правила. Первое: ни слова по-русски. Даже «блин». Русский в офисе Кремниевой долины — это засветка." },
         { from: "sova", text: "Второе: не расслышишь — переспроси. Это не слабость, это инструмент:" },
         { phrase: "repeat" },
         { from: "sova", text: "Третье: тупик — ты тут первую неделю. Первой неделе прощают многое:" },
@@ -276,7 +275,7 @@ const OFFICE = (() => {
       type: "conv", ui: "video", mission: 1, time: "10:00", place: "Видеозвонок", bg: "art/office/bg-home-dawn.jpg", look: "day",
       title: "Murmur · Interview", cast: ["priya", "grace"], npc: "priya", meter: "Собеседование",
       goal: "Получи работу. Отвечай по легенде.",
-      situation: "A video job interview at Murmur for an office assistant role. The candidate is Alex Frost, new in London, with simple English.",
+      situation: "A video job interview at Murmur in San Francisco for an office assistant role. The candidate is Alex Frost, new in California, with simple English.",
       forbid: S3_FORBID,
       failSay: "I think... we'll be in touch. Bye.", failText: "Приглашения в Murmur не будет. Легенда рассыпалась на собеседовании.",
       beats: [
@@ -297,13 +296,13 @@ const OFFICE = (() => {
             { id: "job", label: (s) => `работа: ${Leg.job(s).short}`, ai: (s) => `says they worked as ${Leg.job(s).en}`, any: (s) => Leg.job(s).any }],
           ask: { name: "Sorry, what's your full name?", city: "And where are you from?", job: "And what did you do before?" },
           ok: (s) => `${Leg.city(s).en}! Lovely. I've never been.` },
-        { who: "grace", say: "And how long have you been in London?",
+        { who: "grace", say: "And how long have you been in San Francisco?",
           hint: "Два месяца — two months.", model: "I've been here for two months.",
           facts: [{ id: "months", label: "два месяца", ai: "says two months", any: ["two months", "2 months", "two month", "2 month", "couple of months", "two"] }],
-          ask: { months: "Sorry, how long?" }, ok: "Two months! So you still get lost on the Tube, I bet." },
+          ask: { months: "Sorry, how long?" }, ok: "Two months! So you still get lost on Caltrain, I bet." },
         { who: "priya", say: "The job is office assistant. Phones, deliveries, meetings, a bit of everything. Why do you want to work at Murmur?",
           hint: "Любая причина. Например: I like technology. I want to learn.", model: "I like your product, and I want to learn new things.",
-          facts: [{ id: "why", label: "причина", ai: "gives any reason for wanting this job", any: ["like", "love", "interest*", "want", "because", "technolog*", "tech", "product", "learn", "team", "earbud*", "translat*", "language*", "job", "work", "experience", "cool", "great", "good", "people", "london"] }],
+          facts: [{ id: "why", label: "причина", ai: "gives any reason for wanting this job", any: ["like", "love", "interest*", "want", "because", "technolog*", "tech", "product", "learn", "team", "earbud*", "translat*", "language*", "job", "work", "experience", "cool", "great", "good", "people", "silicon", "valley", "francisco", "california"] }],
           bonus: [{ id: "irony", label: "заговорить о языках", ai: "mentions languages, translation or learning English", any: ["language*", "translat*", "english"],
             reply: "Ha! Our earbud will translate everything. Soon nobody will need to learn English!" }],
           ok: "Love that." },
@@ -335,7 +334,7 @@ const OFFICE = (() => {
           facts: [{ id: "yes", label: "согласиться", ai: "agrees to start on Monday", any: [...YES, "can", "thank*", "love to", "happy"] }],
           ok: "Brilliant! Welcome to Murmur, Alex." }
       ],
-      end: { who: "grace", say: "See you on Monday! Ta-ra!" }
+      end: { who: "grace", say: "See you on Monday! See ya!" }
     },
 
     "o1-debrief": {
@@ -377,14 +376,14 @@ const OFFICE = (() => {
       title: "Первый день",
       goal: "Поговори с Томом, Максом и Грейс: чем занимаются и что делали в прошлый четверг.",
       finds: [
-        { id: "fridge", at: "fridge", ico: "📝", title: "Записка на холодильнике", kind: "", text: "DO NOT eat my yoghurt.\nI know it was you, Max.\n— Tom",
+        { id: "fridge", at: "fridge", ico: "📝", title: "Записка на холодильнике", kind: "", text: "DO NOT eat my yogurt.\nI know it was you, Max.\n— Tom",
           q: "Что случилось?", opts: ["Макс съел йогурт Тома", "Том съел йогурт Макса", "Холодильник сломался"] },
         { id: "printer", at: "printer", ico: "🖨️", title: "Лист в принтере", kind: "print", text: "SwiftBox Couriers — INVOICE\nCustomer: G. Hollis, Murmur\nPickups this month: 2\nPaid: cash",
           q: "Как здесь платят курьерам?", opts: ["Наличными", "Картой компании", "Курьеры работают бесплатно"], clue: "invoice" },
         { id: "door", at: "doorpad", ico: "🚪", title: "Экран у двери", kind: "screen", text: "LAST ENTRY\nBadge #07 — Thu 21:40\nStatus: SPARE BADGE",
           q: "Кто вошёл в четверг в 21:40?", opts: ["Кто-то с запасным пропуском", "Том со своим пропуском", "Никто: дверь была закрыта"], clue: "doorScreen" },
-        { id: "board", at: "board", ico: "📌", title: "Доска объявлений", kind: "", text: "FRIDAY DRINKS! 🍻\n6 pm at The Fox. Everyone's coming.\nExcept Grace: \"busy\".",
-          q: "Кто не идёт в паб в пятницу?", opts: ["Грейс", "Том", "Идут все"], clue: "fridayPub" },
+        { id: "board", at: "board", ico: "📌", title: "Доска объявлений", kind: "", text: "FRIDAY DRINKS! 🍻\n6 pm at Mission Tap. Everyone's coming.\nExcept Grace: \"busy\".",
+          q: "Кто не идёт в бар в пятницу?", opts: ["Грейс", "Том", "Идут все"], clue: "fridayPub" },
         { id: "coffee", at: "coffee", ico: "☕", title: "Кофемашина", kind: "", text: "OUT OF ORDER.\nPlease use the kettle.\nSorry! — Grace",
           q: "Что с кофемашиной?", opts: ["Не работает", "Только для гостей", "Кончилось молоко"] }
       ],
@@ -440,7 +439,7 @@ const OFFICE = (() => {
                   answer: "Sales! I sell earbuds that don't exist yet. Best job in the world.", dossier: ["max", "role", "Продажи"] },
                 { id: "thu", label: "прошлый четверг", required: true, ai: "asks what Max did last week, last Thursday or on Thursday evening", any: ["thursday", "last week", "your week", "anything fun", "what did you do", "last night"],
                   answer: "Last Thursday? Football. Big match. We lost. Don't ask.", dossier: ["max", "thursday", "Футбол, говорит он"], clue: null },
-                { id: "weekend", label: "выходные", ai: "asks about his weekend", any: ["weekend", "saturday", "sunday"], answer: "Weekend was great. Beach. Well, the Thames. Same thing." },
+                { id: "weekend", label: "выходные", ai: "asks about his weekend", any: ["weekend", "saturday", "sunday"], answer: "Weekend was great. Beach. Well, the Bay. Same thing." },
                 { id: "badge", label: "пропуск", offer: true, ai: "asks about badges or passes", any: ["badge*", "pass", "key card", "card", "access"],
                   answer: "My badge? Number four, I think. Lucky number. Why?", dossier: ["max", "badge", "№04"], clue: "maxBadge" },
                 { id: "long", label: "сколько работает", ai: "asks how long he has worked here", any: ["how long"], answer: "Three years. Feels like ten." },
@@ -478,7 +477,7 @@ const OFFICE = (() => {
                   answer: "Me? I do everything. The office, deliveries, couriers, the lot. If it comes in a box, it's mine.", dossier: ["grace", "role", "Офис, доставки, курьеры"] },
                 { id: "thu", label: "прошлый четверг", required: true, ai: "asks what Grace did last week, last Thursday or on Thursday evening", any: ["thursday", "last week", "your week", "anything fun", "what did you do", "last night"],
                   answer: "Last Thursday? Yoga, then home. Early night. My life is very exciting.", dossier: ["grace", "thursday", "Йога, потом домой — говорит она"] },
-                { id: "weekend", label: "выходные", ai: "asks about her weekend", any: ["weekend", "saturday", "sunday"], answer: "Lovely, thanks. I cleaned my flat. Very rock and roll." },
+                { id: "weekend", label: "выходные", ai: "asks about her weekend", any: ["weekend", "saturday", "sunday"], answer: "Lovely, thanks. I cleaned my apartment. Very rock and roll." },
                 { id: "badge", label: "пропуск", offer: true, ai: "asks about badges or passes", any: ["badge*", "pass", "key card", "card", "access"],
                   answer: "Badges are Tom's thing. I just keep the spares in my drawer. Why?", dossier: ["grace", "badge", "Хранит запасные пропуска"], clue: "spares" },
                 { id: "long", label: "сколько работает", ai: "asks how long she has worked here", any: ["how long"], answer: "Eleven years! Before Murmur, this building was a carpet shop." },
@@ -534,7 +533,7 @@ const OFFICE = (() => {
       items: (s) => [
         { say: "Morning, Alex! How are you?", right: "Good, thanks. And you?", wrong: ["I'm Alex.", "Yes, I am."], back: "Can't complain, mate.", why: "На «How are you?» отвечают коротко и спрашивают в ответ." },
         { say: "Did you have a good evening?", right: "Yes, it was nice, thanks.", wrong: ["Yes, I do.", "Good evening!"], why: "Вопрос с did — про вчера. Ответ: Yes, it was…" },
-        { say: "Freezing today, isn't it?", right: "Yeah, it's really cold!", wrong: [`No, I'm from ${Leg.city(s).en}.`, "Yes, I am freezing it."], back: "Welcome to London.", why: "«…isn't it?» — с тобой делятся погодой. Просто согласись." },
+        { say: "Foggy today, isn't it?", right: "Yeah, it's really chilly!", wrong: [`No, I'm from ${Leg.city(s).en}.`, "Yes, I am fogging it."], back: "Welcome to San Francisco.", why: "«…isn't it?» — с тобой делятся погодой. Просто согласись." },
         { say: "Which floor? Five?", right: "Yes, five, please.", wrong: ["I'm fine, thanks.", "Five years."], why: "Он спрашивает про этаж: Yes, five, please." },
         { say: "Ready for your first stand-up?", right: "I think so. A bit nervous!", wrong: ["Yes, I'm standing.", "Stand up, please."], back: "Ha! You'll be fine.", why: "Stand-up — утренняя планёрка. Ready? — I think so." },
         { say: "Here we are. After you!", right: "Thanks!", wrong: ["After me what?", "You're welcome."], why: "After you — «проходи первым». Ответ: Thanks!" }
@@ -556,7 +555,7 @@ const OFFICE = (() => {
           { who: "priya", text: "Ooh, mysterious! Thanks, Tom. Max?" },
           { who: "max", text: "Yesterday, three calls with clients. Today I'm out from two till four. Dentist.", note: "Макс на стендапе", clue: "maxDentist" },
           { who: "grace", text: "Today I'm booking a courier for Friday. The old laptops are going to recycling. Alex is helping me.", note: "Грейс на стендапе" }] },
-        { flash: { who: "grace", text: "📦 SwiftBox: pickup confirmed. Fri 18:30 → 14 Wharf Lane, Flat 3", ms: 9000, clue: "flash" } },
+        { flash: { who: "grace", text: "📦 SwiftBox: pickup confirmed. Fri 18:30 → 14 Bay Street, Apt 3", ms: 9000, clue: "flash" } },
         { lines: [{ who: "grace", text: "Oops! Wrong chat. Sorry, everyone!" }] },
         { who: "priya", say: "No worries! Alex, your first stand-up! What did you do yesterday?",
           hint: "Вчера: познакомился(ась) с командой, получил(а) ноутбук. Прошедшее время.", model: "Yesterday I met the team and got my laptop.",
@@ -591,7 +590,7 @@ const OFFICE = (() => {
         { say: "And here it is. Badge zero seven. In at twenty to ten, p.m.", fields: [["Пропуск", "07"], ["Время", "2140", ":"]], note: "№07 — вошёл в 21:40", tip: "twenty to ten p.m. = 21:40" }
       ],
       done: (s, r) => { s.flags.logScore = r.score; Clues.add("doorLog", r.score < 200); },
-      sova: (s, r) => r.score >= 300 ? "Чисто. «Half past», «five past», «twenty to» — британцы так говорят о времени постоянно. Ты это теперь слышишь." : "Время на слух — самое трудное. Half past five — 5:30. Twenty to ten — без двадцати десять. Потренируйся в «Перехвате»."
+      sova: (s, r) => r.score >= 300 ? "Чисто. «Half past», «five past», «twenty to» — в английском так часто называют время. Ты это теперь слышишь." : "Время на слух — самое трудное. Half past five — 5:30. Twenty to ten — без двадцати десять. Потренируйся в «Перехвате»."
     },
 
     "o3-report": {
@@ -599,14 +598,14 @@ const OFFICE = (() => {
       steps: [
         { from: "sova", text: "Грейс что-то удалила из общего чата. Что там было? По-английски: когда и куда." },
         { me: { report: true, maxTries: 4,
-          hint: "Время и адрес. Например: Friday, six thirty, 14 Wharf Lane.", model: "A pickup on Friday at six thirty. To 14 Wharf Lane, flat 3.",
+          hint: "Время и адрес. Например: Friday, six thirty, 14 Bay Street.", model: "A pickup on Friday at six thirty. To 14 Bay Street, apartment 3.",
           facts: [
             { id: "time", label: "время", ai: "says 18:30 / six thirty / half past six", any: ["1830", "630", "6 30", "six thirty", "half six", "half past six", "six 30", "18 30"], ack: "18:30. Совпадает с её «half six»." },
-            { id: "place", label: "адрес", ai: "says Wharf Lane (number 14)", any: ["wharf", "warf", "wolf lane", "14 lane", "fourteen", "lane"], ack: "Wharf Lane, 14. Принято." }],
+            { id: "place", label: "адрес", ai: "says Bay Street (number 14)", any: ["bay", "bay street", "14 bay", "fourteen", "street", "apt 3", "apartment 3", "wharf"], ack: "Bay Street, 14. Принято." }],
           ask: { time: "Во сколько?", place: "Куда? Адрес?" },
           done: (s, got) => { if (got.has("time") && got.has("place")) s.flags.flashRead = true; Clues.add("flash", true); },
-          fallback: "Ладно, я достала из кэша: пятница, 18:30, 14 Wharf Lane, квартира 3. В следующий раз — скриншот." } },
-        { from: "sova", text: "Wharf Lane, 14 — жилой дом. Квартира. Не склад и не пункт переработки. Странное место для «старых ноутбуков»." },
+          fallback: "Ладно, я достала из кэша: пятница, 18:30, 14 Bay Street, квартира 3. В следующий раз — скриншот." } },
+        { from: "sova", text: "Bay Street, 14 — жилой дом. Квартира. Не склад и не пункт переработки. Странное место для «старых ноутбуков»." },
         { from: "sova", when: (s) => s.clues.halfsix, text: "И «half six» Грейс говорила по телефону ещё на собеседовании. Совпадение? Не думаю." },
         { from: "sova", text: "По журналу двери: №04 и №03 ушли до шести, Том — в 22:05. А в 21:40 вошёл запасной №07." },
         { from: "sova", text: "А Макс сегодня «у стоматолога» с двух до четырёх. Проверим, какой там стоматолог." }
@@ -617,7 +616,7 @@ const OFFICE = (() => {
     "o3-debrief": {
       type: "debrief", mission: 3, time: "10:00", place: "Итог", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Первый стендап",
-      sova: (s) => s.flags.flashRead ? "Шесть секунд на чтение — и ты успел(а). Пятница, 18:30, Wharf Lane." : "Сообщение ушло. Ничего: адрес я достала. Но читать надо быстрее."
+      sova: (s) => s.flags.flashRead ? "Девять секунд на чтение — и ты успел(а). Пятница, 18:30, Bay Street." : "Сообщение ушло. Ничего: адрес я достала. Но читать надо быстрее."
     },
 
     // ═════════ МИССИЯ 4 · СТЕКЛЯННАЯ БУДКА ═════════
@@ -714,10 +713,10 @@ const OFFICE = (() => {
       time: "11:00", place: "Сообщения", bg: "art/office/bg-office-day.jpg", look: "day", app: "loop",
       steps: [
         { from: "grace", text: "Alex, can you call SwiftBox and confirm Friday's pickup? I'm in meetings all day 🙈" },
-        { from: "grace", text: "The booking number is on a sticky note on my desk. Somewhere. Ta!" },
+        { from: "grace", text: "The booking number is on a sticky note on my desk. Somewhere. Thanks!" },
         { app: "sova" },
         { from: "sova", text: "Она сама отдаёт тебе сделку — и пускает за свой стол. Иди." },
-        { from: "sova", text: "План: найди номер заказа, позвони, подтверди. А потом попроси сменить адрес доставки на наш — 9 Mill Road." },
+        { from: "sova", text: "План: найди номер заказа, позвони, подтверди. А потом попроси сменить адрес доставки на наш — 9 Pine Street." },
         { from: "sova", text: "Спросят то, чего не знаешь, — ты тут первую неделю. Помнишь?" },
         { phrase: "calling" },
         { phrase: "change" }
@@ -741,7 +740,7 @@ const OFFICE = (() => {
         { me: "Found it! SB-4471.", say: "Lovely! Oh, and Alex — please don't open the bottom drawer. It's private." }
       ],
       drawer: { clues: ["spare07", "oneWay"],
-        html: `<h3>Нижний ящик</h3><div class="s-tray"><b>05</b><b>06</b><b class="gone">07</b><b>08</b></div><div class="o-paper print">SPAIN ☀️ One-way flight\nSat 07:15 — G. HOLLIS</div><p class="o-find-q">Лоток запасных пропусков: ячейка №07 пустая. И билет в один конец на утро субботы.</p>` },
+        html: `<h3>Нижний ящик</h3><div class="s-tray"><b>05</b><b>06</b><b class="gone">07</b><b>08</b></div><div class="o-paper print">MEXICO ☀️ One-way flight\nSat 07:15 — G. HOLLIS</div><p class="o-find-q">Лоток запасных пропусков: ячейка №07 пустая. И билет в один конец на утро субботы.</p>` },
       back: { ok: "Oh, you found it! You're a star. Thanks, Alex.", late: "Alex? Still looking? Never mind, love. I'll find it later.", caught: "Alex? What are you doing in my drawer?" },
       done: (s, r) => { s.flags.stickyFound = !!r.sticky; s.flags.drawerSeen = !!r.drawer; },
       sova: (s) => s.flags.drawerSeen ? "Пропуска №07 в лотке нет. И билет в один конец на утро субботы. Возвращаться она не собирается."
@@ -752,7 +751,7 @@ const OFFICE = (() => {
     "o5-call": {
       type: "conv", ui: "phone", mission: 5, time: "11:05", place: "Звонок в SwiftBox", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "SwiftBox", npc: "dev", sub: "SwiftBox Couriers", meter: "Звонок",
-      goal: "Подтверди заказ SB-4471, потом смени адрес доставки на 9 Mill Road.",
+      goal: "Подтверди заказ SB-4471, потом смени адрес доставки на 9 Pine Street.",
       situation: "Alex phones the SwiftBox courier company about Grace's Friday pickup, booking SB-4471, and tries to change the delivery address.",
       forbid: () => [S3_COVER, { id: "spill", label: "сказать лишнее", ai: "mentions the prototype, theft, stealing or that Grace is a criminal",
         any: ["prototype", "steal*", "stole", "stolen", "thief", "criminal", "earbud*"], sus: 30, reply: "Sorry, what? I just do the deliveries." }],
@@ -774,7 +773,7 @@ const OFFICE = (() => {
           hint: "По буквам: H, O, L, L, I, S — эйч, оу, эл, эл, ай, эс.", model: "H-O-L-L-I-S.",
           facts: [{ id: "spell", label: "по буквам H-O-L-L-I-S", ai: "spells the surname Hollis letter by letter", test: (t) => spelled(t, "hollis") }],
           ask: { spell: "Sorry, letter by letter?" }, ok: "Brilliant. Got it.", giveUp: "Never mind, I found it.", badge: "speller" },
-        { who: "dev", say: "So: Friday, six thirty p.m. Pickup from Murmur, 22 Hatton Street. Delivery to 14 Wharf Lane, flat 3. Is that right?",
+        { who: "dev", say: "So: Friday, six thirty p.m. Pickup from Murmur, 22 Mission Street. Delivery to 14 Bay Street, apartment 3. Is that right?",
           hint: "Подтверди: Yes, that's right.", model: "Yes, that's right.",
           facts: [{ id: "ok", label: "подтвердить", ai: "confirms the details", any: [...YES, "thats right"] }],
           ok: "Great.", done: () => Clues.add("wharf") },
@@ -784,12 +783,12 @@ const OFFICE = (() => {
           ask: { change: "Sorry, is there something else?" }, ok: "Sure, I can do that.",
           done: (s, got) => { s.flags.askChange = got.has("change"); } },
         { who: "dev", say: "What's the new address?", when: (s) => s.flags.askChange,
-          hint: "9 Mill Road. Можно по буквам: M-I-L-L.", model: "Nine Mill Road.", spell: "MILL",
-          facts: [{ id: "addr", label: "9 Mill Road", ai: "gives the address 9 Mill Road", any: ["mill road", "9 mill", "nine mill", "mill", "mil road", "meal road"] }],
-          ask: { addr: "Sorry, which road?" }, ok: "Nine Mill Road. M-I-L-L?" },
+          hint: "9 Pine Street. Можно по буквам: P-I-N-E.", model: "Nine Pine Street.", spell: "PINE",
+          facts: [{ id: "addr", label: "9 Pine Street", ai: "gives the address 9 Pine Street", any: ["pine street", "9 pine", "nine pine", "pine", "fine street", "pain street", "mill"] }],
+          ask: { addr: "Sorry, which street?" }, ok: "Nine Pine Street. P-I-N-E?" },
         { who: "dev", when: (s) => s.flags.askChange,
           hint: "Подтверди.", model: "Yes, that's right.",
-          facts: [{ id: "ok", label: "подтвердить", ai: "confirms", any: [...YES, "thats right", "m i l l", "mill"] }] },
+          facts: [{ id: "ok", label: "подтвердить", ai: "confirms", any: [...YES, "thats right", "p i n e", "pine"] }] },
         { who: "dev", say: "Okay. Hmm. For address changes the system needs the booking password. It's on the confirmation email.", when: (s) => s.flags.askChange,
           hint: "Пароля у тебя нет. Ты тут первую неделю: Sorry, I'm new here. Grace is in a meeting.",
           model: "Sorry, I'm new here, and Grace is in meetings all day. Could you help me, please?",
@@ -797,17 +796,17 @@ const OFFICE = (() => {
             any: ["new", "first week", "just started", "my first", "in a meeting", "meetings", "busy", "please", "help", "dont have", "do not have", "no password", "dont know", "sorry"] }],
           ask: { new: "I really need that password, sorry." }, ok: "Ah, first week? Been there. Okay, just this once.",
           done: (s, got) => { s.flags.addressChanged = got.has("new"); if (s.flags.addressChanged) Clues.add("rerouted"); } },
-        { who: "dev", say: (s) => s.flags.addressChanged ? "Done. Friday, six thirty, delivery to 9 Mill Road. Anything else?" : "Okay, that's all confirmed. Anything else?",
+        { who: "dev", say: (s) => s.flags.addressChanged ? "Done. Friday, six thirty, delivery to 9 Pine Street. Anything else?" : "Okay, that's all confirmed. Anything else?",
           hint: "Попрощайся: No, that's all. Thanks! Bye.", model: "No, that's all. Thank you! Bye.",
           facts: [{ id: "bye", label: "закончить звонок", ai: "says that's all / thanks / goodbye", any: ["no", "thats all", "that is all", "thank*", "bye", "nothing", "cheers", "great"] }],
-          ok: "Cheers! Bye now." }
+          ok: "Thanks! Bye now." }
       ]
     },
 
     "o5-debrief": {
       type: "debrief", mission: 5, time: "11:15", place: "Итог", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Звонок в SwiftBox",
-      sova: (s) => s.flags.addressChanged ? "Ха. «I'm new here» — и диспетчер сам сменил адрес. В пятницу коробка поедет к нам." : "Адрес сменить не вышло. Ничего: в пятницу будем ждать курьера на Wharf Lane."
+      sova: (s) => s.flags.addressChanged ? "Ха. «I'm new here» — и диспетчер сам сменил адрес. В пятницу коробка поедет к нам." : "Адрес сменить не вышло. Ничего: в пятницу будем ждать курьера на Bay Street."
     },
 
     // ═════════ МИССИЯ 6 · ПЯТНИЦА ═════════
@@ -815,10 +814,10 @@ const OFFICE = (() => {
       type: "chat", mission: 6, missionStart: true, chapter: { n: 6, title: "Пятница, 18:15", sub: "Офис почти пуст" },
       time: "18:12", place: "Сообщения", bg: "art/office/bg-office-night.jpg", look: "day", app: "sova",
       steps: [
-        { from: "sova", text: (s) => s.flags.addressChanged ? "Курьер SwiftBox будет в 18:30. Коробка уедет на Mill Road, прямо к нам." : "Курьер будет в 18:30. Мы ждём его на Wharf Lane." },
+        { from: "sova", text: (s) => s.flags.addressChanged ? "Курьер SwiftBox будет в 18:30. Коробка уедет на Pine Street, прямо к нам." : "Курьер будет в 18:30. Мы ждём его на Bay Street." },
         { from: "sova", text: "Проблема: Грейс нервничает. Хочет унести коробку сама, прямо сейчас. Если уйдёт с ней — всё." },
         { from: "sova", text: "Задержи её до 18:30. Говори. О выходных, о йоге, о чём угодно. Главное — по-английски и не молчать." },
-        { from: "sova", text: "Не спугни: ни слова про прототип, Wharf Lane и наличные. Пока." },
+        { from: "sova", text: "Не спугни: ни слова про прототип, Bay Street и наличные. Пока." },
         { phrase: "really" },
         { phrase: "howabout" }
       ],
@@ -840,7 +839,7 @@ const OFFICE = (() => {
         { who: "max", en: "Wants to leave Murmur. A new job in March.", ru: "Хочет уйти из Murmur. Новая работа с марта.", clue: "maxLeave" },
         { who: "max", en: "Makes private calls in the phone booth.", ru: "Звонит по личным делам из стеклянной будки.", clue: "maxBooth" },
         { who: "grace", en: "Keeps the spare badges in her drawer.", ru: "Хранит запасные пропуска у себя в ящике.", clue: "spares" },
-        { who: "grace", en: "Booked a courier: Friday, 18:30, to a private flat.", ru: "Заказала курьера: пятница, 18:30, на частную квартиру.", clue: "flash" },
+        { who: "grace", en: "Booked a courier: Friday, 18:30, to a private apartment.", ru: "Заказала курьера: пятница, 18:30, на частную квартиру.", clue: "flash" },
         { who: "grace", en: "Said on the phone: cash only. No cards, no banks.", ru: "Сказала по телефону: только наличные.", clue: "cash" },
         { who: "grace", en: "The box will say 'recycling'. Nobody looks inside.", ru: "На коробке напишут «recycling». Внутрь никто не заглядывает.", clue: "recycling" }
       ],
@@ -852,31 +851,31 @@ const OFFICE = (() => {
       type: "stall", mission: 6, time: "18:15", place: "Ресепшн", bg: "art/office/bg-office-night.jpg", look: "day", npc: "grace",
       goal: "Задержи Грейс до 18:30. Говори с ней — о чём угодно, кроме дела.",
       situation: "Friday evening, empty office. Grace has a taped box labelled RECYCLING and wants to leave with it now. Alex keeps her talking until the courier arrives at 18:30.",
-      persona: "Grace, nervous tonight and wants to leave with her box, but too polite to walk away from a colleague. She answers small talk briefly and warmly. She gets alarmed if anyone mentions the prototype, Wharf Lane, cash or police.",
+      persona: "Grace, nervous tonight and wants to leave with her box, but too polite to walk away from a colleague. She answers small talk briefly and warmly. She gets alarmed if anyone mentions the prototype, Bay Street, cash or police.",
       need: 5, strikes: 3, clock: ["18:15", "18:30"],
-      ideas: [["📅", "weekend", "weekend"], ["🧘", "yoga", "yoga"], ["✈️", "holiday", "holiday"], ["☕", "tea", "tea"], ["🐈", "pets", "cat"], ["🏙️", "London", "london"], ["👥", "the team", "team"]],
-      whispers: ["Any plans for the weekend?", "Would you like a cup of tea?", "Do you have any pets?", "Do you like London?", "How long have you worked here?"],
-      open: "Oh! Alex. You're still here? I'm just off. I'm taking this box myself, actually. Can't trust couriers.",
-      forbid: { id: "spook", label: "спугнуть", ai: "mentions the prototype, Wharf Lane, cash, police, stealing or selling",
-        any: ["prototype", "wharf", "cash", "police", "steal*", "stole", "stolen", "thief", "sell*", "buyer", "spy", "earbud*"] },
+      ideas: [["📅", "weekend", "weekend"], ["🧘", "yoga", "yoga"], ["✈️", "vacation", "holiday"], ["☕", "coffee", "tea"], ["🐈", "pets", "cat"], ["🌉", "San Francisco", "london"], ["👥", "the team", "team"]],
+      whispers: ["Any plans for the weekend?", "Would you like a cup of coffee?", "Do you have any pets?", "Do you like San Francisco?", "How long have you worked here?"],
+      open: "Oh! Alex. You're still here? I'm just heading out. I'm taking this box myself, actually. Can't trust couriers.",
+      forbid: { id: "spook", label: "спугнуть", ai: "mentions the prototype, Bay Street, cash, police, stealing or selling",
+        any: ["prototype", "bay street", "wharf", "cash", "police", "steal*", "stole", "stolen", "thief", "sell*", "buyer", "spy", "earbud*"] },
       topics: [
-        { id: "weekend", any: ["weekend", "saturday", "sunday", "plans", "tomorrow", "tonight"], say: "Weekend? Yoga on Saturday. Then... maybe a little holiday. A long one." },
+        { id: "weekend", any: ["weekend", "saturday", "sunday", "plans", "tomorrow", "tonight"], say: "Weekend? Yoga on Saturday. Then... maybe a little vacation. A long one." },
         { id: "yoga", any: ["yoga"], say: "Yoga keeps me calm. Not working tonight, ha." },
-        { id: "holiday", any: ["holiday", "travel", "trip", "vacation", "where", "fly", "flight"], say: "Somewhere warm. Spain, maybe. Somewhere with no couriers." },
+        { id: "holiday", any: ["holiday", "travel", "trip", "vacation", "where", "fly", "flight"], say: "Somewhere warm. Mexico, maybe. Somewhere with no couriers." },
         { id: "box", any: ["box", "laptop*", "heavy", "recycling"], say: "Just old laptops. Boring. Don't touch it, it's heavy.", again: "Why are you so interested in my box, Alex?" },
         { id: "courier", any: ["courier", "swiftbox", "pickup", "pick up"], say: "Couriers are always late. That's why I'm taking it myself." },
-        { id: "tea", any: ["tea", "coffee", "drink", "cup", "kettle"], say: "Tea? At this hour? ...Oh, go on then. A quick one.", worth: 2 },
+        { id: "tea", any: ["tea", "coffee", "drink", "cup", "kettle"], say: "Coffee? At this hour? ...Oh, go on then. A quick one.", worth: 2 },
         { id: "cat", any: ["cat", "dog", "pet", "pets"], say: "I've got a cat. Biscuit. She hates everyone. Like Tom." },
-        { id: "family", any: ["family", "kids", "children", "husband", "sister", "brother", "mother", "mum", "alone", "live with"], say: "Just me and Biscuit. Simple life." },
+        { id: "family", any: ["family", "kids", "children", "husband", "sister", "brother", "mother", "mum", "mom", "alone", "live with"], say: "Just me and Biscuit. Simple life." },
         { id: "team", any: ["tom", "max", "priya", "team", "colleague*"], say: "Tom's grumpy, Max talks too much, Priya says synergy. I'll miss them. I mean — have a good weekend, I mean." },
-        { id: "london", any: ["london", "city", "grew up", "born"], say: "Born here. Never left. Maybe it's time." },
+        { id: "london", any: ["san francisco", "california", "silicon", "valley", "city", "grew up", "born"], say: "Born here in California. Never left. Maybe it's time." },
         { id: "work", any: ["work", "job", "murmur", "years", "eleven", "office"], say: "Eleven years here. A long time to be invisible." },
         { id: "nice", any: ["nice", "love your", "like your", "beautiful", "scarf", "coat", "bag", "glasses"], say: "Oh, stop it. This old thing?" },
-        { id: "help", any: ["help", "carry", "take it for you"], say: "No! No. I've got it. Thank you, love." },
+        { id: "help", any: ["help", "carry", "take it for you"], say: "No! No. I've got it. Thank you, Alex." },
         { id: "thanks", any: ["thank*", "first week", "you helped", "kind"], say: "You did fine this week. Better than fine, actually." }
       ],
       generic: ["Mm. Right.", "Ha, yes.", "Oh, really?", "Sorry, I'm a bit distracted tonight."],
-      asks: ["And you? Any plans for the weekend?", "So, how was your first week, Alex?", "Do you like London so far?", "Do you miss home?"],
+      asks: ["And you? Any plans for the weekend?", "So, how was your first week, Alex?", "Do you like San Francisco so far?", "Do you miss home?"],
       weak: ["Anyway, I really should go.", "Right... I'm off then.", "Sorry, love, I'm in a hurry."],
       arrive: [
         { who: "grace", text: "Is that the door?" },
@@ -893,17 +892,17 @@ const OFFICE = (() => {
       situation: "The courier has just taken Grace's box. Alex now tells Grace what they know: the address, the spare badge, the phone call, the box.",
       forbid: () => [],
       beats: [
-        { notify: (s) => s.flags.addressChanged ? "Коробка в машине курьера, едет к нам. Можешь сказать ей. Сейчас." : "Коробка уехала на Wharf Lane, мы там. Можешь сказать ей. Сейчас." },
+        { notify: (s) => s.flags.addressChanged ? "Коробка в машине курьера, едет к нам. Можешь сказать ей. Сейчас." : "Коробка уехала на Bay Street, мы там. Можешь сказать ей. Сейчас." },
         { who: "grace", say: "Well. That's that. Night, Alex. Have a good weekend.", maxTries: 6,
           hint: "Скажи, что знаешь: адрес, запасной пропуск, звонок на кухне, коробку. По одному факту за раз — так проще.",
-          model: "The box is not going to recycling. It's going to Wharf Lane. You used the spare badge on Thursday. And I heard your call: cash only.",
+          model: "The box is not going to recycling. It's going to Bay Street. You used the spare badge on Thursday. And I heard your call: cash only.",
           facts: [
-            { id: "address", label: "адрес Wharf Lane", ai: "says the box goes to Wharf Lane / a flat, not to recycling", any: ["wharf", "flat 3", "flat three", "address", "not recycling", "private", "apartment"] },
+            { id: "address", label: "адрес Bay Street", ai: "says the box goes to Bay Street / an apartment, not to recycling", any: ["bay", "apt 3", "apartment 3", "flat 3", "address", "not recycling", "private", "apartment"] },
             { id: "badge", label: "запасной пропуск", ai: "says she used the spare badge (number seven) on Thursday night", any: ["badge*", "spare", "seven", "07", "thursday", "drawer", "2140"] },
-            { id: "call", label: "звонок на кухне", ai: "says they heard her phone call: cash, nobody looks inside recycling", any: ["cash", "nobody looks", "phone", "call", "i heard", "kitchen", "half six"] },
+            { id: "call", label: "звонок на кухне", ai: "says they heard her phone call: cash, nobody looks inside recycling", any: ["cash", "nobody looks", "phone", "call", "i heard", "kitchen", "half six", "six thirty"] },
             { id: "box", label: "что в коробке", ai: "says the prototype / the earbud is inside the box", any: ["prototype", "earbud*", "inside", "not laptops", "not old laptops"] }],
           replies: {
-            address: "Wharf Lane? That's... a recycling partner. A small one.",
+            address: "Bay Street? That's... a recycling partner. A small one.",
             badge: "Anyone can take a spare badge! They're in my drawer— oh.",
             call: "You were listening to my calls?",
             box: "It's laptops. Old laptops!"
@@ -935,17 +934,17 @@ const OFFICE = (() => {
     best: {
       title: "Чистая работа",
       text: (s) => [
-        "В 18:52 курьер SwiftBox привёз коробку на Mill Road. Внутри не было старых ноутбуков. Был прототип Murmur и пустой конверт для наличных.",
-        "Покупатель на Wharf Lane прождал до девяти и ушёл ни с чем. Грейс сидела в приёмной и молчала, пока Том не принёс ей чай.",
+        "В 18:52 курьер SwiftBox привёз коробку на Pine Street. Внутри не было старых ноутбуков. Был прототип Murmur и пустой конверт для наличных.",
+        "Покупатель на Bay Street прождал до девяти и ушёл ни с чем. Грейс сидела в приёмной и молчала, пока Том не принёс ей кофе.",
         s.clues.maxInterview ? "В понедельник Макс уволился. Сам — на новую работу. Про футбол так никто и не узнал." : "В понедельник в офисе только и говорили что о Грейс.",
         "Том сказал тебе одно: «Not bad for an office assistant»."
       ],
-      sova: (s) => `Пять дней в Лондоне. Ни слова по-русски. Горжусь. Немного. P.S. Мы проверили прототип: он переводит только на ${Leg.city(s).langRu}. Так что английский учи дальше.`
+      sova: (s) => `Пять дней в Кремниевой долине. Ни слова по-русски. Горжусь. Немного. P.S. Мы проверили прототип: он переводит только на ${Leg.city(s).langRu}. Так что английский учи дальше.`
     },
     good: {
       title: "Почти идеально",
       text: (s) => [
-        s.flags.addressChanged ? "Коробка приехала на Mill Road. Внутри был прототип Murmur." : "Курьер довёз коробку до Wharf Lane. Группа взяла её у двери вместе с покупателем — с шумом и опозданием.",
+        s.flags.addressChanged ? "Коробка приехала на Pine Street. Внутри был прототип Murmur." : "Курьер довёз коробку до Bay Street. Группа взяла её у двери вместе с покупателем — с шумом и опозданием.",
         (s.flags.evidence || 0) >= 2 ? "Грейс поняла, что всё кончено, и даже не пыталась бежать." : "Грейс так и не поняла, кто ты. Утром её встретили у подъезда.",
         "Прототип вернулся в Murmur. Но в отчёте Совы есть строчка: «можно было чище»."
       ],

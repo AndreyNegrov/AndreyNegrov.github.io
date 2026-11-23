@@ -1,0 +1,10 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-bg-title.txt",
+    "w": 1280,
+    "h": 720,
+    "seed": 711,
+    "out": "art/office/bg-title.jpg"
+  }
+]
