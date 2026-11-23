@@ -537,8 +537,8 @@ body.s3 .o-final.best h1 { color: var(--ok); }
 
 /* ───── узкие экраны ───── */
 @media (max-width: 1000px) {
-  .t-main { grid-template-columns: 1fr; }
-  .t-side { grid-template-columns: repeat(3, 1fr); }
+  .t-main { grid-template-columns: minmax(0, 1fr); }
+  .t-side { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .t-card { grid-template-columns: 1fr; justify-items: start; }
   .t-card > i { grid-row: auto; }
   .xpchip b, .xpchip .xp-bar { display: none; }
@@ -732,23 +732,42 @@ body[data-pack="office"] .o-tok.live::after {
 /* ───── мобильная адаптация сезона «Онбординг» ───── */
 @media (max-width: 760px) {
   /* Титул и главное меню */
-  .o-title { padding: 14px 12px calc(22px + env(safe-area-inset-bottom)); gap: 10px; }
-  .t-logo { font-size: clamp(42px, 13vw, 64px); letter-spacing: 0.1em; margin: 4px 0 0; }
-  .t-tag { font-size: 13px; margin-bottom: 6px; }
-  .t-top { gap: 8px; }
-  .t-agent { padding: 6px 10px; gap: 8px; }
-  .t-chips { gap: 6px; }
-  .t-chip { padding: 5px 9px; font-size: 12px; }
+  body.s3 .title.hub.o-title {
+    padding: calc(12px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom));
+    gap: 8px; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
+  body.s3 .o-title h1.t-logo {
+    font-size: clamp(40px, 12.5vw, 62px); letter-spacing: 0.1em; margin: 2px 0 0 0.1em;
+  }
+  .t-tag { font-size: 11px; letter-spacing: 0.16em; margin: 4px 0 10px; }
+  .t-top { gap: 8px; flex-wrap: wrap; justify-content: space-between; }
+  .t-agent { flex: 1 1 220px; min-width: 0; padding: 6px 10px 6px 6px; gap: 8px; border-radius: 14px; }
+  .t-agent > i { width: 38px; height: 38px; font-size: 20px; border-radius: 11px; flex: none; }
+  .t-agent > div { flex: 1; min-width: 0; }
+  .t-agent b { font-size: 14px; }
+  .t-agent .xp-bar { width: 100%; max-width: 130px; height: 6px; }
+  .t-chips { gap: 6px; flex-wrap: wrap; }
+  .t-chip { padding: 5px 9px; font-size: 12px; border-radius: 11px; }
+  .t-main { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  body.s3 .o-hero {
+    min-width: 0; width: 100%; max-width: 100%;
+    padding: 16px 14px; border-radius: 22px; overflow: hidden;
+  }
+  body.s3 .o-hero h2 { font-size: 28px; margin-bottom: 6px; }
+  body.s3 .o-hero .lead { font-size: 14px; line-height: 1.45; margin-bottom: 14px; }
   .t-tabs {
-    display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px;
-    padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; max-width: 100%;
+    padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
   .t-tabs::-webkit-scrollbar { display: none; }
-  .t-tab { flex: none; padding: 8px 12px; border-radius: 14px; }
-  .t-tab b { font-size: 13px; }
-  .t-tab span { font-size: 10px; }
+  .t-tab { flex: none; padding: 7px 11px; border-radius: 12px; }
+  .t-tab b { font-size: 12.5px; }
+  .t-tab span { font-size: 9.5px; }
   .o-hero .row { flex-direction: column; align-items: stretch; gap: 8px; }
   .o-hero .row .btn { width: 100%; min-height: 46px; justify-content: center; }
+  .t-card { padding: 12px 14px; border-radius: 18px; }
+  .t-card b { font-size: 16px; }
+  .t-card span { font-size: 12px; }
 
   /* Портреты и разговоры */
   body[data-pack="office"] .o-bust {
