@@ -6,6 +6,66 @@
   <meta name="theme-color" content="#0b0c0e" />
   <title>Иней</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237180ff'/%3E%3Cstop offset='1' stop-color='%239a6bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 14v36M16.4 23l31.2 18M47.6 23L16.4 41' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preload" as="image" href="art/office/bg-title.jpg" />
+  <link rel="preload" as="image" href="art/office/p-sova-calm.jpg" />
+  <style>
+    #boot-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      display: grid; place-items: center; padding: 20px;
+      background: radial-gradient(1100px 620px at 50% 30%, #241b5c 0%, #100c2b 65%, #09071a 100%);
+      color: #fff; font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    #boot-loader.out { opacity: 0; transform: scale(1.03); pointer-events: none; }
+    #boot-loader .bl-bg {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      opacity: 0; filter: brightness(0.42) saturate(1.15);
+      transition: opacity 0.6s ease;
+    }
+    #boot-loader .bl-bg.on { opacity: 1; }
+    #boot-loader .bl-card {
+      position: relative; z-index: 2; width: min(380px, 100%);
+      padding: 28px 24px 22px; border-radius: 28px; text-align: center;
+      background: rgba(18, 13, 52, 0.78);
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    }
+    #boot-loader .bl-crest {
+      width: 96px; height: 96px; margin: 0 auto 14px; border-radius: 50%; overflow: hidden;
+      border: 3px solid #38d0ff;
+      box-shadow: 0 0 0 6px rgba(56, 208, 255, 0.16), 0 12px 28px rgba(0, 0, 0, 0.45);
+      background: #1b1448;
+      animation: bl-float 2.4s ease-in-out infinite;
+    }
+    #boot-loader .bl-crest img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #boot-loader h1 {
+      margin: 0; font-size: 38px; font-weight: 900; letter-spacing: 0.14em; padding-left: 0.14em;
+      background: linear-gradient(180deg, #fff 20%, #a8d8ff 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    #boot-loader .bl-sub { margin: 4px 0 18px; font-size: 13px; color: rgba(220, 226, 255, 0.78); font-weight: 600; }
+    #boot-loader .bl-bar {
+      height: 10px; border-radius: 999px; overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #boot-loader .bl-fill {
+      height: 100%; width: 6%; border-radius: 999px;
+      background: linear-gradient(90deg, #38d0ff, #5eead4, #ffd23f);
+      transition: width 0.25s ease;
+    }
+    #boot-loader .bl-meta {
+      margin-top: 10px; display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: rgba(215, 222, 255, 0.8); font-weight: 600;
+    }
+    #boot-loader .bl-skip {
+      margin-top: 12px; background: transparent; border: 0; color: rgba(255, 255, 255, 0.55);
+      font: inherit; font-size: 12px; cursor: pointer; text-decoration: underline;
+    }
+    #boot-loader .bl-skip:hover { color: #fff; }
+    @keyframes bl-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  </style>
   <link rel="stylesheet" href="styles.css" />
   <!-- Два вида: ночной (основной) и мультяшный (сезон «Онбординг»). Включён один, переключает Theme в js/core.js. -->
   <link rel="stylesheet" href="night.css" data-theme="night" />
@@ -16,6 +76,17 @@
   <link rel="stylesheet" href="arcade.css" data-theme="toon" media="not all" />
 </head>
 <body>
+  <div id="boot-loader" role="status" aria-live="polite">
+    <img class="bl-bg" src="art/office/bg-title.jpg" alt="" onload="this.classList.add('on')" />
+    <div class="bl-card">
+      <div class="bl-crest"><img src="art/office/p-sova-calm.jpg" alt="" /></div>
+      <h1>ИНЕЙ</h1>
+      <p class="bl-sub">Сезон «Онбординг» · шпионский английский</p>
+      <div class="bl-bar"><div class="bl-fill" id="bl-fill"></div></div>
+      <div class="bl-meta"><span id="bl-msg">Готовим легенду…</span><b id="bl-pct">0%</b></div>
+      <button type="button" class="bl-skip" id="bl-skip" hidden>Открыть сразу</button>
+    </div>
+  </div>
   <div id="bg"><div class="bg-layer on" id="bg-a"></div><div class="bg-layer" id="bg-b"></div></div>
   <div id="vignette"></div>
   <header id="hud" hidden>
@@ -71,5 +142,72 @@
   <script src="js/packs.js"></script>
   <script src="js/toon.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    (() => {
+      const el = document.getElementById("boot-loader");
+      if (!el) return;
+      const fill = document.getElementById("bl-fill");
+      const pct = document.getElementById("bl-pct");
+      const msg = document.getElementById("bl-msg");
+      const skip = document.getElementById("bl-skip");
+      const LINES = [
+        "Готовим легенду…",
+        "Настраиваем связь с Совой…",
+        "Загружаем офис Murmur и портреты…",
+        "Проверяем голоса и музыку…"
+      ];
+      const IMAGES = [
+        "art/office/bg-title.jpg",
+        "art/office/bg-home-dawn.jpg",
+        "art/office/bg-office-day.jpg",
+        "art/office/bg-office-dusk.jpg",
+        "art/office/bg-office-night.jpg",
+        "art/office/map-office.jpg",
+        "art/office/desk-grace.jpg",
+        "art/office/p-sova-calm.jpg",
+        "art/office/p-you-calm.jpg",
+        "art/office/p-priya-calm.jpg",
+        "art/office/p-grace-calm.jpg",
+        "art/office/p-tom-calm.jpg",
+        "art/office/p-max-calm.jpg",
+        "art/office/p-dev-calm.jpg"
+      ];
+      const FETCHES = [
+        "audio/office/manifest.json",
+        "audio/office/menu-theme.ogg"
+      ];
+      const total = IMAGES.length + FETCHES.length;
+      let done = 0, closed = false;
+      const update = () => {
+        const p = Math.min(100, Math.round((done / total) * 100));
+        if (fill) fill.style.width = Math.max(8, p) + "%";
+        if (pct) pct.textContent = p + "%";
+        if (msg) msg.textContent = LINES[Math.min(LINES.length - 1, Math.floor((done / total) * LINES.length))];
+      };
+      const finish = () => {
+        if (closed) return;
+        closed = true;
+        if (fill) fill.style.width = "100%";
+        if (pct) pct.textContent = "100%";
+        if (msg) msg.textContent = "Готово!";
+        setTimeout(() => {
+          el.classList.add("out");
+          setTimeout(() => el.remove(), 480);
+        }, 180);
+      };
+      const step = () => { done += 1; update(); if (done >= total) finish(); };
+      IMAGES.forEach((src) => {
+        const im = new Image();
+        im.onload = im.onerror = step;
+        im.src = src;
+      });
+      FETCHES.forEach((url) => {
+        fetch(url).catch(() => null).finally(step);
+      });
+      if (skip) skip.addEventListener("click", finish);
+      setTimeout(() => { if (!closed && skip) skip.hidden = false; }, 3500);
+      setTimeout(finish, 9000);
+    })();
+  </script>
 </body>
 </html>
