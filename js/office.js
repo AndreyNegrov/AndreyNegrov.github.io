@@ -255,7 +255,7 @@ const OFFICE = (() => {
     "o1-check": {
       type: "chat", mission: 1, time: "09:57", place: "Сообщения", bg: "art/office/bg-home-dawn.jpg", look: "day", app: "sova",
       steps: [
-        { from: "sova", text: (s) => `${Leg.city(s).ru}, ${Leg.job(s).ru}, ${Leg.hobby(s).ru}. Запомнила. Проверять будут.` },
+        { from: "sova", text: (s) => `${Leg.city(s).ru}, ${Leg.job(s).ru}, ${Leg.hobby(s).ru}. Запомнил. Проверять будут.` },
         { from: "sova", text: "Проверка связи. Нажми «Говорить» (или держи пробел) и скажи по-английски: Hi, I'm Alex. Можно и написать." },
         { me: { hint: "Скажи: Hi, I'm Alex.", model: "Hi, I'm Alex.",
           facts: [{ id: "hi", label: "представиться", ai: "greets and/or says their name is Alex", any: ["alex", "hi", "hello", "hey", "frost", "im", "i am"] }],
@@ -352,7 +352,7 @@ const OFFICE = (() => {
       steps: [
         { from: "sova", text: "Первый день. В прошлый четверг в 21:40 кто-то скопировал файлы прототипа. В логах двери — пропуск №07. Чей — неизвестно." },
         { from: "sova", text: "Кандидаты: Том (IT), Макс (продажи), Грейс (офис). Узнай у каждого, чем занимается и что делал в прошлый четверг." },
-        { from: "sova", text: "Только не в лоб: «Где вы были в 21:40?» — так спрашивает полиция. Вопросы я зашифровала. Собери их — заодно запомнишь." }
+        { from: "sova", text: "Только не в лоб: «Где вы были в 21:40?» — так спрашивает полиция. Вопросы я зашифровал. Собери их — заодно запомнишь." }
       ],
       end: "Открыть шифровку"
     },
@@ -604,7 +604,7 @@ const OFFICE = (() => {
             { id: "place", label: "адрес", ai: "says Bay Street (number 14)", any: ["bay", "bay street", "14 bay", "fourteen", "street", "apt 3", "apartment 3", "wharf"], ack: "Bay Street, 14. Принято." }],
           ask: { time: "Во сколько?", place: "Куда? Адрес?" },
           done: (s, got) => { if (got.has("time") && got.has("place")) s.flags.flashRead = true; Clues.add("flash", true); },
-          fallback: "Ладно, я достала из кэша: пятница, 18:30, 14 Bay Street, квартира 3. В следующий раз — скриншот." } },
+          fallback: "Ладно, я достал из кэша: пятница, 18:30, 14 Bay Street, квартира 3. В следующий раз — скриншот." } },
         { from: "sova", text: "Bay Street, 14 — жилой дом. Квартира. Не склад и не пункт переработки. Странное место для «старых ноутбуков»." },
         { from: "sova", when: (s) => s.clues.halfsix, text: "И «half six» Грейс говорила по телефону ещё на собеседовании. Совпадение? Не думаю." },
         { from: "sova", text: "По журналу двери: №04 и №03 ушли до шести, Том — в 22:05. А в 21:40 вошёл запасной №07." },
@@ -616,7 +616,7 @@ const OFFICE = (() => {
     "o3-debrief": {
       type: "debrief", mission: 3, time: "10:00", place: "Итог", bg: "art/office/bg-office-day.jpg", look: "day",
       title: "Первый стендап",
-      sova: (s) => s.flags.flashRead ? "Девять секунд на чтение — и ты успел(а). Пятница, 18:30, Bay Street." : "Сообщение ушло. Ничего: адрес я достала. Но читать надо быстрее."
+      sova: (s) => s.flags.flashRead ? "Девять секунд на чтение — и ты успел(а). Пятница, 18:30, Bay Street." : "Сообщение ушло. Ничего: адрес я достал. Но читать надо быстрее."
     },
 
     // ═════════ МИССИЯ 4 · СТЕКЛЯННАЯ БУДКА ═════════
@@ -745,7 +745,7 @@ const OFFICE = (() => {
       done: (s, r) => { s.flags.stickyFound = !!r.sticky; s.flags.drawerSeen = !!r.drawer; },
       sova: (s) => s.flags.drawerSeen ? "Пропуска №07 в лотке нет. И билет в один конец на утро субботы. Возвращаться она не собирается."
         : s.flags.stickyFound ? "Номер есть. Кстати, она просила не открывать нижний ящик. Обычно всё интересное лежит именно там."
-        : "Номер я достала из её почты: SB-4471. Звони."
+        : "Номер я достал из её почты: SB-4471. Звони."
     },
 
     "o5-call": {

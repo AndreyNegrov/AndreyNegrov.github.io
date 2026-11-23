@@ -33,7 +33,11 @@ const Chat = {
     this.header(C);
     C.el.addEventListener("click", (e) => {
       const s = e.target.closest("[data-say]");
-      if (s) Voice.say(s.dataset.say, { who: s.dataset.who || "guest", rate: 0.9 });
+      if (s) {
+        const who = s.dataset.who || "guest";
+        const lang = (PEOPLE[who] && PEOPLE[who].lang) || "en";
+        Voice.say(s.dataset.say, { who, lang, rate: lang === "ru" ? 1 : 0.9 });
+      }
     });
   },
 
@@ -47,6 +51,7 @@ const Chat = {
   },
 
   destroy(C) {
+    Voice.stop();
     if (C.reply) { C.reply.destroy(); C.reply = null; }
     if (C.ringStop) C.ringStop();
   },
@@ -134,6 +139,7 @@ const Chat = {
     const scLike = { npc: "sova", persona: "Сова, куратор. Отвечает коротко, сухо, с иронией, по-русски.", situation: "Игрок докладывает куратору по-английски в чате.", forbid: [] };
     const ack = async (text) => {
       await this.typing(C, text.length);
+      if (tok.dead) return;
       this.bubble(C, esc(text), "them");
       Sound.sfx("note");
     };
@@ -177,7 +183,7 @@ const Chat = {
       if (fresh.length) Sound.sfx("pop"); else Juice.miss();
       for (const a of acks) await ack(a);
       if (!acks.length && r.ai && r.reply) await ack(r.reply);
-      else if (!acks.length) await ack((me.ask && me.ask[missing[0].id]) || "Не поняла. Ещё раз, по-английски.");
+      else if (!acks.length) await ack((me.ask && me.ask[missing[0].id]) || "Не понял. Ещё раз, по-английски.");
       if (tries >= 2 && me.model && lv.subs !== "none") showHint(`<small>Пример: <span class="english">${esc(val(me.model, state))}</span></small>`);
     }
     if (C.reply) { C.reply.destroy(); C.reply = null; }

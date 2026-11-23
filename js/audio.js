@@ -236,7 +236,7 @@ const Voice = (() => {
   function localUrl(who, text) {
     if (!localManifest) return null;
     const isOffice = typeof Pack !== "undefined" && Pack.cur === "office";
-    const cast = ["priya", "grace", "tom", "max", "dev"];
+    const cast = ["priya", "grace", "tom", "max", "dev", "sova"];
     if (!isOffice && !cast.includes(who)) return null;
     const nk = normKey(text);
     const exact = localManifest[(who || "guest") + "|" + nk];
@@ -519,7 +519,7 @@ const Voice = (() => {
     };
     stop();
     Sound.ensure();
-    const local = lang === "en" ? localUrl(opts.who, text) : null;
+    const local = localUrl(opts.who, text);
     const cloud = !local && s.cloudVoices && s.provider === "openai" && s.apiKey && !cloudBroken;
     const raw = local
       ? localSay(local, text, o)
@@ -554,6 +554,7 @@ const Voice = (() => {
     sayAsync: (text, opts) => say(text, opts).done,
     stop,
     busy: () => !!current,
+    hasLocal: (who, text) => !!localUrl(who, text),
     hasRussian: () => voices.some((v) => (v.lang || "").toLowerCase().startsWith("ru"))
   };
 })();
