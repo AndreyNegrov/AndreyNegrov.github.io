@@ -232,11 +232,8 @@
 .a-stickers .sticker.on { background: #2a2166; }
 
 /* находки на карте */
-.o-findbar { background: rgba(255, 79, 139, 0.1); border: 2px solid rgba(255, 79, 139, 0.4); border-radius: 16px; padding: 10px 12px; display: grid; gap: 6px; }
-.o-findbar span { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 800; color: #ff9dc0; }
-.o-findbar div { display: flex; gap: 6px; }
-.o-findbar i { font-style: normal; font-size: 20px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: rgba(255, 255, 255, 0.08); filter: grayscale(1); opacity: 0.45; }
-.o-findbar i.on { filter: none; opacity: 1; background: rgba(255, 255, 255, 0.16); }
+.o-findbar { background: rgba(20, 184, 166, 0.1); border: 2px solid rgba(45, 212, 191, 0.38); border-radius: 16px; padding: 10px 12px; display: grid; gap: 6px; }
+.o-findbar > span, .o-findbar-head span { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 800; color: #5eead4; }
 .o-findbar small { color: var(--muted); font-size: 12px; line-height: 1.35; }
 .o-catchbox:empty { display: none; }
 body.s3 .m-floor { stroke: none; }

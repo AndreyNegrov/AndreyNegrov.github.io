@@ -881,3 +881,6 @@ body:has(#notebook:not([hidden])) .phone-hang { right: min(460px, calc(100vw - 1
   transition: background 0.15s;
 }
 #skip-bar button:hover { background: rgba(255, 255, 255, 0.16); }
+@media (max-width: 760px) {
+  #skip-bar { left: 10px; top: calc(58px + env(safe-area-inset-top)); bottom: auto; opacity: 0.35; }
+}

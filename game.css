@@ -728,3 +728,70 @@ body[data-pack="office"] .o-tok.live::after {
   opacity: 0.72;
 }
 .o-find-btn.on em { color: #3de0a8; background: rgba(61, 224, 168, 0.16); }
+
+/* ───── мобильная адаптация сезона «Онбординг» ───── */
+@media (max-width: 760px) {
+  /* Титул и главное меню */
+  .o-title { padding: 14px 12px calc(22px + env(safe-area-inset-bottom)); gap: 10px; }
+  .t-logo { font-size: clamp(42px, 13vw, 64px); letter-spacing: 0.1em; margin: 4px 0 0; }
+  .t-tag { font-size: 13px; margin-bottom: 6px; }
+  .t-top { gap: 8px; }
+  .t-agent { padding: 6px 10px; gap: 8px; }
+  .t-chips { gap: 6px; }
+  .t-chip { padding: 5px 9px; font-size: 12px; }
+  .t-tabs {
+    display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px;
+    padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .t-tabs::-webkit-scrollbar { display: none; }
+  .t-tab { flex: none; padding: 8px 12px; border-radius: 14px; }
+  .t-tab b { font-size: 13px; }
+  .t-tab span { font-size: 10px; }
+  .o-hero .row { flex-direction: column; align-items: stretch; gap: 8px; }
+  .o-hero .row .btn { width: 100%; min-height: 46px; justify-content: center; }
+
+  /* Портреты и разговоры */
+  body[data-pack="office"] .o-bust {
+    width: 82px; height: 82px; flex: none; margin: 0 10px 0 0;
+  }
+  body[data-pack="office"] .o-bust .o-photo,
+  body[data-pack="office"] .lift-npc .o-photo {
+    border-radius: 20px; border-width: 2px; box-shadow: 0 8px 20px rgba(10, 8, 36, 0.45);
+  }
+  .o-facecard { align-items: center; }
+  .o-vc { height: 28dvh; min-height: 170px; }
+  .o-tile .o-photo { border-radius: 12px; }
+  .o-side { min-height: 0; }
+  .o-side .reply .mic-btn { min-height: 46px; }
+  .o-side .reply input { font-size: 16px; min-height: 42px; }
+
+  /* Иллюстрированная карта офиса */
+  .o-rounds, .o-eaves { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .o-panel { flex: 1 0 auto; overflow-y: visible; }
+  .o-map-art { border-radius: 16px; border-width: 2px; }
+  .o-map-tag { font-size: 8.5px; padding: 2px 6px; }
+  .o-map-tip {
+    top: 8px; font-size: 11px; padding: 5px 10px;
+    white-space: normal; text-align: center; max-width: calc(100% - 16px); line-height: 1.3;
+  }
+  .o-tok { width: 11.5%; }
+  body[data-pack="office"] .o-tok.live::after {
+    width: 20px; height: 20px; font-size: 10px; right: -5px; top: -6px; border-width: 1.5px;
+  }
+  .o-hot { width: 8.5%; border-width: 2px; font-size: 13px; }
+  .o-hot-lbl { display: none; }
+  .o-findbar-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .o-find-btn { padding: 7px 8px; font-size: 12px; min-height: 38px; }
+  .o-find-btn em { font-size: 10px; padding: 2px 5px; }
+
+  /* Стол Грейс и мини-игры */
+  .a-search .s-frame { border-radius: 16px; }
+  .a-search .s-side { padding: 12px; }
+  .a-search .s-log { max-height: 24dvh; }
+  .o-find-card { padding: 16px; border-radius: 20px; }
+  .o-find-opts button { min-height: 44px; font-size: 14px; }
+}
+@media (max-width: 420px) {
+  .o-findbar-list { grid-template-columns: 1fr; }
+  .t-path { grid-template-columns: repeat(2, 1fr); }
+}
