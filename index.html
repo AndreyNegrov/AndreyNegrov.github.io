@@ -40,8 +40,18 @@
     }
     #boot-loader .bl-crest img { width: 100%; height: 100%; object-fit: cover; display: block; }
     #boot-loader h1 {
-      margin: 0; font-size: 38px; font-weight: 900; letter-spacing: 0.14em; padding-left: 0.14em;
-      background: linear-gradient(180deg, #fff 20%, #a8d8ff 100%);
+      margin: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      line-height: 1; white-space: nowrap;
+    }
+    #boot-loader .bl-pre {
+      padding: 5px 10px; border-radius: 9px;
+      background: linear-gradient(180deg, #ffe478, #ffb429); color: #1c1038;
+      font-size: 12px; font-weight: 900; letter-spacing: 0.1em;
+      box-shadow: 0 3px 0 #a86c00; transform: rotate(-3deg);
+    }
+    #boot-loader .bl-main {
+      font-size: 36px; font-weight: 900; letter-spacing: 0.1em;
+      background: linear-gradient(180deg, #fff 20%, #a6ebff 65%, #57a4ff 100%);
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     #boot-loader .bl-sub { margin: 4px 0 18px; font-size: 13px; color: rgba(220, 226, 255, 0.78); font-weight: 600; }
@@ -80,8 +90,7 @@
     <img class="bl-bg" src="art/office/bg-title.jpg" alt="" onload="this.classList.add('on')" />
     <div class="bl-card">
       <div class="bl-crest"><img src="art/office/p-sova-calm.jpg" alt="" /></div>
-      <div style="font-size:11px;font-weight:800;letter-spacing:0.32em;text-transform:uppercase;color:#9fe8ff;margin-bottom:4px;">Позывной</div>
-      <h1>ИНЕЙ</h1>
+      <h1><span class="bl-pre">ПОЗЫВНОЙ</span><span class="bl-main">ИНЕЙ</span></h1>
       <p class="bl-sub">Сезон «Онбординг» · шпионский английский</p>
       <div class="bl-bar"><div class="bl-fill" id="bl-fill"></div></div>
       <div class="bl-meta"><span id="bl-msg">Готовим легенду…</span><b id="bl-pct">0%</b></div>
