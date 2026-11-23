@@ -73,9 +73,9 @@ const OFFICE = (() => {
   // ───────── легенда ─────────
   const LEGEND = {
     city: {
-      riga: { emo: "🐈", en: "Riga", ru: "Рига, Латвия", gen: "Риги", country: "Latvia", lang: "Latvian", langRu: "латышский", any: ["riga", "latvia*"], say: "I'm from Riga, in Latvia." },
-      tallinn: { emo: "🏰", en: "Tallinn", ru: "Таллин, Эстония", gen: "Таллина", country: "Estonia", lang: "Estonian", langRu: "эстонский", any: ["tallinn", "tallin", "talin", "estonia*"], say: "I'm from Tallinn, in Estonia." },
-      vilnius: { emo: "🎈", en: "Vilnius", ru: "Вильнюс, Литва", gen: "Вильнюса", country: "Lithuania", lang: "Lithuanian", langRu: "литовский", any: ["vilnius", "vilnus", "lithuania*"], say: "I'm from Vilnius, in Lithuania." }
+      riga: { emo: "🐈", en: "Riga", ru: "Рига, Латвия", gen: "Риги", country: "Latvia", lang: "Latvian", langRu: "латышский", any: ["riga", "reega", "rega", "rigo", "latvia*"], say: "I'm from Riga, in Latvia." },
+      tallinn: { emo: "🏰", en: "Tallinn", ru: "Таллин, Эстония", gen: "Таллина", country: "Estonia", lang: "Estonian", langRu: "эстонский", any: ["tallinn", "tallin", "talin", "talon", "tallen", "talen", "talling", "talan", "tall in", "telling", "stalin", "thailand", "tailand", "thai land", "estonia*", "stonia*", "astonia*"], say: "I'm from Tallinn, in Estonia." },
+      vilnius: { emo: "🎈", en: "Vilnius", ru: "Вильнюс, Литва", gen: "Вильнюса", country: "Lithuania", lang: "Lithuanian", langRu: "литовский", any: ["vilnius", "vilnus", "vilnia*", "venus", "lithuania*"], say: "I'm from Vilnius, in Lithuania." }
     },
     job: {
       hotel: { emo: "🛎️", ru: "администратор отеля", en: "a receptionist in a hotel", short: "receptionist", say: "I worked as a receptionist in a hotel.", any: ["hotel", "reception*"] },
@@ -424,6 +424,7 @@ const OFFICE = (() => {
             { who: "max", say: "G'day! You must be Alex. I'm Max. How's the first day going?",
               hint: "Ответь, как день. И спроси в ответ: How about you?", model: "It's good, thanks. A bit busy. How about you?",
               facts: [{ id: "how", label: "ответить, как день", ai: "says how their first day is going", any: ["good", "fine", "great", "ok", "okay", "busy", "nervous", "well", "not bad", "interesting", "so far", "alright", "all right", "thanks", "nice", "cool"] }],
+              ask: { how: "So how's your first day going, mate? Good?" },
               bonus: [{ id: "back", label: "спросить в ответ", ai: "asks Max back how he is", any: ["and you", "how about you", "what about you", "how are you"], reply: "Me? Living the dream, mate." }],
               ok: "Ha, good on ya." },
             { who: "max", say: "So where are you from, Alex? I can't place the accent.",

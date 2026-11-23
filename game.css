@@ -733,41 +733,55 @@ body[data-pack="office"] .o-tok.live::after {
 @media (max-width: 760px) {
   /* Титул и главное меню */
   body.s3 .title.hub.o-title {
-    padding: calc(12px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom));
+    padding: calc(12px + env(safe-area-inset-top)) 14px calc(28px + env(safe-area-inset-bottom));
     gap: 8px; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  body.s3 .title.hub.o-title::-webkit-scrollbar { display: none; }
   body.s3 .o-title h1.t-logo {
-    font-size: clamp(40px, 12.5vw, 62px); letter-spacing: 0.1em; margin: 2px 0 0 0.1em;
+    font-size: clamp(40px, 12vw, 58px); letter-spacing: 0.1em; margin: 2px 0 0 0.1em;
   }
-  .t-tag { font-size: 11px; letter-spacing: 0.16em; margin: 4px 0 10px; }
-  .t-top { gap: 8px; flex-wrap: wrap; justify-content: space-between; }
-  .t-agent { flex: 1 1 220px; min-width: 0; padding: 6px 10px 6px 6px; gap: 8px; border-radius: 14px; }
-  .t-agent > i { width: 38px; height: 38px; font-size: 20px; border-radius: 11px; flex: none; }
+  .t-tag { font-size: 11px; letter-spacing: 0.16em; margin: 2px 0 8px; }
+  .t-top { gap: 8px; flex-wrap: nowrap; align-items: center; justify-content: space-between; }
+  .t-agent { flex: 1; min-width: 0; padding: 6px 10px 6px 6px; gap: 8px; border-radius: 14px; }
+  .t-agent > i { width: 38px; height: 38px; font-size: 21px; border-radius: 11px; flex: none; }
   .t-agent > div { flex: 1; min-width: 0; }
-  .t-agent b { font-size: 14px; }
-  .t-agent .xp-bar { width: 100%; max-width: 130px; height: 6px; }
-  .t-chips { gap: 6px; flex-wrap: wrap; }
-  .t-chip { padding: 5px 9px; font-size: 12px; border-radius: 11px; }
+  .t-agent span { display: none; }
+  .t-agent b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .t-agent .xp-bar { width: 100%; max-width: 110px; height: 6px; margin-top: 4px; }
+  .t-agent em { font-size: 11.5px; white-space: nowrap; }
+  .t-chips { gap: 6px; flex: none; }
+  .t-chip { padding: 7px 9px; font-size: 12px; border-radius: 12px; }
   .t-main { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   body.s3 .o-hero {
     min-width: 0; width: 100%; max-width: 100%;
     padding: 16px 14px; border-radius: 22px; overflow: hidden;
   }
   body.s3 .o-hero h2 { font-size: 28px; margin-bottom: 6px; }
-  body.s3 .o-hero .lead { font-size: 14px; line-height: 1.45; margin-bottom: 14px; }
+  body.s3 .o-hero .lead { font-size: 13.5px; line-height: 1.45; margin-bottom: 14px; }
   .t-tabs {
-    display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 6px; max-width: 100%;
-    padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px;
+    max-width: 100%; padding-bottom: 0; margin-bottom: 14px;
   }
-  .t-tabs::-webkit-scrollbar { display: none; }
-  .t-tab { flex: none; padding: 7px 11px; border-radius: 12px; }
-  .t-tab b { font-size: 12.5px; }
+  .t-tab { min-width: 0; padding: 8px 10px; border-radius: 13px; }
+  .t-tab b { font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; }
   .t-tab span { font-size: 9.5px; }
-  .o-hero .row { flex-direction: column; align-items: stretch; gap: 8px; }
-  .o-hero .row .btn { width: 100%; min-height: 46px; justify-content: center; }
-  .t-card { padding: 12px 14px; border-radius: 18px; }
+  .t-tab.locked { opacity: 0.62; }
+  .t-path { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 6px; margin: 6px 0 4px; }
+  .t-path li { gap: 5px; }
+  .t-path li i {
+    width: 60px; height: 60px; font-size: 28px; border-radius: 20px;
+    opacity: 0.82; filter: grayscale(0.45); background: #2c2372;
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+  .t-path li b { font-size: 11.5px; color: rgba(235, 232, 255, 0.88); }
+  .t-path li em:empty { display: none; }
+  .o-hero .row { flex-direction: column; align-items: stretch; gap: 8px; margin-top: 14px; }
+  .o-hero .row .btn { width: 100%; min-height: 48px; font-size: 16px; justify-content: center; }
+  .t-card { padding: 13px 14px; border-radius: 18px; gap: 4px 12px; }
+  .t-card > i { width: 52px; height: 52px; font-size: 27px; border-radius: 16px; }
   .t-card b { font-size: 16px; }
-  .t-card span { font-size: 12px; }
+  .t-card span { font-size: 12.5px; }
 
   /* Портреты и разговоры */
   body[data-pack="office"] .o-bust {
@@ -823,5 +837,4 @@ body[data-pack="office"] .o-tok.live::after {
 }
 @media (max-width: 420px) {
   .o-findbar-list { grid-template-columns: 1fr; }
-  .t-path { grid-template-columns: repeat(2, 1fr); }
 }

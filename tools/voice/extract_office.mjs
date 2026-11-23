@@ -131,6 +131,21 @@ for (const grp of Object.values(OFFICE.LEGEND)) {
   }
 }
 
+// Общие системные переспросы из conv.js — озвучиваем голосом каждого персонажа, чтобы не откатывались на браузер.
+const COMMON = [
+  "Sorry, what do you mean?",
+  "Sorry? In English, please.",
+  "Anything else?",
+  "Anyway, I need to get back to work.",
+  "Sorry. I think we're done here.",
+  "Sorry, I didn't catch that.",
+  "Sorry, I'm not sure how to spell that.",
+  "Sorry, I don't know how to explain that."
+];
+for (const who of ["priya", "grace", "tom", "max", "dev"]) {
+  for (const line of COMMON) add(who, line);
+}
+
 const list = [...map.values()];
 fs.mkdirSync("tools/voice", { recursive: true });
 fs.writeFileSync("tools/voice/office-lines.json", JSON.stringify(list, null, 2), "utf8");

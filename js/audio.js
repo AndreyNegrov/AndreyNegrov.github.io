@@ -236,9 +236,13 @@ const Voice = (() => {
   function localUrl(who, text) {
     if (!localManifest) return null;
     const isOffice = typeof Pack !== "undefined" && Pack.cur === "office";
-    if (!isOffice && !["priya", "grace", "tom", "max", "dev"].includes(who)) return null;
+    const cast = ["priya", "grace", "tom", "max", "dev"];
+    if (!isOffice && !cast.includes(who)) return null;
     const nk = normKey(text);
-    return localManifest[(who || "guest") + "|" + nk] || localManifest["*|" + nk] || null;
+    const exact = localManifest[(who || "guest") + "|" + nk];
+    if (exact) return exact;
+    // Чужой голос по «*|...» берём только для guest (разговорник/подсказки), чтобы мужчина не заговорил женским голосом.
+    return !who || who === "guest" ? localManifest["*|" + nk] || null : null;
   }
   async function localBuffer(url) {
     if (cache.has(url)) return cache.get(url);

@@ -321,6 +321,10 @@
   },
   {
     "who": "max",
+    "text": "So how's your first day going, mate? Good?"
+  },
+  {
+    "who": "max",
     "text": "Me? Living the dream, mate."
   },
   {
@@ -1298,5 +1302,165 @@
   {
     "who": "guest",
     "text": "I like chess."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry, what do you mean?"
+  },
+  {
+    "who": "priya",
+    "text": "Sorry? In English, please."
+  },
+  {
+    "who": "priya",
+    "text": "Anything else?"
+  },
+  {
+    "who": "priya",
+    "text": "Anyway, I need to get back to work."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry. I think we're done here."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry, I didn't catch that."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry, I'm not sure how to spell that."
+  },
+  {
+    "who": "priya",
+    "text": "Sorry, I don't know how to explain that."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, what do you mean?"
+  },
+  {
+    "who": "grace",
+    "text": "Sorry? In English, please."
+  },
+  {
+    "who": "grace",
+    "text": "Anything else?"
+  },
+  {
+    "who": "grace",
+    "text": "Anyway, I need to get back to work."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry. I think we're done here."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, I didn't catch that."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, I'm not sure how to spell that."
+  },
+  {
+    "who": "grace",
+    "text": "Sorry, I don't know how to explain that."
+  },
+  {
+    "who": "tom",
+    "text": "Sorry, what do you mean?"
+  },
+  {
+    "who": "tom",
+    "text": "Sorry? In English, please."
+  },
+  {
+    "who": "tom",
+    "text": "Anything else?"
+  },
+  {
+    "who": "tom",
+    "text": "Anyway, I need to get back to work."
+  },
+  {
+    "who": "tom",
+    "text": "Sorry. I think we're done here."
+  },
+  {
+    "who": "tom",
+    "text": "Sorry, I didn't catch that."
+  },
+  {
+    "who": "tom",
+    "text": "Sorry, I'm not sure how to spell that."
+  },
+  {
+    "who": "tom",
+    "text": "Sorry, I don't know how to explain that."
+  },
+  {
+    "who": "max",
+    "text": "Sorry, what do you mean?"
+  },
+  {
+    "who": "max",
+    "text": "Sorry? In English, please."
+  },
+  {
+    "who": "max",
+    "text": "Anything else?"
+  },
+  {
+    "who": "max",
+    "text": "Anyway, I need to get back to work."
+  },
+  {
+    "who": "max",
+    "text": "Sorry. I think we're done here."
+  },
+  {
+    "who": "max",
+    "text": "Sorry, I didn't catch that."
+  },
+  {
+    "who": "max",
+    "text": "Sorry, I'm not sure how to spell that."
+  },
+  {
+    "who": "max",
+    "text": "Sorry, I don't know how to explain that."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, what do you mean?"
+  },
+  {
+    "who": "dev",
+    "text": "Sorry? In English, please."
+  },
+  {
+    "who": "dev",
+    "text": "Anything else?"
+  },
+  {
+    "who": "dev",
+    "text": "Anyway, I need to get back to work."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry. I think we're done here."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, I didn't catch that."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, I'm not sure how to spell that."
+  },
+  {
+    "who": "dev",
+    "text": "Sorry, I don't know how to explain that."
   }
 ]
