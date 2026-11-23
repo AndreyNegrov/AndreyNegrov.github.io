@@ -59,6 +59,7 @@ const Toon = {
             ${stars ? `<div class="t-chip" title="Звёзды за миссии">⭐ ${stars}/${Math.max(1, Object.keys(pk.MISSIONS).length) * 3}</div>` : ""}
           </div>
         </header>
+        <p class="t-callsign">Позывной</p>
         <h1 class="t-logo">ИНЕЙ</h1>
         <p class="t-tag">шпионский английский</p>
         <div class="t-main">

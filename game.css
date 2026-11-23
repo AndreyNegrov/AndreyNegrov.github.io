@@ -245,8 +245,13 @@ body.s3 .title.hub { justify-content: flex-start; padding: 18px 16px 36px; }
 .t-chip { display: flex; align-items: center; gap: 6px; background: #1e1650; border: 2px solid rgba(255, 255, 255, 0.14); border-radius: 14px; padding: 8px 12px; font-weight: 800; box-shadow: 0 4px 0 var(--edge); color: var(--ink); }
 .t-chip.hot { background: linear-gradient(180deg, #ff8a3d, #ff4f5e); border-color: transparent; box-shadow: 0 4px 0 #a3202f; }
 button.t-chip:hover { border-color: var(--yellow); }
+.t-callsign {
+  margin: 16px 0 2px; text-transform: uppercase; letter-spacing: 0.36em; padding-left: 0.36em;
+  font-weight: 900; font-size: 13px; color: #9fe8ff;
+  text-shadow: 0 2px 0 rgba(20, 12, 70, 0.75);
+}
 body.s3 .o-title h1.t-logo {
-  font-size: clamp(64px, 11vw, 132px); font-weight: 900; letter-spacing: 0.12em; margin: 14px 0 0 0.12em; line-height: 1;
+  font-size: clamp(64px, 11vw, 132px); font-weight: 900; letter-spacing: 0.12em; margin: 2px 0 0 0.12em; line-height: 1;
   background: linear-gradient(180deg, #ffffff 20%, #9fe8ff 55%, #5aa8ff 90%); -webkit-background-clip: text; background-clip: text; color: transparent;
   text-shadow: none; filter: drop-shadow(0 6px 0 rgba(20, 12, 70, 0.75)) drop-shadow(0 0 40px rgba(120, 210, 255, 0.5));
 }
@@ -738,8 +743,9 @@ body[data-pack="office"] .o-tok.live::after {
     scrollbar-width: none;
   }
   body.s3 .title.hub.o-title::-webkit-scrollbar { display: none; }
+  .t-callsign { font-size: 11px; letter-spacing: 0.3em; margin: 16px 0 2px; }
   body.s3 .o-title h1.t-logo {
-    font-size: clamp(42px, 12vw, 58px); letter-spacing: 0.1em; margin: 16px 0 6px 0.1em;
+    font-size: clamp(42px, 12vw, 58px); letter-spacing: 0.1em; margin: 0 0 6px 0.1em;
   }
   .t-tag { font-size: 11px; letter-spacing: 0.18em; margin: 0 0 18px; }
   .t-top { gap: 8px; flex-wrap: nowrap; align-items: center; justify-content: space-between; }
