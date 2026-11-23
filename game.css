@@ -246,11 +246,11 @@ body.s3 .title.hub { justify-content: flex-start; padding: 18px 16px 36px; }
 .t-chip.hot { background: linear-gradient(180deg, #ff8a3d, #ff4f5e); border-color: transparent; box-shadow: 0 4px 0 #a3202f; }
 button.t-chip:hover { border-color: var(--yellow); }
 body.s3 .o-title h1.t-logo {
-  font-size: clamp(64px, 11vw, 132px); font-weight: 900; letter-spacing: 0.12em; margin: 4px 0 0 0.12em; line-height: 1;
+  font-size: clamp(64px, 11vw, 132px); font-weight: 900; letter-spacing: 0.12em; margin: 14px 0 0 0.12em; line-height: 1;
   background: linear-gradient(180deg, #ffffff 20%, #9fe8ff 55%, #5aa8ff 90%); -webkit-background-clip: text; background-clip: text; color: transparent;
   text-shadow: none; filter: drop-shadow(0 6px 0 rgba(20, 12, 70, 0.75)) drop-shadow(0 0 40px rgba(120, 210, 255, 0.5));
 }
-.t-tag { margin: 6px 0 16px; text-transform: uppercase; letter-spacing: 0.34em; font-weight: 800; font-size: 13px; color: #ffe9a8; text-shadow: 0 2px 0 rgba(20, 12, 70, 0.7); }
+.t-tag { margin: 10px 0 22px; text-transform: uppercase; letter-spacing: 0.34em; font-weight: 800; font-size: 13px; color: #ffe9a8; text-shadow: 0 2px 0 rgba(20, 12, 70, 0.7); }
 .t-main { width: min(1060px, 100%); display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; text-align: left; }
 body.s3 .o-hero { width: auto; text-align: left; border-radius: 28px; padding: 24px 26px; }
 body.s3 .o-hero h2 { font-weight: 900; font-size: 44px; }
@@ -739,9 +739,9 @@ body[data-pack="office"] .o-tok.live::after {
   }
   body.s3 .title.hub.o-title::-webkit-scrollbar { display: none; }
   body.s3 .o-title h1.t-logo {
-    font-size: clamp(40px, 12vw, 58px); letter-spacing: 0.1em; margin: 2px 0 0 0.1em;
+    font-size: clamp(42px, 12vw, 58px); letter-spacing: 0.1em; margin: 16px 0 6px 0.1em;
   }
-  .t-tag { font-size: 11px; letter-spacing: 0.16em; margin: 2px 0 8px; }
+  .t-tag { font-size: 11px; letter-spacing: 0.18em; margin: 0 0 18px; }
   .t-top { gap: 8px; flex-wrap: nowrap; align-items: center; justify-content: space-between; }
   .t-agent { flex: 1; min-width: 0; padding: 6px 10px 6px 6px; gap: 8px; border-radius: 14px; }
   .t-agent > i { width: 38px; height: 38px; font-size: 21px; border-radius: 11px; flex: none; }
