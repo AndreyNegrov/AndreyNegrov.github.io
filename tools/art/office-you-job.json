@@ -1,0 +1,10 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-p-you-calm.txt",
+    "w": 1024,
+    "h": 1024,
+    "seed": 715,
+    "out": "art/office/p-you-calm.jpg"
+  }
+]

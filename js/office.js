@@ -26,7 +26,7 @@ const OFFICE = (() => {
       faces: { calm: "art/office/p-dev-calm.jpg", happy: "art/office/p-dev-happy.jpg", wow: "art/office/p-dev-happy.jpg", sus: "art/office/p-dev-calm.jpg", hm: "art/office/p-dev-calm.jpg" },
       face: { skin: "#8f5d3d", hair: "#121212", style: "buzz", wear: "vest", top: "#f3a712", beard: "#121212", stubble: true, bg: "#7fd8e8", headset: true },
       voice: { g: "m", pitch: 1, rate: 1.05, prefer: ["Prabhat", "Thomas", "Ryan", "UK English Male", "en-GB"], cloud: "ash", style: "Busy London courier dispatcher on the phone." } },
-    you: { name: "Вы", role: "Alex Frost", face: "self", voice: { g: "m" } }
+    you: { name: "Вы", role: "Alex Frost", face: "self", img: "art/office/p-you-calm.jpg", voice: { g: "m" } }
   };
 
   const glossary = {
@@ -529,7 +529,7 @@ const OFFICE = (() => {
       kicker: "Лифт", title: "Шесть этажей с Максом",
       goal: "Small talk в лифте: отвечай быстро и по-человечески.",
       intro: "Утро, лифт, Макс. Он болтает — ты отвечаешь. Выбери естественный ответ, пока лифт едет до следующего этажа.",
-      secs: 7,
+      secs: 14,
       items: (s) => [
         { say: "Morning, Alex! How are you?", right: "Good, thanks. And you?", wrong: ["I'm Alex.", "Yes, I am."], back: "Can't complain, mate.", why: "На «How are you?» отвечают коротко и спрашивают в ответ." },
         { say: "Did you have a good evening?", right: "Yes, it was nice, thanks.", wrong: ["Yes, I do.", "Good evening!"], why: "Вопрос с did — про вчера. Ответ: Yes, it was…" },
@@ -555,7 +555,7 @@ const OFFICE = (() => {
           { who: "priya", text: "Ooh, mysterious! Thanks, Tom. Max?" },
           { who: "max", text: "Yesterday, three calls with clients. Today I'm out from two till four. Dentist.", note: "Макс на стендапе", clue: "maxDentist" },
           { who: "grace", text: "Today I'm booking a courier for Friday. The old laptops are going to recycling. Alex is helping me.", note: "Грейс на стендапе" }] },
-        { flash: { who: "grace", text: "📦 SwiftBox: pickup confirmed. Fri 18:30 → 14 Wharf Lane, Flat 3", ms: 6500, clue: "flash" } },
+        { flash: { who: "grace", text: "📦 SwiftBox: pickup confirmed. Fri 18:30 → 14 Wharf Lane, Flat 3", ms: 9000, clue: "flash" } },
         { lines: [{ who: "grace", text: "Oops! Wrong chat. Sorry, everyone!" }] },
         { who: "priya", say: "No worries! Alex, your first stand-up! What did you do yesterday?",
           hint: "Вчера: познакомился(ась) с командой, получил(а) ноутбук. Прошедшее время.", model: "Yesterday I met the team and got my laptop.",
@@ -728,8 +728,8 @@ const OFFICE = (() => {
       type: "deskSearch", mission: 5, time: "11:02", place: "Стол Грейс", bg: "art/office/bg-office-day.jpg", look: "day", who: "grace",
       kicker: "Ресепшн, пока никого", title: "Стол Грейс",
       goal: "Найди стикер с номером заказа. Грейс пишет, где искать.",
-      intro: "Грейс на встрече и шлёт голосовые: где лежит стикер. Сама она не помнит. У тебя чуть больше минуты, пока она не вернулась.",
-      seconds: 80,
+      intro: "Грейс на встрече и шлёт голосовые: где лежит стикер. Сама она не помнит. У тебя две минуты, пока она не вернулась.",
+      seconds: 120,
       tasks: [
         { say: "It's on a yellow sticky note. Under the keyboard, I think.", target: "keyboard", title: "Под клавиатурой",
           html: `<div class="o-paper print">Biscuit crumbs. A lot of them.</div>`, ru: "under the keyboard — под клавиатурой. Только крошки от печенья." },

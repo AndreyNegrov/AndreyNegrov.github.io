@@ -133,7 +133,8 @@
 .s-frame { position: relative; width: min(100%, calc((100dvh - 130px) * 1.613)); aspect-ratio: 1000 / 620; border-radius: 26px; overflow: hidden; border: 5px solid #0d082c; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16), 0 10px 0 var(--edge), 0 30px 70px rgba(8, 4, 34, 0.55); }
 .s-desk { width: 100%; height: 100%; display: block; stroke: none; }
 .s-desk text { stroke: none; }
-.s-hit { fill: transparent; }
+.s-hit { fill: transparent; transition: fill 0.15s, stroke 0.15s; }
+.s-desk.art .s-obj:hover .s-hit { fill: rgba(255, 226, 122, 0.16); stroke: rgba(255, 226, 122, 0.85); stroke-width: 3; }
 .s-obj { cursor: pointer; transition: transform 0.4s cubic-bezier(0.3, 1.4, 0.5, 1), filter 0.15s; transform-box: fill-box; transform-origin: center; }
 .s-obj:hover { filter: brightness(1.1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.9)); }
 .s-obj.moved[data-id="keyboard"] { transform: translate(0, -62px) rotate(-7deg); }

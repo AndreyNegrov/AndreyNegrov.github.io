@@ -1,0 +1,10 @@
+[
+  {
+    "style": "tools/art/style-office-anim.txt",
+    "prompt": "tools/art/prompts/office-desk-grace.txt",
+    "w": 1280,
+    "h": 800,
+    "seed": 505,
+    "out": "art/office/desk-grace.jpg"
+  }
+]

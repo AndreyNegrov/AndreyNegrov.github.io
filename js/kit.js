@@ -176,9 +176,9 @@ const OfficeMap = {
   // Координаты под иллюстрированную изометрическую карту art/office/map-office.jpg
   OFFICE_POS: {
     it: [175, 215], desks: [365, 315], reception: [235, 495], yourdesk: [515, 435],
-    booth: [640, 125], cooler: [678, 155], printer: [520, 220], meeting: [690, 300],
+    booth: [640, 125], cooler: [678, 155], printer: [445, 245], meeting: [690, 300],
     kitchen: [835, 460], coffee: [745, 490], door: [340, 75],
-    fridge: [825, 415], board: [270, 265], doorpad: [385, 95]
+    fridge: [885, 455], board: [270, 265], doorpad: [385, 95]
   },
   isArt(plan) { return !plan && typeof Pack !== "undefined" && Pack.cur === "office"; },
   pct(id, plan) {
@@ -292,7 +292,7 @@ const Kit = {
           <section class="o-legend">
             <article class="o-leg-card ${drawn ? "still" : ""}">
               <div class="o-leg-head">
-                <div class="o-leg-photo">${T ? Face.svg("self") : ICON.user}</div>
+                <div class="o-leg-photo">${(PEOPLE.you && PEOPLE.you.img) ? `<img class="o-photo" src="${PEOPLE.you.img}" alt="">` : T ? Face.svg("self") : ICON.user}</div>
                 <div><p class="kicker">${esc(M.legendKicker || "Легенда · профиль курьера Relay")}</p><h1>Alex Frost</h1>
                 <p class="muted">${esc(M.legendLead || "Frost — «иней». В Лондоне два месяца. Остальное выбери: потом это придётся говорить вслух, и не один раз.")}</p></div>
               </div>

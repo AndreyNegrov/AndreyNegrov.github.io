@@ -438,13 +438,31 @@ body.s3 .o-eye-bar { height: 12px; }
 
 /* предметы на карте */
 .o-hot {
-  position: absolute; transform: translate(-50%, -50%); width: 5%; aspect-ratio: 1; border-radius: 50%; border: 3px solid #fff; background: var(--pink, #ff4f8b);
+  position: absolute; transform: translate(-50%, -50%); width: 5%; aspect-ratio: 1; border-radius: 50%; border: 3px solid #fff; background: #14b8a6;
   color: #fff; font-weight: 900; font-size: clamp(11px, 1.5vw, 18px); display: grid; place-items: center; z-index: 2; padding: 0; box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
-  animation: hot-pulse 1.3s ease-in-out infinite;
+  animation: hot-pulse 2.2s ease-in-out infinite;
 }
-.o-hot.seen { background: #3a2e92; border-color: rgba(255, 255, 255, 0.4); animation: none; opacity: 0.85; }
-.o-hot:hover { transform: translate(-50%, -50%) scale(1.15); }
-@keyframes hot-pulse { 50% { box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 0 0 9px rgba(255, 79, 139, 0.28); } }
+.o-hot:not(.seen)::before {
+  content: ""; position: absolute; inset: -3px; border-radius: 50%;
+  border: 2px solid rgba(45, 212, 191, 0.85); pointer-events: none;
+  animation: hot-ring 2.2s ease-out infinite;
+}
+.o-hot.seen { background: #3a2e92; border-color: rgba(255, 255, 255, 0.4); animation: none; opacity: 0.82; }
+.o-hot:hover { transform: translate(-50%, -50%) scale(1.1); animation: none; }
+@keyframes hot-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(45, 212, 191, 0.45);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 0 14px 3px rgba(45, 212, 191, 0.65);
+  }
+}
+@keyframes hot-ring {
+  0% { transform: scale(1); opacity: 0.75; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
 .o-find { position: absolute; inset: 0; z-index: 9; display: grid; place-items: center; background: rgba(12, 7, 44, 0.72); padding: 16px; animation: o-fade 0.2s ease; }
 .o-find-card { width: min(480px, 100%); background: #1e1650; border: 2px solid rgba(255, 255, 255, 0.14); border-radius: 26px; padding: 20px; box-shadow: 0 8px 0 var(--edge); display: grid; gap: 12px; animation: bubble-in 0.3s cubic-bezier(0.2, 1.5, 0.4, 1); }
 .o-find-card h3 { margin: 0; font-size: 20px; font-weight: 900; }
@@ -582,7 +600,8 @@ body[data-pack="office"] .lift-npc .o-photo {
 }
 body[data-pack="office"] .o-notify-ava .o-photo,
 body[data-pack="office"] .a-ava .o-photo,
-body[data-pack="office"] .o-sova-ava .o-photo {
+body[data-pack="office"] .o-sova-ava .o-photo,
+body[data-pack="office"] .o-leg-photo .o-photo {
   width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block;
 }
 
@@ -612,6 +631,45 @@ body[data-pack="office"] .o-sova-ava .o-photo {
 }
 .o-map-img {
   width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: brightness(0.84) contrast(1.04) saturate(0.92);
+}
+.o-map-tip {
+  position: absolute; left: 50%; top: 14px; transform: translateX(-50%); z-index: 6;
+  padding: 7px 14px; border-radius: 999px;
+  background: rgba(18, 13, 52, 0.92);
+  border: 2px solid rgba(255, 210, 63, 0.7);
+  color: #fff; font-size: 13px; font-weight: 800; white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  animation: tip-bob 2.2s ease-in-out infinite;
+}
+@keyframes tip-bob {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -3px); }
+}
+/* Заметный игровой маркер «поговорить» над активными персонажами */
+body[data-pack="office"] .o-tok.live {
+  cursor: pointer;
+  animation: tok-pulse 2.4s ease-in-out infinite;
+}
+body[data-pack="office"] .o-tok.live::after {
+  content: "💬";
+  position: absolute; right: -8px; top: -10px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #ffd23f; color: #1b1238;
+  border: 2px solid #fff;
+  display: grid; place-items: center;
+  font-size: 13px; line-height: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: chat-bounce 2.2s ease-in-out infinite;
+}
+@keyframes tok-pulse {
+  0%, 100% { filter: drop-shadow(0 6px 12px rgba(255, 210, 63, 0.25)); }
+  50% { filter: drop-shadow(0 0 14px rgba(255, 210, 63, 0.65)); }
+}
+@keyframes chat-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
 }
 .o-map-tag {
   position: absolute; transform: translate(-50%, -50%);
@@ -629,17 +687,17 @@ body[data-pack="office"] .o-sova-ava .o-photo {
 .o-hot-lbl {
   position: absolute; left: 50%; top: calc(100% + 4px); transform: translateX(-50%);
   padding: 2px 7px; border-radius: 999px;
-  background: rgba(24, 14, 52, 0.88);
-  border: 1px solid rgba(255, 95, 155, 0.55);
+  background: rgba(14, 24, 42, 0.9);
+  border: 1px solid rgba(45, 212, 191, 0.55);
   color: #fff; font-size: 10.5px; font-weight: 700; white-space: nowrap;
   pointer-events: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
-.o-hot.seen .o-hot-lbl { opacity: 0.55; border-color: rgba(61, 224, 168, 0.45); }
+.o-hot.seen .o-hot-lbl { opacity: 0.55; border-color: rgba(120, 140, 200, 0.4); }
 .o-findbar-head {
   display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
 }
 .o-findbar-head b {
-  font-size: 11.5px; color: #ff8fb8; font-weight: 800;
+  font-size: 11.5px; color: #5eead4; font-weight: 800;
 }
 .o-findbar-list {
   display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px;
@@ -647,14 +705,14 @@ body[data-pack="office"] .o-sova-ava .o-photo {
 .o-find-btn {
   display: flex; align-items: center; gap: 8px; width: 100%;
   padding: 6px 9px; border-radius: 12px; cursor: pointer;
-  background: rgba(255, 79, 139, 0.14);
-  border: 1px solid rgba(255, 79, 139, 0.38);
+  background: rgba(20, 184, 166, 0.14);
+  border: 1px solid rgba(45, 212, 191, 0.38);
   color: #fff; text-align: left; font: inherit; font-size: 12.5px;
   transition: transform 0.14s, background 0.14s, border-color 0.14s;
 }
 .o-find-btn:hover {
-  background: rgba(255, 79, 139, 0.26);
-  border-color: rgba(255, 120, 170, 0.75);
+  background: rgba(20, 184, 166, 0.26);
+  border-color: rgba(94, 234, 212, 0.75);
   transform: translateX(2px);
 }
 .o-find-btn i { font-style: normal; font-size: 15px; line-height: 1; }

@@ -102,7 +102,7 @@ const Toon = {
         <div class="o-vc-top"><span class="o-rec"></span><b>${esc(sc.title || "Call")}</b><span class="o-vc-time">00:00</span></div>
         <div class="o-vc-grid n${cast.length + 1}">
           ${cast.map((w) => `<div class="o-tile" data-who="${w}" style="background:${(P(w).face && P(w).face.bg) || "#1a2130"}">${slot(w)}<span class="o-tag">${esc(P(w).name)}</span><i class="o-tile-mic">${ICON.mic}</i></div>`).join("")}
-          <div class="o-tile self" data-who="you" style="background:#2a2470">${Face.svg("self")}<span class="o-tag">Вы · Alex</span><i class="o-tile-mic">${ICON.mic}</i></div>
+          <div class="o-tile self" data-who="you" style="background:#2a2470">${(PEOPLE.you && PEOPLE.you.img) ? `<img class="o-photo" src="${PEOPLE.you.img}" alt="">` : Face.svg("self")}<span class="o-tag">Вы · Alex</span><i class="o-tile-mic">${ICON.mic}</i></div>
         </div>
         <div class="o-cc" hidden></div>
         <div class="o-vc-chat" hidden></div>
@@ -342,35 +342,28 @@ const DESK_WORDS = {
 // Предлоги места и названия вещей; запретный нижний ящик; Грейс возвращается, когда кончилось время.
 const DeskSearch = {
   svg() {
-    const hit = (x, y, w, h) => `<rect class="s-hit" x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/>`;
-    return `<svg class="s-desk" viewBox="0 0 1000 620" aria-hidden="true">
-      <rect width="1000" height="320" fill="#ffe1cf"/>
-      <rect y="300" width="1000" height="320" fill="#3a2e92"/>
-      <g opacity=".5" fill="#ffcdb4"><circle cx="120" cy="250" r="5"/><circle cx="320" cy="60" r="5"/><circle cx="520" cy="80" r="5"/><circle cx="700" cy="230" r="5"/><circle cx="940" cy="240" r="5"/><circle cx="60" cy="90" r="5"/></g>
-      <g class="s-obj" data-id="photo">${hit(96, 36, 150, 150)}<rect x="104" y="44" width="134" height="134" rx="8" fill="#fff" transform="rotate(-4 171 111)"/><rect x="116" y="56" width="110" height="94" rx="4" fill="#7ee6c4" transform="rotate(-4 171 111)"/>
-        <g transform="rotate(-4 171 111)"><ellipse cx="171" cy="122" rx="30" ry="24" fill="#f3a76b"/><path d="M147 108 L150 84 L164 100 Z M195 108 L192 84 L178 100 Z" fill="#f3a76b"/><circle cx="162" cy="118" r="3.4" fill="#2b1a00"/><circle cx="180" cy="118" r="3.4" fill="#2b1a00"/><path d="M167 127 q4 4 8 0" stroke="#2b1a00" stroke-width="2" fill="none"/></g></g>
-      <g class="s-obj" data-id="calendar">${hit(748, 30, 164, 170)}<rect x="756" y="38" width="148" height="154" rx="10" fill="#fff"/><rect x="756" y="38" width="148" height="38" rx="10" fill="#ff4f8b"/><text x="830" y="64" text-anchor="middle" font-size="18" font-weight="900" fill="#fff" font-family="Segoe UI, sans-serif">MARCH</text>
-        <g fill="#d9d2f5">${[0, 1, 2, 3].map((r) => [0, 1, 2, 3, 4].map((c) => `<rect x="${770 + c * 26}" y="${90 + r * 24}" width="18" height="16" rx="3"/>`).join("")).join("")}</g>
-        <circle cx="883" cy="146" r="14" fill="none" stroke="#ff4f8b" stroke-width="4"/><circle cx="883" cy="146" r="19" fill="none" stroke="#ff4f8b" stroke-width="2"/></g>
-      <rect x="30" y="300" width="940" height="176" rx="16" fill="#d49a63"/>
-      <rect x="30" y="456" width="940" height="164" fill="#b87c48"/><rect x="30" y="456" width="940" height="14" fill="#a26a3b"/>
-      <g class="s-obj" data-id="lamp">${hit(84, 150, 150, 200)}<ellipse cx="140" cy="338" rx="46" ry="12" fill="#2b2360"/><path d="M140 334 L170 210" stroke="#2b2360" stroke-width="9" stroke-linecap="round"/><path d="M124 208 Q176 150 232 196 L196 236 Z" fill="#ffd23f"/><ellipse cx="212" cy="218" rx="24" ry="10" fill="#fff6c8" transform="rotate(44 212 218)"/></g>
-      <g class="s-obj" data-id="monitor">${hit(392, 138, 240, 200)}<rect x="400" y="146" width="224" height="150" rx="14" fill="#1a1238"/><rect x="412" y="158" width="200" height="126" rx="6" fill="#7fe0ff"/><rect x="424" y="172" width="90" height="10" rx="5" fill="#fff" opacity=".8"/><rect x="424" y="192" width="140" height="8" rx="4" fill="#fff" opacity=".5"/><rect x="424" y="208" width="110" height="8" rx="4" fill="#fff" opacity=".5"/>
-        <rect x="496" y="296" width="32" height="26" fill="#1a1238"/><rect x="456" y="318" width="112" height="12" rx="6" fill="#1a1238"/><rect x="588" y="140" width="40" height="40" fill="#ffe27a" transform="rotate(8 608 160)"/></g>
-      <g class="s-note s-n-plant"><rect x="800" y="262" width="62" height="56" fill="#ffe27a" transform="rotate(-6 831 290)"/><text x="831" y="286" text-anchor="middle" font-size="13" font-weight="800" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive">YOGA</text><text x="831" y="304" text-anchor="middle" font-size="11" font-weight="700" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive">Sat 10:00</text></g>
-      <g class="s-obj" data-id="plant">${hit(770, 150, 130, 190)}<g class="sc-sway"><path d="M836 268 C826 220 780 200 762 160 C800 168 828 200 838 244 Z" fill="#2fbf8f"/><path d="M836 268 C846 214 884 190 904 150 C860 162 838 204 834 244 Z" fill="#3de0a8"/><path d="M836 268 C832 214 816 176 834 138 C852 178 842 226 838 250 Z" fill="#25a87c"/></g><path d="M800 262 H872 L862 332 H810 Z" fill="#ff7a59"/><rect x="794" y="254" width="84" height="16" rx="7" fill="#e0603f"/></g>
-      <g class="s-obj" data-id="biscuits">${hit(672, 296, 96, 70)}<ellipse cx="720" cy="344" rx="40" ry="14" fill="#c9304a"/><rect x="680" y="314" width="80" height="30" fill="#ff4f5e"/><ellipse cx="720" cy="314" rx="40" ry="14" fill="#ff7a86"/><circle cx="708" cy="312" r="7" fill="#e9b872"/><circle cx="730" cy="316" r="7" fill="#d9a55e"/></g>
-      <g class="s-obj" data-id="phone">${hit(72, 362, 130, 90)}<rect x="80" y="372" width="114" height="72" rx="12" fill="#2b2360"/><rect x="88" y="366" width="34" height="84" rx="14" fill="#4a3fb0"/><g fill="#7fe0ff"><rect x="134" y="384" width="12" height="10" rx="2"/><rect x="152" y="384" width="12" height="10" rx="2"/><rect x="170" y="384" width="12" height="10" rx="2"/><rect x="134" y="402" width="12" height="10" rx="2"/><rect x="152" y="402" width="12" height="10" rx="2"/><rect x="170" y="402" width="12" height="10" rx="2"/><rect x="134" y="420" width="12" height="10" rx="2"/><rect x="152" y="420" width="12" height="10" rx="2"/><rect x="170" y="420" width="12" height="10" rx="2"/></g></g>
-      <g class="s-note s-n-folder"><rect x="262" y="330" width="70" height="56" fill="#ffe27a" transform="rotate(7 297 358)"/><text x="297" y="354" text-anchor="middle" font-size="11" font-weight="800" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive" transform="rotate(7 297 358)">SwiftBox</text><text x="297" y="372" text-anchor="middle" font-size="13" font-weight="900" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive" transform="rotate(7 297 358)">SB-4471</text></g>
-      <g class="s-obj" data-id="folder">${hit(212, 346, 140, 104)}<rect x="220" y="354" width="124" height="90" rx="8" fill="#2f7de0" transform="rotate(-5 282 399)"/><rect x="220" y="354" width="124" height="18" rx="8" fill="#5a9bf0" transform="rotate(-5 282 399)"/><rect x="250" y="388" width="64" height="22" rx="4" fill="#fff" transform="rotate(-5 282 399)"/></g>
-      <g class="s-crumbs" fill="#e9b872"><circle cx="450" cy="408" r="4"/><circle cx="486" cy="420" r="3"/><circle cx="530" cy="404" r="5"/><circle cx="566" cy="424" r="3"/><circle cx="600" cy="410" r="4"/><circle cx="508" cy="430" r="3"/></g>
-      <g class="s-obj" data-id="keyboard">${hit(396, 372, 252, 76)}<rect x="404" y="380" width="236" height="60" rx="10" fill="#f2efff"/><g fill="#bdb4e8">${[0, 1, 2].map((r) => Array.from({ length: 11 }, (_, c) => `<rect x="${414 + c * 20}" y="${388 + r * 16}" width="15" height="11" rx="2.5"/>`).join("")).join("")}</g></g>
-      <g class="s-obj" data-id="mouse">${hit(656, 388, 54, 64)}<rect x="664" y="394" width="38" height="52" rx="19" fill="#f2efff"/><path d="M683 396 v18" stroke="#bdb4e8" stroke-width="3"/></g>
-      <g class="s-obj" data-id="mug">${hit(732, 366, 84, 80)}<path d="M740 376 H790 V430 Q765 444 740 430 Z" fill="#ff4f8b"/><path d="M790 388 q20 2 18 18 t-18 16" stroke="#ff4f8b" stroke-width="8" fill="none"/><ellipse cx="765" cy="376" rx="25" ry="7" fill="#7a2e1a"/></g>
-      <g class="s-obj" data-id="stapler">${hit(828, 392, 110, 56)}<rect x="836" y="424" width="94" height="14" rx="6" fill="#2b2360"/><path d="M838 422 L926 402 Q934 412 928 424 L838 424 Z" fill="#ff4f5e"/></g>
-      <g class="s-obj" data-id="top">${hit(80, 484, 262, 60)}<rect x="88" y="490" width="246" height="50" rx="8" fill="#c98b56"/><rect x="186" y="508" width="50" height="12" rx="6" fill="#7a4a2a"/></g>
-      <g class="s-obj" data-id="bottom">${hit(80, 548, 262, 64)}<rect x="88" y="554" width="246" height="54" rx="8" fill="#c98b56"/><rect x="186" y="574" width="50" height="12" rx="6" fill="#7a4a2a"/><text x="306" y="586" font-size="20">🔒</text></g>
-      <g class="s-obj" data-id="bin">${hit(800, 494, 110, 122)}<path d="M810 504 H900 L890 612 H820 Z" fill="#8f86d6"/><rect x="804" y="496" width="102" height="14" rx="7" fill="#6f65c0"/><path d="M834 520 v76 M855 520 v76 M876 520 v76" stroke="#6f65c0" stroke-width="5"/></g>
+    const obj = (id, x, y, w, h, extra = "") =>
+      `<g class="s-obj" data-id="${id}"><rect class="s-hit" x="${x}" y="${y}" width="${w}" height="${h}" rx="12"/>${extra}</g>`;
+    return `<svg class="s-desk art" viewBox="0 0 1000 620" aria-hidden="true">
+      <image href="art/office/desk-grace.jpg" x="0" y="0" width="1000" height="620" preserveAspectRatio="xMidYMid slice"/>
+      <g class="s-note s-n-plant"><rect x="786" y="292" width="66" height="58" rx="4" fill="#ffe27a" transform="rotate(-6 819 321)"/><text x="819" y="317" text-anchor="middle" font-size="13" font-weight="800" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive">YOGA</text><text x="819" y="335" text-anchor="middle" font-size="11" font-weight="700" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive">Sat 10:00</text></g>
+      <g class="s-note s-n-folder"><rect x="218" y="366" width="76" height="58" rx="4" fill="#ffe27a" transform="rotate(6 256 395)"/><text x="256" y="391" text-anchor="middle" font-size="11" font-weight="800" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive" transform="rotate(6 256 395)">SwiftBox</text><text x="256" y="409" text-anchor="middle" font-size="13" font-weight="900" fill="#3a2f0c" font-family="Segoe Print, Comic Sans MS, cursive" transform="rotate(6 256 395)">SB-4471</text></g>
+      <g class="s-crumbs" fill="#f2c47d"><circle cx="440" cy="422" r="4"/><circle cx="476" cy="432" r="3"/><circle cx="520" cy="418" r="5"/><circle cx="556" cy="434" r="3"/><circle cx="590" cy="422" r="4"/><circle cx="498" cy="436" r="3"/></g>
+      ${obj("photo", 206, 26, 114, 126)}
+      ${obj("calendar", 680, 22, 200, 162)}
+      ${obj("lamp", 126, 152, 174, 176)}
+      ${obj("monitor", 350, 148, 308, 248)}
+      ${obj("plant", 764, 194, 124, 206)}
+      ${obj("phone", 94, 322, 166, 86)}
+      ${obj("folder", 162, 390, 190, 66)}
+      ${obj("keyboard", 380, 396, 246, 50)}
+      ${obj("mouse", 640, 404, 64, 42)}
+      ${obj("biscuits", 674, 334, 84, 66)}
+      ${obj("mug", 720, 360, 84, 72)}
+      ${obj("stapler", 830, 394, 70, 46)}
+      ${obj("top", 72, 496, 210, 84)}
+      ${obj("bottom", 72, 578, 210, 42, `<text x="252" y="606" font-size="18">🔒</text>`)}
+      ${obj("bin", 704, 536, 156, 84)}
     </svg>`;
   },
 
